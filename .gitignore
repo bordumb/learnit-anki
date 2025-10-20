@@ -1,0 +1,32 @@
+# Environment Variables
+# Ignore the .env file to keep secret API keys out of version control
+.env
+
+# Google Cloud Credentials
+# Ignore the JSON key file for your Google Cloud service account
+google_config.json
+*.json
+
+# Python
+# Ignore virtual environments, cache files, and build artifacts
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+build/
+dist/
+*.egg-info/
+
+# Project-Specific Files
+# Ignore generated Anki decks, local audio storage, and logs
+output/
+storage/
+logs/
+
+# IDE and OS-specific files
+# Ignore common files created by editors and operating systems
+.idea/
+.vscode/
+.DS_Store

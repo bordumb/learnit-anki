@@ -1,0 +1,14 @@
+# docker/Dockerfile.prod
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install dependencies
+COPY pyproject.toml poetry.lock ./
+RUN pip install poetry && poetry install --no-root --no-dev
+
+# Copy application
+COPY . .
+
+# Run API server
+CMD ["poetry", "run", "uvicorn", "infrastructure.api.main:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -1,0 +1,2606 @@
+----- FILE: ./.env.example -----
+# .env
+# API Keys
+DEEPL_API_KEY=your-deepl-key-here
+OPENAI_API_KEY=your-openai-key-here
+GOOGLE_APPLICATION_CREDENTIALS=path/to/google-credentials.json
+
+# Storage
+STORAGE_TYPE=local
+STORAGE_PATH=./storage
+
+# Audio
+AUDIO_PROVIDER=google
+GOOGLE_TTS_VOICE=fr-FR-Neural2-A
+
+# Translation
+TRANSLATION_PROVIDER=openai  # or "deepl"
+
+# Dictionary
+DICTIONARY_PROVIDER=openai
+
+
+----- FILE: ./Makefile -----
+# Makefile
+.PHONY: install test add batch clean help
+
+install:
+	poetry install
+	mkdir -p output storage/audio cache
+
+test:
+	poetry run python infrastructure/cli/main.py test
+
+add:
+	@echo "Usage: make add SENTENCE='Your French sentence here'"
+	poetry run python infrastructure/cli/main.py add "$(SENTENCE)"
+
+batch:
+	@echo "Usage: make batch FILE=sentences.txt DECK='Deck Name'"
+	poetry run python infrastructure/cli/main.py batch $(FILE) --deck-name "$(DECK)"
+
+clean:
+	rm -rf output/*.apkg
+	rm -rf cache/*
+	rm -rf storage/audio/*
+
+help:
+	@echo "French Flashcard Generator"
+	@echo ""
+	@echo "Commands:"
+	@echo "  make install              Install dependencies"
+	@echo "  make test                 Test configuration"
+	@echo "  make add SENTENCE='...'   Generate single card"
+	@echo "  make batch FILE=...       Generate deck from file"
+	@echo "  make clean                Clean output files"
+
+
+----- FILE: ./adapters/anki/genanki_exporter.py -----
+# adapters/anki/genanki_exporter.py
+import genanki
+import hashlib
+from pathlib import Path
+from typing import List, Optional
+from core.domain.interfaces import DeckExporter
+from core.domain.models import Deck, FlashCard
+
+class GenankiExporter(DeckExporter):
+    """
+    Adapter for exporting decks to Anki's .apkg format using genanki library.
+    
+    This adapter converts our domain models into genanki's format and
+    handles the creation of proper Anki card templates with styling.
+    """
+    
+    # Class-level constants for model IDs (must be unique and stable)
+    # These are generated once and should not change
+    DEFAULT_MODEL_ID = 1891667001
+    DEFAULT_DECK_ID_SALT = "french-flashcard-generator"
+    
+    def __init__(self):
+        self._card_model = self._create_card_model()
+    
+    def _create_card_model(self) -> genanki.Model:
+        """
+        Create the Anki card template (note type).
+        
+        This defines:
+        - What fields each card has
+        - How the front/back are rendered (HTML templates)
+        - CSS styling for the cards
+        """
+        return genanki.Model(
+            model_id=self.DEFAULT_MODEL_ID,
+            name='French Language Card (Enhanced)',
+            fields=[
+                {'name': 'French'},           # Front: The sentence in French
+                {'name': 'English'},          # Back: English translation
+                {'name': 'WordBreakdown'},    # Back: Word-by-word definitions
+                {'name': 'Audio'},            # Front/Back: Audio pronunciation
+                {'name': 'GrammarNotes'},     # Back: Grammar explanations
+                {'name': 'Tags'},             # Metadata: Tags for organization
+                {'name': 'SentenceId'},       # Hidden: For tracking/updates
+            ],
+            templates=[
+                {
+                    'name': 'Card 1',
+                    'qfmt': self._get_front_template(),  # Question (front) format
+                    'afmt': self._get_back_template(),   # Answer (back) format
+                },
+            ],
+            css=self._get_card_styles()
+        )
+    
+    def _get_front_template(self) -> str:
+        """HTML template for the front of the card"""
+        return '''
+        <div class="card-container">
+            <div class="card-header">
+                <span class="language-label">🇫🇷 Français</span>
+            </div>
+            
+            <div class="french-text">
+                {{French}}
+            </div>
+            
+            <div class="audio-container">
+                {{Audio}}
+            </div>
+            
+            <div class="hint">
+                💡 Tap to reveal translation
+            </div>
+        </div>
+        '''
+    
+    def _get_back_template(self) -> str:
+        """HTML template for the back of the card"""
+        return '''
+        {{FrontSide}}
+        
+        <hr class="divider">
+        
+        <div class="card-container">
+            <div class="card-header">
+                <span class="language-label">🇬🇧 English</span>
+            </div>
+            
+            <div class="english-text">
+                {{English}}
+            </div>
+            
+            {{#WordBreakdown}}
+            <div class="breakdown-section">
+                <div class="section-title">📚 Word Breakdown</div>
+                <div class="breakdown-content">
+                    {{WordBreakdown}}
+                </div>
+            </div>
+            {{/WordBreakdown}}
+            
+            {{#GrammarNotes}}
+            <div class="grammar-section">
+                <div class="section-title">✏️ Grammar Notes</div>
+                <div class="grammar-content">
+                    {{GrammarNotes}}
+                </div>
+            </div>
+            {{/GrammarNotes}}
+        </div>
+        '''
+    
+    def _get_card_styles(self) -> str:
+        """CSS styling for the cards"""
+        return '''
+        /* Base card styling */
+        .card {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 
+                         'Helvetica Neue', Arial, sans-serif;
+            font-size: 18px;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: #ffffff;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .card-container {
+            text-align: center;
+        }
+        
+        /* Header with language label */
+        .card-header {
+            margin-bottom: 15px;
+        }
+        
+        .language-label {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #f8f9fa;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #6c757d;
+        }
+        
+        /* Main text styling */
+        .french-text {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 25px 0;
+            line-height: 1.4;
+        }
+        
+        .english-text {
+            font-size: 22px;
+            font-weight: 500;
+            color: #27ae60;
+            margin: 20px 0;
+            line-height: 1.4;
+        }
+        
+        /* Audio player */
+        .audio-container {
+            margin: 20px 0;
+        }
+        
+        /* Hint text on front */
+        .hint {
+            font-size: 14px;
+            color: #95a5a6;
+            margin-top: 30px;
+            font-style: italic;
+        }
+        
+        /* Divider between front and back */
+        .divider {
+            margin: 30px 0;
+            border: none;
+            border-top: 2px solid #ecf0f1;
+        }
+        
+        /* Word breakdown section */
+        .breakdown-section {
+            margin-top: 30px;
+            text-align: left;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #495057;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .breakdown-content {
+            font-size: 15px;
+            line-height: 1.8;
+        }
+        
+        .breakdown-content b {
+            color: #3498db;
+            font-weight: 600;
+        }
+        
+        /* Grammar notes section */
+        .grammar-section {
+            margin-top: 20px;
+            text-align: left;
+            background: #fff9e6;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #f39c12;
+        }
+        
+        .grammar-content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #7f6d00;
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 600px) {
+            .card {
+                padding: 15px;
+                font-size: 16px;
+            }
+            
+            .french-text {
+                font-size: 24px;
+            }
+            
+            .english-text {
+                font-size: 20px;
+            }
+        }
+        
+        /* Dark mode support (Anki 2.1.50+) */
+        .nightMode .card {
+            background: #1e1e1e;
+            color: #e0e0e0;
+        }
+        
+        .nightMode .french-text {
+            color: #ffffff;
+        }
+        
+        .nightMode .english-text {
+            color: #4caf50;
+        }
+        
+        .nightMode .breakdown-section {
+            background: #2d2d2d;
+        }
+        
+        .nightMode .grammar-section {
+            background: #3d3520;
+            border-left-color: #ffa726;
+        }
+        
+        .nightMode .language-label {
+            background: #2d2d2d;
+            color: #b0b0b0;
+        }
+        '''
+    
+    async def export_deck(
+        self, 
+        deck: Deck, 
+        output_path: str
+    ) -> str:
+        """
+        Export a Deck to .apkg format.
+        
+        Args:
+            deck: The Deck domain model to export
+            output_path: Where to save the .apkg file
+            
+        Returns:
+            The full path to the created .apkg file
+        """
+        # Generate a stable deck ID based on deck name
+        deck_id = self._generate_deck_id(deck.name)
+        
+        # Create genanki deck
+        anki_deck = genanki.Deck(
+            deck_id=deck_id,
+            name=deck.name
+        )
+        
+        # Convert each card and add to deck
+        media_files = []
+        for card in deck.cards:
+            note = self._convert_card_to_note(card)
+            anki_deck.add_note(note)
+            
+            # Collect media files (audio)
+            if card.audio and card.audio.filename:
+                media_files.append(card.audio.filename)
+        
+        # Create package with media
+        package = genanki.Package(anki_deck)
+        
+        # Add media files if they exist
+        if media_files:
+            package.media_files = self._resolve_media_paths(media_files)
+        
+        # Ensure output directory exists
+        output_file = Path(output_path)
+        output_file.parent.mkdir(parents=True, exist_ok=True)
+        
+        # Write .apkg file
+        package.write_to_file(str(output_file))
+        
+        return str(output_file.absolute())
+    
+    def _convert_card_to_note(self, card: FlashCard) -> genanki.Note:
+        """
+        Convert a FlashCard domain model to a genanki Note.
+        
+        Args:
+            card: The FlashCard to convert
+            
+        Returns:
+            A genanki.Note instance ready to be added to a deck
+        """
+        # Format word breakdown as HTML
+        word_breakdown_html = self._format_word_breakdown(card)
+        
+        # Format grammar notes as HTML
+        grammar_notes_html = self._format_grammar_notes(card)
+        
+        # Format audio field
+        audio_field = self._format_audio_field(card)
+        
+        # Format tags
+        tags_str = " ".join(card.tags) if card.tags else ""
+        
+        # Create note with all fields
+        note = genanki.Note(
+            model=self._card_model,
+            fields=[
+                card.sentence.text,                    # French
+                card.translation.text,                 # English
+                word_breakdown_html,                   # WordBreakdown
+                audio_field,                           # Audio
+                grammar_notes_html,                    # GrammarNotes
+                tags_str,                              # Tags
+                card.id,                               # SentenceId (hidden)
+            ],
+            tags=card.tags if card.tags else []
+        )
+        
+        return note
+    
+    def _format_word_breakdown(self, card: FlashCard) -> str:
+        """Format word breakdown as HTML"""
+        if not card.word_breakdown or not card.word_breakdown.words:
+            return ""
+        
+        lines = []
+        for word in card.word_breakdown.words:
+            # Format: <b>word</b> (pos): definition
+            line = f"<b>{word.text}</b> <span class='pos'>({word.pos})</span>: {word.definition}"
+            lines.append(line)
+        
+        return "<br>".join(lines)
+    
+    def _format_grammar_notes(self, card: FlashCard) -> str:
+        """Format grammar notes as HTML"""
+        if not card.grammar_notes:
+            return ""
+        
+        lines = []
+        for note in card.grammar_notes:
+            # Format with bullet points
+            lines.append(f"• <strong>{note.title}:</strong> {note.explanation}")
+            
+            # Add examples if present
+            if note.examples:
+                for example in note.examples:
+                    lines.append(f"  <em>Example: {example}</em>")
+        
+        return "<br>".join(lines)
+    
+    def _format_audio_field(self, card: FlashCard) -> str:
+        """
+        Format audio field for Anki.
+        
+        Anki expects: [sound:filename.mp3]
+        """
+        if not card.audio or not card.audio.filename:
+            return ""
+        
+        return f"[sound:{card.audio.filename}]"
+    
+    def _generate_deck_id(self, deck_name: str) -> int:
+        """
+        Generate a stable deck ID from the deck name.
+        
+        Uses hash to ensure:
+        1. Same deck name = same ID (for updates)
+        2. Different deck names = different IDs
+        3. IDs are valid positive integers for Anki
+        """
+        # Create hash of deck name + salt
+        hash_input = f"{deck_name}{self.DEFAULT_DECK_ID_SALT}"
+        hash_value = hashlib.md5(hash_input.encode()).hexdigest()
+        
+        # Convert first 8 hex chars to int (ensures 32-bit positive int)
+        deck_id = int(hash_value[:8], 16)
+        
+        # Ensure it's positive and within Anki's range
+        return deck_id & 0x7FFFFFFF
+    
+    def _resolve_media_paths(self, filenames: List[str]) -> List[str]:
+        """
+        Resolve media file paths.
+        
+        This assumes audio files are stored in a known location.
+        In production, this would interface with the StorageService.
+        """
+        # For now, assume files are in ./storage/audio/
+        # In production, you'd get these from StorageService
+        base_path = Path("./storage/audio")
+        
+        resolved_paths = []
+        for filename in filenames:
+            file_path = base_path / filename
+            if file_path.exists():
+                resolved_paths.append(str(file_path))
+            else:
+                # Log warning but don't fail
+                print(f"⚠️  Warning: Audio file not found: {filename}")
+        
+        return resolved_paths
+
+
+class GenankiExporterWithProgressTracking(GenankiExporter):
+    """
+    Enhanced version with progress tracking for large decks.
+    
+    Useful for API/background job scenarios where you want to
+    report progress to users.
+    """
+    
+    def __init__(self, progress_callback: Optional[callable] = None):
+        super().__init__()
+        self.progress_callback = progress_callback
+    
+    async def export_deck(
+        self, 
+        deck: Deck, 
+        output_path: str
+    ) -> str:
+        """Export with progress updates"""
+        
+        total_cards = len(deck.cards)
+        
+        # Generate deck ID
+        deck_id = self._generate_deck_id(deck.name)
+        anki_deck = genanki.Deck(deck_id=deck_id, name=deck.name)
+        
+        # Process cards with progress tracking
+        media_files = []
+        for i, card in enumerate(deck.cards):
+            note = self._convert_card_to_note(card)
+            anki_deck.add_note(note)
+            
+            if card.audio and card.audio.filename:
+                media_files.append(card.audio.filename)
+            
+            # Report progress
+            if self.progress_callback:
+                progress = (i + 1) / total_cards * 100
+                self.progress_callback(progress, f"Processing card {i+1}/{total_cards}")
+        
+        # Create package
+        if self.progress_callback:
+            self.progress_callback(95, "Creating .apkg file...")
+        
+        package = genanki.Package(anki_deck)
+        if media_files:
+            package.media_files = self._resolve_media_paths(media_files)
+        
+        # Write file
+        output_file = Path(output_path)
+        output_file.parent.mkdir(parents=True, exist_ok=True)
+        package.write_to_file(str(output_file))
+        
+        if self.progress_callback:
+            self.progress_callback(100, "Complete!")
+        
+        return str(output_file.absolute())
+
+
+# Convenience function for direct usage
+def export_cards_to_anki(
+    cards: List[FlashCard],
+    deck_name: str,
+    output_path: str
+) -> str:
+    """
+    Quick utility function to export cards without using the full architecture.
+    
+    Useful for simple scripts or testing.
+    
+    Args:
+        cards: List of FlashCard objects
+        deck_name: Name for the Anki deck
+        output_path: Where to save the .apkg file
+        
+    Returns:
+        Path to the created .apkg file
+    """
+    from core.domain.models import Deck
+    import asyncio
+    
+    # Create a deck from the cards
+    deck = Deck(name=deck_name, cards=cards)
+    
+    # Export
+    exporter = GenankiExporter()
+    return asyncio.run(exporter.export_deck(deck, output_path))
+
+
+# Example usage
+# if __name__ == "__main__":
+#     """
+#     Example of how to use the exporter directly
+#     """
+#     from core.domain.models import (
+#         FlashCard, Sentence, Translation, WordBreakdown, 
+#         Word, AudioFile, AudioFormat, GrammarNote
+#     )
+    
+#     # Create a sample card
+#     card = FlashCard(
+#         sentence=Sentence(text="Je mange une pomme."),
+#         translation=Translation(text="I eat an apple."),
+#         word_breakdown=WordBreakdown(words=[
+#             Word(text="Je", lemma="je", pos="pronoun", definition="I"),
+#             Word(text="mange", lemma="manger", pos="verb", definition="eat"),
+#             Word(text="une", lemma="un", pos="article", definition="a/an"),
+#             Word(text="pomme", lemma="pomme", pos="noun", definition="apple"),
+#         ]),
+#         audio=AudioFile(
+#             filename="je_mange_une_pomme.mp3",
+#             format=AudioFormat.MP3,
+#             provider="google-tts"
+#         ),
+#         grammar_notes=[
+#             GrammarNote(
+#                 title="Present tense",
+#                 explanation="'mange' is the present tense conjugation of 'manger' for 'je'",
+#                 examples=["Tu manges", "Il mange"]
+#             )
+#         ],
+#         tags=["food", "beginner", "verbs"]
+#     )
+    
+#     # Export single card
+#     output = export_cards_to_anki(
+#         cards=[card],
+#         deck_name="French Practice",
+#         output_path="./output/french_practice.apkg"
+#     )
+    
+#     print(f"✅ Deck created: {output}")
+
+
+----- FILE: ./adapters/audio/google_tts_adapter.py -----
+# adapters/audio/google_tts_adapter.py
+from google.cloud import texttospeech_v1 as tts
+from core.domain.interfaces import AudioService
+from core.domain.models import AudioFile, AudioFormat
+import hashlib
+
+class GoogleTTSAdapter(AudioService):
+    """Google Cloud Text-to-Speech"""
+    
+    def __init__(self, voice_name: str = "fr-FR-Neural2-A"):
+        self.client = tts.TextToSpeechClient()
+        self.voice_name = voice_name
+    
+    async def generate_audio(
+        self,
+        text: str,
+        language: str,
+        format: AudioFormat = AudioFormat.MP3
+    ) -> AudioFile:
+        
+        synthesis_input = tts.SynthesisInput(text=text)
+        
+        voice = tts.VoiceSelectionParams(
+            language_code=f"{language}-{language.upper()}",
+            name=self.voice_name,
+            ssml_gender=tts.SsmlVoiceGender.FEMALE
+        )
+        
+        audio_config = tts.AudioConfig(
+            audio_encoding=tts.AudioEncoding.MP3
+        )
+        
+        response = self.client.synthesize_speech(
+            input=synthesis_input,
+            voice=voice,
+            audio_config=audio_config
+        )
+        
+        # Generate filename from content hash
+        text_hash = hashlib.md5(text.encode()).hexdigest()
+        filename = f"{text_hash}.{format.value}"
+        
+        # Save audio data (would be handled by storage service)
+        # For now, just return metadata
+        
+        return AudioFile(
+            filename=filename,
+            format=format,
+            provider="google-tts"
+        )
+
+
+----- FILE: ./adapters/dictionary/openai_dictionary_adapter.py -----
+# adapters/dictionary/openai_dictionary_adapter.py
+import openai
+import json
+from typing import List
+from core.domain.interfaces import DictionaryService
+from core.domain.models import Word, WordBreakdown
+
+class OpenAIDictionaryAdapter(DictionaryService):
+    """Use GPT-4o for word analysis (most flexible)"""
+    
+    def __init__(self, api_key: str):
+        self.client = openai.AsyncOpenAI(api_key=api_key)
+    
+    async def lookup_word(
+        self,
+        word: str,
+        source_lang: str,
+        target_lang: str
+    ) -> Word:
+        
+        prompt = f"""Analyze this {source_lang} word: "{word}"
+
+Provide JSON:
+{{
+  "lemma": "base form of word",
+  "pos": "noun/verb/adj/etc",
+  "definition": "concise English definition (max 5 words)"
+}}"""
+        
+        response = await self.client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": prompt}],
+            response_format={"type": "json_object"}
+        )
+        
+        data = json.loads(response.choices[0].message.content)
+        
+        return Word(
+            text=word,
+            lemma=data['lemma'],
+            pos=data['pos'],
+            definition=data['definition']
+        )
+    
+    async def analyze_sentence(
+        self,
+        sentence: str,
+        source_lang: str,
+        target_lang: str
+    ) -> WordBreakdown:
+        
+        prompt = f"""Analyze each word in this {source_lang} sentence:
+"{sentence}"
+
+For each word provide JSON array:
+[
+  {{
+    "text": "original word",
+    "lemma": "base form",
+    "pos": "part of speech",
+    "definition": "brief English definition"
+  }}
+]
+
+Skip punctuation."""
+        
+        response = await self.client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": prompt}],
+            response_format={"type": "json_object"}
+        )
+        
+        data = json.loads(response.choices[0].message.content)
+        
+        words = [
+            Word(**word_data) 
+            for word_data in data.get('words', [])
+        ]
+        
+        return WordBreakdown(words=words)
+
+
+----- FILE: ./adapters/storage/local_file_storage.py -----
+# adapters/storage/local_file_storage.py
+import os
+from pathlib import Path
+from core.domain.interfaces import StorageService
+from core.domain.models import AudioFile
+
+class LocalFileStorage(StorageService):
+    """Store files locally (for laptop use)"""
+    
+    def __init__(self, base_path: str = "./storage"):
+        self.base_path = Path(base_path)
+        self.audio_path = self.base_path / "audio"
+        self.audio_path.mkdir(parents=True, exist_ok=True)
+    
+    async def save_audio(self, audio: AudioFile, data: bytes) -> str:
+        filepath = self.audio_path / audio.filename
+        
+        with open(filepath, 'wb') as f:
+            f.write(data)
+        
+        return str(filepath)
+    
+    async def get_audio(self, filename: str) -> bytes:
+        filepath = self.audio_path / filename
+        
+        with open(filepath, 'rb') as f:
+            return f.read()
+    
+    async def delete_audio(self, filename: str) -> None:
+        filepath = self.audio_path / filename
+        filepath.unlink(missing_ok=True)
+
+
+----- FILE: ./adapters/storage/s3_storage.py -----
+# adapters/storage/s3_storage.py
+import boto3
+from core.domain.interfaces import StorageService
+from core.domain.models import AudioFile
+
+class S3StorageAdapter(StorageService):
+    """Store files in S3 (for production)"""
+    
+    def __init__(self, bucket_name: str, region: str = "us-east-1"):
+        self.bucket = bucket_name
+        self.s3 = boto3.client('s3', region_name=region)
+    
+    async def save_audio(self, audio: AudioFile, data: bytes) -> str:
+        key = f"audio/{audio.filename}"
+        
+        self.s3.put_object(
+            Bucket=self.bucket,
+            Key=key,
+            Body=data,
+            ContentType=f"audio/{audio.format.value}"
+        )
+        
+        # Return public URL
+        url = f"https://{self.bucket}.s3.amazonaws.com/{key}"
+        return url
+    
+    async def get_audio(self, filename: str) -> bytes:
+        key = f"audio/{filename}"
+        response = self.s3.get_object(Bucket=self.bucket, Key=key)
+        return response['Body'].read()
+    
+    async def delete_audio(self, filename: str) -> None:
+        key = f"audio/{filename}"
+        self.s3.delete_object(Bucket=self.bucket, Key=key)
+
+
+----- FILE: ./adapters/translation/deepl_adapter.py -----
+# adapters/translation/deepl_adapter.py
+import httpx
+from core.domain.interfaces import TranslationService
+from core.domain.models import Translation
+
+class DeepLTranslationAdapter(TranslationService):
+    """DeepL API implementation"""
+    
+    def __init__(self, api_key: str):
+        self.api_key = api_key
+        self.base_url = "https://api-free.deepl.com/v2"
+    
+    async def translate(
+        self,
+        text: str,
+        source_lang: str,
+        target_lang: str
+    ) -> Translation:
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                f"{self.base_url}/translate",
+                data={
+                    'auth_key': self.api_key,
+                    'text': text,
+                    'source_lang': source_lang.upper(),
+                    'target_lang': target_lang.upper()
+                }
+            )
+            response.raise_for_status()
+            data = response.json()
+            
+            return Translation(
+                text=data['translations'][0]['text'],
+                target_language=target_lang,
+                provider="deepl",
+                confidence=1.0  # DeepL doesn't provide confidence
+            )
+            
+
+
+----- FILE: ./adapters/translation/openai_adapter.py -----
+# adapters/translation/openai_adapter.py
+import openai
+from core.domain.interfaces import TranslationService
+from core.domain.models import Translation
+
+class OpenAITranslationAdapter(TranslationService):
+    """OpenAI GPT-4o translation (more context-aware)"""
+    
+    def __init__(self, api_key: str, model: str = "gpt-4o-mini"):
+        self.client = openai.AsyncOpenAI(api_key=api_key)
+        self.model = model
+    
+    async def translate(
+        self,
+        text: str,
+        source_lang: str,
+        target_lang: str
+    ) -> Translation:
+        
+        prompt = f"""Translate this {source_lang} text to {target_lang}.
+Provide ONLY the translation, no explanations.
+
+Text: {text}"""
+        
+        response = await self.client.chat.completions.create(
+            model=self.model,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.3  # Lower = more consistent
+        )
+        
+        translated_text = response.choices[0].message.content.strip()
+        
+        return Translation(
+            text=translated_text,
+            target_language=target_lang,
+            provider=f"openai-{self.model}"
+        )
+
+
+----- FILE: ./core/domain/interfaces.py -----
+# core/domain/interfaces.py
+from abc import ABC, abstractmethod
+from typing import List, Optional
+from .models import (
+    Sentence, Translation, WordBreakdown, AudioFile, 
+    GrammarNote, FlashCard, Deck, AudioFormat
+)
+
+class TranslationService(ABC):
+    """Port for translation providers"""
+    
+    @abstractmethod
+    async def translate(
+        self, 
+        text: str, 
+        source_lang: str, 
+        target_lang: str
+    ) -> Translation:
+        """Translate text from source to target language"""
+        pass
+
+class DictionaryService(ABC):
+    """Port for dictionary lookups"""
+    
+    @abstractmethod
+    async def lookup_word(
+        self, 
+        word: str, 
+        source_lang: str,
+        target_lang: str
+    ) -> Word:
+        """Get definition for a single word"""
+        pass
+    
+    @abstractmethod
+    async def analyze_sentence(
+        self, 
+        sentence: str,
+        source_lang: str,
+        target_lang: str
+    ) -> WordBreakdown:
+        """Analyze all words in a sentence"""
+        pass
+
+class AudioService(ABC):
+    """Port for text-to-speech"""
+    
+    @abstractmethod
+    async def generate_audio(
+        self, 
+        text: str, 
+        language: str,
+        format: AudioFormat = AudioFormat.MP3
+    ) -> AudioFile:
+        """Generate audio file for text"""
+        pass
+
+class GrammarService(ABC):
+    """Port for grammar explanations"""
+    
+    @abstractmethod
+    async def explain_grammar(
+        self, 
+        sentence: str,
+        language: str
+    ) -> List[GrammarNote]:
+        """Generate grammar explanations"""
+        pass
+
+class SentenceSearchService(ABC):
+    """Port for finding example sentences"""
+    
+    @abstractmethod
+    async def search_by_topic(
+        self, 
+        topic: str,
+        language: str,
+        limit: int = 20
+    ) -> List[Sentence]:
+        """Find sentences about a topic"""
+        pass
+    
+    @abstractmethod
+    async def search_by_difficulty(
+        self,
+        difficulty: CardDifficulty,
+        language: str,
+        limit: int = 20
+    ) -> List[Sentence]:
+        """Find sentences at difficulty level"""
+        pass
+
+class StorageService(ABC):
+    """Port for file storage"""
+    
+    @abstractmethod
+    async def save_audio(self, audio: AudioFile, data: bytes) -> str:
+        """Save audio file and return path/URL"""
+        pass
+    
+    @abstractmethod
+    async def get_audio(self, filename: str) -> bytes:
+        """Retrieve audio file"""
+        pass
+    
+    @abstractmethod
+    async def delete_audio(self, filename: str) -> None:
+        """Delete audio file"""
+        pass
+
+class DeckExporter(ABC):
+    """Port for exporting decks"""
+    
+    @abstractmethod
+    async def export_deck(
+        self, 
+        deck: Deck,
+        output_path: str
+    ) -> str:
+        """Export deck to file format (.apkg, JSON, etc.)"""
+        pass
+
+class CacheService(ABC):
+    """Port for caching expensive operations"""
+    
+    @abstractmethod
+    async def get(self, key: str) -> Optional[any]:
+        """Get cached value"""
+        pass
+    
+    @abstractmethod
+    async def set(self, key: str, value: any, ttl: Optional[int] = None) -> None:
+        """Cache value with optional TTL"""
+        pass
+    
+    @abstractmethod
+    async def delete(self, key: str) -> None:
+        """Remove from cache"""
+        pass
+
+
+
+----- FILE: ./core/domain/models.py -----
+# core/domain/models.py
+from dataclasses import dataclass, field
+from typing import Optional, List
+from datetime import datetime
+from enum import Enum
+import uuid
+
+class AudioFormat(Enum):
+    MP3 = "mp3"
+    OGG = "ogg"
+    WAV = "wav"
+
+class CardDifficulty(Enum):
+    A1 = "beginner"
+    A2 = "elementary"
+    B1 = "intermediate"
+    B2 = "upper_intermediate"
+    C1 = "advanced"
+    C2 = "proficient"
+
+@dataclass
+class Word:
+    """Individual word with definition"""
+    text: str
+    lemma: str  # Base form (e.g., "manger" for "mangent")
+    pos: str    # Part of speech
+    definition: str
+    pronunciation: Optional[str] = None
+    
+@dataclass
+class Sentence:
+    """A sentence in the source language"""
+    id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    text: str
+    language: str = "fr"
+    source: Optional[str] = None  # Where it came from (URL, book, etc.)
+    difficulty: Optional[CardDifficulty] = None
+    created_at: datetime = field(default_factory=datetime.utcnow)
+
+@dataclass
+class Translation:
+    """Translation of a sentence"""
+    text: str
+    target_language: str = "en"
+    confidence: float = 1.0  # 0-1
+    provider: str = "unknown"
+    
+@dataclass
+class WordBreakdown:
+    """Word-by-word analysis"""
+    words: List[Word]
+    
+@dataclass
+class AudioFile:
+    """Audio recording of sentence"""
+    id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    filename: str
+    format: AudioFormat
+    duration_seconds: Optional[float] = None
+    url: Optional[str] = None  # For cloud storage
+    provider: str = "unknown"
+
+@dataclass
+class GrammarNote:
+    """Grammar explanation for the sentence"""
+    title: str
+    explanation: str
+    examples: List[str] = field(default_factory=list)
+
+@dataclass
+class FlashCard:
+    """Complete flashcard with all components"""
+    id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    sentence: Sentence
+    translation: Translation
+    word_breakdown: WordBreakdown
+    audio: Optional[AudioFile] = None
+    grammar_notes: List[GrammarNote] = field(default_factory=list)
+    tags: List[str] = field(default_factory=list)
+    created_at: datetime = field(default_factory=datetime.utcnow)
+    
+    def to_anki_fields(self) -> dict:
+        """Convert to Anki card format"""
+        return {
+            "French": self.sentence.text,
+            "English": self.translation.text,
+            "WordBreakdown": self._format_word_breakdown(),
+            "Audio": f"[sound:{self.audio.filename}]" if self.audio else "",
+            "GrammarNotes": self._format_grammar_notes(),
+            "Tags": " ".join(self.tags)
+        }
+    
+    def _format_word_breakdown(self) -> str:
+        lines = []
+        for word in self.word_breakdown.words:
+            lines.append(f"<b>{word.text}</b> ({word.pos}): {word.definition}")
+        return "<br>".join(lines)
+    
+    def _format_grammar_notes(self) -> str:
+        if not self.grammar_notes:
+            return ""
+        return "<br>".join(f"• {note.explanation}" for note in self.grammar_notes)
+
+@dataclass
+class Deck:
+    """Collection of flashcards"""
+    id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    description: Optional[str] = None
+    cards: List[FlashCard] = field(default_factory=list)
+    language_pair: tuple[str, str] = ("fr", "en")
+    created_at: datetime = field(default_factory=datetime.utcnow)
+    tags: List[str] = field(default_factory=list)
+
+
+
+----- FILE: ./core/use_cases/generate_card.py -----
+# core/use_cases/generate_card.py
+from typing import Optional
+from ..domain.models import Sentence, FlashCard
+from ..domain.interfaces import (
+    TranslationService, DictionaryService, AudioService, GrammarService
+)
+
+class GenerateCardUseCase:
+    """
+    Single Responsibility: Generate one complete flashcard
+    
+    This is the core business logic - it orchestrates the adapters
+    but doesn't know their implementations.
+    """
+    
+    def __init__(
+        self,
+        translation_service: TranslationService,
+        dictionary_service: DictionaryService,
+        audio_service: AudioService,
+        grammar_service: Optional[GrammarService] = None
+    ):
+        self.translator = translation_service
+        self.dictionary = dictionary_service
+        self.audio = audio_service
+        self.grammar = grammar_service
+    
+    async def execute(
+        self, 
+        sentence_text: str,
+        include_audio: bool = True,
+        include_grammar: bool = True
+    ) -> FlashCard:
+        """
+        Generate a complete flashcard from a sentence.
+        
+        This method is pure business logic - it can be tested
+        without any real API calls by using mock adapters.
+        """
+        
+        # Create sentence object
+        sentence = Sentence(text=sentence_text, language="fr")
+        
+        # Get translation
+        translation = await self.translator.translate(
+            text=sentence_text,
+            source_lang="fr",
+            target_lang="en"
+        )
+        
+        # Get word breakdown
+        word_breakdown = await self.dictionary.analyze_sentence(
+            sentence=sentence_text,
+            source_lang="fr",
+            target_lang="en"
+        )
+        
+        # Generate audio (optional)
+        audio = None
+        if include_audio:
+            audio = await self.audio.generate_audio(
+                text=sentence_text,
+                language="fr"
+            )
+        
+        # Get grammar notes (optional)
+        grammar_notes = []
+        if include_grammar and self.grammar:
+            grammar_notes = await self.grammar.explain_grammar(
+                sentence=sentence_text,
+                language="fr"
+            )
+        
+        # Assemble card
+        card = FlashCard(
+            sentence=sentence,
+            translation=translation,
+            word_breakdown=word_breakdown,
+            audio=audio,
+            grammar_notes=grammar_notes
+        )
+        
+        return card
+
+
+----- FILE: ./core/use_cases/search_sentences.py -----
+# core/use_cases/search_sentences.py
+from typing import List
+from ..domain.models import Sentence, CardDifficulty
+from ..domain.interfaces import SentenceSearchService
+
+class SearchSentencesUseCase:
+    """Search for sentences to create cards from"""
+    
+    def __init__(self, search_service: SentenceSearchService):
+        self.search = search_service
+    
+    async def by_topic(
+        self,
+        topic: str,
+        limit: int = 20
+    ) -> List[Sentence]:
+        """Find sentences about a specific topic"""
+        return await self.search.search_by_topic(
+            topic=topic,
+            language="fr",
+            limit=limit
+        )
+    
+    async def by_difficulty(
+        self,
+        difficulty: CardDifficulty,
+        limit: int = 20
+    ) -> List[Sentence]:
+        """Find sentences at a difficulty level"""
+        return await self.search.search_by_difficulty(
+            difficulty=difficulty,
+            language="fr",
+            limit=limit
+        )
+
+
+
+----- FILE: ./docker-compose.yml -----
+# docker-compose.yml
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.prod
+    ports:
+      - "8000:8000"
+    environment:
+      - DEEPL_API_KEY=${DEEPL_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - STORAGE_TYPE=s3
+      - S3_BUCKET=flashcard-storage
+    depends_on:
+      - redis
+      - postgres
+  
+  worker:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.prod
+    command: poetry run celery -A infrastructure.jobs.celery_app worker --loglevel=info
+    environment:
+      - DEEPL_API_KEY=${DEEPL_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    depends_on:
+      - redis
+      - postgres
+  
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+  
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=flashcards
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=changeme
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+
+
+----- FILE: ./docker/Dockerfile.local -----
+# docker/Dockerfile.local
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements
+COPY pyproject.toml poetry.lock ./
+RUN pip install poetry && poetry install --no-root
+
+# Copy application
+COPY . .
+
+# Run CLI
+ENTRYPOINT ["poetry", "run", "python", "infrastructure/cli/main.py"]
+
+
+----- FILE: ./docker/Dockerfile.prod -----
+# docker/Dockerfile.prod
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install dependencies
+COPY pyproject.toml poetry.lock ./
+RUN pip install poetry && poetry install --no-root --no-dev
+
+# Copy application
+COPY . .
+
+# Run API server
+CMD ["poetry", "run", "uvicorn", "infrastructure.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+
+----- FILE: ./docs/quick_start_guide.md -----
+# Quick Start Guide
+
+Get your first French flashcard in under 5 minutes.
+
+## Prerequisites
+
+- Python 3.11+
+- An OpenAI API key ([Get one here](https://platform.openai.com/api-keys))
+
+---
+
+## 1. Install
+```bash
+# Clone or download the project
+cd anki-card-generator
+
+# Install dependencies
+poetry install
+
+# Or use pip if you prefer
+python3 -m venv .venv
+source .venv/bin/activate
+pip install click genanki httpx pydantic pydantic-settings python-dotenv openai
+```
+
+---
+
+## 2. Configure
+
+Create a `.env` file in the project root:
+```bash
+# .env
+OPENAI_API_KEY=sk-your-key-here
+TRANSLATION_PROVIDER=openai
+STORAGE_PATH=./storage
+```
+
+**Get your OpenAI API key:**
+1. Go to https://platform.openai.com/api-keys
+2. Click "Create new secret key"
+3. Copy and paste it into `.env`
+4. Add $5 credit (will last for hundreds of cards)
+
+---
+
+## 3. Create Your First Card
+
+### Single Card
+```bash
+poetry run python infrastructure/cli/main.py add "Je voudrais un café."
+```
+
+**What happens:**
+1. ✅ Translates to English: "I would like a coffee."
+2. ✅ Breaks down each word with definitions
+3. ✅ Creates `output/French Practice.apkg`
+
+**Import into Anki:**
+1. Open Anki
+2. File → Import
+3. Select `output/French Practice.apkg`
+4. Done! Study your card
+
+---
+
+## 4. Create a Deck (Multiple Cards)
+
+### Step 1: Create a text file with French sentences
+```bash
+# sentences.txt
+Je voudrais un café, s'il vous plaît.
+Où est la gare?
+Comment allez-vous aujourd'hui?
+J'aime beaucoup la musique française.
+Pouvez-vous m'aider?
+Quelle heure est-il?
+```
+
+### Step 2: Generate the deck
+```bash
+poetry run python infrastructure/cli/main.py batch sentences.txt --deck-name "Daily French"
+```
+
+**Output:**
+```
+🔄 Processing 6 sentences...
+  [1/6] Je voudrais un café, s'il vous plaît....
+  [2/6] Où est la gare?...
+  [3/6] Comment allez-vous aujourd'hui?...
+  [4/6] J'aime beaucoup la musique française....
+  [5/6] Pouvez-vous m'aider?...
+  [6/6] Quelle heure est-il?...
+✅ Deck created with 6 cards: ./output/Daily French.apkg
+```
+
+### Step 3: Import into Anki
+
+Same process: File → Import → Select the `.apkg` file
+
+---
+
+## 5. What Your Cards Look Like
+
+### Front (Question)
+```
+🇫🇷 Français
+
+Je voudrais un café, s'il vous plaît.
+
+💡 Tap to reveal translation
+```
+
+### Back (Answer)
+```
+🇬🇧 English
+
+I would like a coffee, please.
+
+📚 Word Breakdown
+Je (pronoun): I
+voudrais (verb): would like
+un (article): a/an
+café (noun): coffee
+s'il vous plaît (phrase): please
+```
+
+---
+
+## 6. Common Use Cases
+
+### From a movie script
+```bash
+# Copy subtitles to a file
+# Generate cards
+poetry run python infrastructure/cli/main.py batch movie_subtitles.txt --deck-name "Amélie Movie"
+```
+
+### From a textbook chapter
+```bash
+# Copy example sentences from your textbook
+poetry run python infrastructure/cli/main.py batch chapter_3.txt --deck-name "French 101 - Chapter 3"
+```
+
+### From a news article
+```bash
+# Copy interesting sentences
+poetry run python infrastructure/cli/main.py batch news_article.txt --deck-name "Current Events"
+```
+
+---
+
+## 7. Tips & Tricks
+
+### Use the Makefile (easier commands)
+```bash
+# Install once
+make install
+
+# Test your setup
+make test
+
+# Create a card
+make add SENTENCE="Bonjour, ça va?"
+
+# Create a deck
+make batch FILE=sentences.txt DECK="My Deck"
+```
+
+### Cost Estimate
+
+With OpenAI GPT-4o-mini:
+- **1 card** = ~$0.005 (half a cent)
+- **100 cards** = ~$0.50
+- **1000 cards** = ~$5
+
+Your $5 credit will last a long time!
+
+### File Organization
+```
+sentences/
+├── beginner/
+│   ├── greetings.txt
+│   ├── food.txt
+│   └── travel.txt
+├── intermediate/
+│   └── news.txt
+└── advanced/
+    └── literature.txt
+```
+
+Then batch process each:
+```bash
+poetry run python infrastructure/cli/main.py batch sentences/beginner/food.txt --deck-name "Food Vocabulary"
+```
+
+---
+
+## 8. Troubleshooting
+
+### "OpenAI API key not found"
+- Check `.env` file exists in project root
+- Verify key starts with `sk-`
+- No quotes around the key in `.env`
+
+### "Command not found: poetry"
+Use `python3` directly:
+```bash
+python3 infrastructure/cli/main.py add "Your sentence"
+```
+
+### Cards not showing up in Anki
+- Make sure you're importing the `.apkg` file, not opening it
+- In Anki: File → Import (not File → Open)
+- Check `output/` folder for the generated file
+
+### Translation quality issues
+- Sentences work best when they're complete thoughts
+- Avoid fragments like "the cat" - use "The cat is sleeping"
+- Context helps: "Il mange." is ambiguous, "Il mange une pomme." is clear
+
+---
+
+## 9. Next Steps
+
+Once you're comfortable with the basics:
+
+1. **Add audio** - Set up Google Cloud TTS for pronunciation
+2. **Add grammar notes** - Enable `include_grammar=True`
+3. **Customize templates** - Edit `adapters/anki/genanki_exporter.py`
+4. **Add sentence search** - Automatically find example sentences
+
+See the full documentation for advanced features.
+
+---
+
+## 10. Getting Help
+
+**Common Questions:**
+
+**Q: Can I use this for other languages?**  
+A: Yes! Just change the sentence language. The code is French-focused but works for any language pair.
+
+**Q: How do I update existing cards?**  
+A: Re-import the deck. Anki will update cards with the same text.
+
+**Q: Can I add images?**  
+A: Not yet in the CLI version, but it's on the roadmap.
+
+**Q: Is my data sent to OpenAI?**  
+A: Yes, sentences are sent to OpenAI's API for translation. Don't use sensitive content.
+
+---
+
+## Example Output
+
+Here's what a generated `.apkg` file contains:
+```
+French Practice.apkg
+├── Card 1: "Je voudrais un café."
+│   ├── Front: French sentence
+│   ├── Back: English + word breakdown
+│   └── Metadata: tags, timestamps
+├── Card 2: "Où est la gare?"
+│   └── ...
+└── Media: (audio files when enabled)
+```
+
+Import this into Anki and start studying immediately!
+
+---
+
+## Quick Reference
+```bash
+# Single card
+poetry run python infrastructure/cli/main.py add "French sentence here"
+
+# Deck from file  
+poetry run python infrastructure/cli/main.py batch file.txt --deck-name "Deck Name"
+
+# Test setup
+poetry run python infrastructure/cli/main.py test
+
+# With Make
+make add SENTENCE="French sentence"
+make batch FILE=sentences.txt DECK="Deck Name"
+```
+
+**Cost:** ~$0.005 per card with OpenAI  
+**Time:** ~2-3 seconds per card  
+**Result:** Professional Anki flashcards with translations and definitions
+
+---
+
+Happy learning! 🇫🇷
+
+
+
+----- FILE: ./infrastructure/api/main.py -----
+# infrastructure/api/main.py
+from fastapi import FastAPI, HTTPException, BackgroundTasks, Depends
+from fastapi.responses import FileResponse
+from pydantic import BaseModel
+from typing import List, Optional
+import asyncio
+from infrastructure.config.dependency_injection import get_container, ServiceContainer
+
+app = FastAPI(
+    title="French Flashcard Generator API",
+    version="1.0.0",
+    description="Generate Anki flashcards from French sentences"
+)
+
+# Request/Response models
+class GenerateCardRequest(BaseModel):
+    sentence: str
+    include_audio: bool = True
+    include_grammar: bool = True
+
+class GenerateCardResponse(BaseModel):
+    card_id: str
+    french: str
+    english: str
+    word_breakdown: dict
+    audio_url: Optional[str]
+    grammar_notes: List[dict]
+
+class GenerateDeckRequest(BaseModel):
+    sentences: List[str]
+    deck_name: str
+    include_audio: bool = True
+    include_grammar: bool = True
+
+class GenerateDeckResponse(BaseModel):
+    deck_id: str
+    deck_name: str
+    card_count: int
+    download_url: str
+    status: str  # "processing", "completed", "failed"
+
+class SearchSentencesRequest(BaseModel):
+    topic: str
+    count: int = 20
+    difficulty: Optional[str] = None
+
+class SearchSentencesResponse(BaseModel):
+    sentences: List[str]
+    count: int
+
+# Dependency
+def get_service_container() -> ServiceContainer:
+    return get_container()
+
+# Endpoints
+@app.post("/api/v1/cards/generate", response_model=GenerateCardResponse)
+async def generate_card(
+    request: GenerateCardRequest,
+    container: ServiceContainer = Depends(get_service_container)
+):
+    """Generate a single flashcard"""
+    try:
+        use_case = container.create_card_generator()
+        card = await use_case.execute(
+            sentence_text=request.sentence,
+            include_audio=request.include_audio,
+            include_grammar=request.include_grammar
+        )
+        
+        return GenerateCardResponse(
+            card_id=card.id,
+            french=card.sentence.text,
+            english=card.translation.text,
+            word_breakdown={
+                "words": [
+                    {
+                        "text": w.text,
+                        "pos": w.pos,
+                        "definition": w.definition
+                    }
+                    for w in card.word_breakdown.words
+                ]
+            },
+            audio_url=card.audio.url if card.audio else None,
+            grammar_notes=[
+                {"title": note.title, "explanation": note.explanation}
+                for note in card.grammar_notes
+            ]
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/v1/decks/generate", response_model=GenerateDeckResponse)
+async def generate_deck(
+    request: GenerateDeckRequest,
+    container: ServiceContainer = Depends(get_service_container)
+):
+    """Generate a deck (async with Celery)"""
+    
+    # Queue the job
+    task = generate_deck_task.delay(
+        sentences=request.sentences,
+        deck_name=request.deck_name,
+        user_id="anonymous"  # TODO: Get from auth
+    )
+    
+    return GenerateDeckResponse(
+        deck_id=task.id,
+        deck_name=request.deck_name,
+        card_count=len(request.sentences),
+        download_url=f"/api/v1/decks/{task.id}/download",
+        status="queued"
+    )
+
+@app.get("/api/v1/decks/{task_id}/status")
+async def get_deck_status(task_id: str):
+    """Check Celery task status"""
+    from celery.result import AsyncResult
+    
+    task = AsyncResult(task_id)
+    
+    if task.state == 'PENDING':
+        response = {'status': 'queued'}
+    elif task.state == 'PROGRESS':
+        response = {'status': 'processing', 'progress': task.info.get('progress', 0)}
+    elif task.state == 'SUCCESS':
+        response = {'status': 'completed', 'result': task.result}
+    else:
+        response = {'status': 'failed', 'error': str(task.info)}
+    
+    return response
+
+@app.get("/api/v1/decks/{deck_id}/download")
+async def download_deck(deck_id: str):
+    """Download generated deck"""
+    # TODO: Implement file serving
+    file_path = f"./output/{deck_id}.apkg"
+    return FileResponse(
+        file_path,
+        media_type="application/octet-stream",
+        filename=f"{deck_id}.apkg"
+    )
+
+@app.post("/api/v1/sentences/search", response_model=SearchSentencesResponse)
+async def search_sentences(
+    request: SearchSentencesRequest,
+    container: ServiceContainer = Depends(get_service_container)
+):
+    """Search for example sentences"""
+    # TODO: Implement sentence search
+    return SearchSentencesResponse(
+        sentences=[],
+        count=0
+    )
+
+# Background task
+async def process_deck_generation(
+    deck_id: str,
+    sentences: List[str],
+    deck_name: str,
+    container: ServiceContainer
+):
+    """Process deck generation in background"""
+    try:
+        use_case = container.create_deck_generator()
+        output_path = await use_case.execute(
+            sentences=sentences,
+            deck_name=deck_name,
+            output_path=f"./output/{deck_id}.apkg"
+        )
+        # TODO: Update status in database/cache
+        print(f"✅ Deck {deck_id} completed: {output_path}")
+    except Exception as e:
+        # TODO: Update status to failed
+        print(f"❌ Deck {deck_id} failed: {e}")
+
+# Health check
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
+
+
+----- FILE: ./infrastructure/cli/main.py -----
+# infrastructure/cli/main.py
+import click
+import asyncio
+from pathlib import Path
+import sys
+import os
+
+# Add the project root to the Python path
+project_root = Path(__file__).parent.parent.parent
+sys.path.insert(0, str(project_root))
+
+# Now we can import from the project
+from infrastructure.config.settings import Settings
+from core.domain.models import (
+    FlashCard, Sentence, Translation, WordBreakdown, 
+    Word, AudioFile, AudioFormat
+)
+
+@click.group()
+def cli():
+    """French Flashcard Generator - Create Anki cards automatically"""
+    pass
+
+@cli.command()
+@click.argument('sentence')
+@click.option('--deck-name', default='French Practice', help='Name of the Anki deck')
+def add(sentence, deck_name):
+    """Generate a flashcard from a French sentence
+    
+    Example:
+        python infrastructure/cli/main.py add "Je mange une pomme."
+    """
+    click.echo(f"🔄 Generating card for: {sentence}")
+    
+    # Import here to avoid circular dependencies
+    import openai
+    import genanki
+    import hashlib
+    
+    # Load settings
+    try:
+        settings = Settings()
+        openai.api_key = settings.openai_api_key
+    except Exception as e:
+        click.echo(f"❌ Error loading settings: {e}")
+        click.echo("💡 Make sure you have a .env file with OPENAI_API_KEY")
+        return
+    
+    async def generate_card():
+        # Get translation
+        click.echo("  Translating...")
+        translation_response = await openai.ChatCompletion.acreate(
+            model="gpt-4o-mini",
+            messages=[{
+                "role": "user",
+                "content": f"Translate this French sentence to English. Provide ONLY the translation:\n\n{sentence}"
+            }],
+            temperature=0.3
+        )
+        english = translation_response.choices[0].message.content.strip()
+        
+        # Get word breakdown
+        click.echo("  Analyzing words...")
+        words_response = await openai.ChatCompletion.acreate(
+            model="gpt-4o-mini",
+            messages=[{
+                "role": "user",
+                "content": f"""Analyze each word in this French sentence: "{sentence}"
+
+Return JSON array (no other text):
+[
+  {{"text": "word", "lemma": "base form", "pos": "part of speech", "definition": "brief English definition"}},
+  ...
+]
+
+Skip punctuation."""
+            }],
+            temperature=0.3,
+            response_format={"type": "json_object"}
+        )
+        
+        import json
+        words_data = json.loads(words_response.choices[0].message.content)
+        
+        # Build word breakdown HTML
+        breakdown_lines = []
+        for word_data in words_data.get('words', []):
+            line = f"<b>{word_data['text']}</b> ({word_data['pos']}): {word_data['definition']}"
+            breakdown_lines.append(line)
+        
+        breakdown_html = "<br>".join(breakdown_lines)
+        
+        # Create Anki model
+        model_id = 1891667001
+        model = genanki.Model(
+            model_id,
+            'French Card',
+            fields=[
+                {'name': 'French'},
+                {'name': 'English'},
+                {'name': 'WordBreakdown'},
+            ],
+            templates=[{
+                'name': 'Card 1',
+                'qfmt': '''
+                    <div style="text-align: center; font-size: 24px; margin: 20px;">
+                        {{French}}
+                    </div>
+                ''',
+                'afmt': '''
+                    {{FrontSide}}
+                    <hr>
+                    <div style="text-align: center; font-size: 20px; color: green; margin: 20px;">
+                        {{English}}
+                    </div>
+                    <div style="text-align: left; background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px;">
+                        {{WordBreakdown}}
+                    </div>
+                ''',
+            }]
+        )
+        
+        # Create deck
+        deck_id = int(hashlib.md5(deck_name.encode()).hexdigest()[:8], 16)
+        deck = genanki.Deck(deck_id, deck_name)
+        
+        # Create note
+        note = genanki.Note(
+            model=model,
+            fields=[sentence, english, breakdown_html]
+        )
+        
+        deck.add_note(note)
+        
+        # Export
+        output_path = Path("output")
+        output_path.mkdir(exist_ok=True)
+        output_file = output_path / f"{deck_name}.apkg"
+        
+        package = genanki.Package(deck)
+        package.write_to_file(str(output_file))
+        
+        return str(output_file)
+    
+    try:
+        output = asyncio.run(generate_card())
+        click.echo(f"✅ Card created: {output}")
+        click.echo(f"📥 Import this file into Anki!")
+    except Exception as e:
+        click.echo(f"❌ Error: {e}")
+
+@cli.command()
+@click.argument('file_path', type=click.Path(exists=True))
+@click.option('--deck-name', default='French Practice', help='Name of the Anki deck')
+def batch(file_path, deck_name):
+    """Generate multiple cards from a text file
+    
+    Example:
+        python infrastructure/cli/main.py batch sentences.txt
+    """
+    # Read sentences
+    with open(file_path, 'r', encoding='utf-8') as f:
+        sentences = [line.strip() for line in f if line.strip()]
+    
+    click.echo(f"🔄 Processing {len(sentences)} sentences...")
+    
+    # Import here
+    import openai
+    import genanki
+    import hashlib
+    import json
+    
+    # Load settings
+    try:
+        settings = Settings()
+        openai.api_key = settings.openai_api_key
+    except Exception as e:
+        click.echo(f"❌ Error loading settings: {e}")
+        return
+    
+    async def generate_deck():
+        # Create model
+        model_id = 1891667001
+        model = genanki.Model(
+            model_id,
+            'French Card',
+            fields=[
+                {'name': 'French'},
+                {'name': 'English'},
+                {'name': 'WordBreakdown'},
+            ],
+            templates=[{
+                'name': 'Card 1',
+                'qfmt': '<div style="text-align: center; font-size: 24px; margin: 20px;">{{French}}</div>',
+                'afmt': '''{{FrontSide}}<hr>
+                    <div style="text-align: center; font-size: 20px; color: green; margin: 20px;">{{English}}</div>
+                    <div style="text-align: left; background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px;">{{WordBreakdown}}</div>
+                ''',
+            }]
+        )
+        
+        # Create deck
+        deck_id = int(hashlib.md5(deck_name.encode()).hexdigest()[:8], 16)
+        deck = genanki.Deck(deck_id, deck_name)
+        
+        # Process each sentence
+        for i, sentence in enumerate(sentences, 1):
+            click.echo(f"  [{i}/{len(sentences)}] {sentence[:50]}...")
+            
+            # Get translation
+            translation_response = await openai.ChatCompletion.acreate(
+                model="gpt-4o-mini",
+                messages=[{"role": "user", "content": f"Translate to English (translation only): {sentence}"}],
+                temperature=0.3
+            )
+            english = translation_response.choices[0].message.content.strip()
+            
+            # Get word breakdown
+            words_response = await openai.ChatCompletion.acreate(
+                model="gpt-4o-mini",
+                messages=[{
+                    "role": "user",
+                    "content": f'Analyze words in "{sentence}". Return JSON: {{"words": [{{"text": "word", "pos": "pos", "definition": "def"}}]}}'
+                }],
+                temperature=0.3,
+                response_format={"type": "json_object"}
+            )
+            
+            words_data = json.loads(words_response.choices[0].message.content)
+            breakdown_lines = [
+                f"<b>{w['text']}</b> ({w['pos']}): {w['definition']}"
+                for w in words_data.get('words', [])
+            ]
+            breakdown_html = "<br>".join(breakdown_lines)
+            
+            # Create note
+            note = genanki.Note(model=model, fields=[sentence, english, breakdown_html])
+            deck.add_note(note)
+        
+        # Export
+        output_path = Path("output")
+        output_path.mkdir(exist_ok=True)
+        output_file = output_path / f"{deck_name}.apkg"
+        
+        package = genanki.Package(deck)
+        package.write_to_file(str(output_file))
+        
+        return str(output_file)
+    
+    try:
+        output = asyncio.run(generate_deck())
+        click.echo(f"✅ Deck created with {len(sentences)} cards: {output}")
+    except Exception as e:
+        click.echo(f"❌ Error: {e}")
+
+@cli.command()
+def test():
+    """Test your configuration"""
+    click.echo("🧪 Testing configuration...")
+    
+    try:
+        settings = Settings()
+        click.echo("✅ Settings loaded")
+        
+        if settings.openai_api_key:
+            click.echo("✅ OpenAI API key found")
+            # Test if key works
+            import openai
+            openai.api_key = settings.openai_api_key
+            click.echo("✅ OpenAI configured")
+        else:
+            click.echo("❌ OpenAI API key missing")
+        
+        # Test output directory
+        Path("./output").mkdir(exist_ok=True)
+        click.echo("✅ Output directory ready")
+        
+        click.echo("\n🎉 Everything looks good! Try:")
+        click.echo('   python infrastructure/cli/main.py add "Bonjour!"')
+        
+    except Exception as e:
+        click.echo(f"❌ Error: {e}")
+        click.echo("\n💡 Make sure you have a .env file with:")
+        click.echo("   OPENAI_API_KEY=sk-your-key-here")
+
+if __name__ == '__main__':
+    cli()
+
+
+----- FILE: ./infrastructure/config/dependency_injection.py -----
+# infrastructure/config/dependency_injection.py
+from functools import lru_cache
+from core.domain.interfaces import (
+    TranslationService, DictionaryService, AudioService,
+    StorageService, CacheService
+)
+from core.use_cases.generate_card import GenerateCardUseCase
+from core.use_cases.generate_deck import GenerateDeckUseCase
+from adapters.translation.deepl_adapter import DeepLTranslationAdapter
+from adapters.translation.openai_adapter import OpenAITranslationAdapter
+from adapters.dictionary.openai_dictionary_adapter import OpenAIDictionaryAdapter
+from adapters.audio.google_tts_adapter import GoogleTTSAdapter
+from adapters.storage.local_file_storage import LocalFileStorage
+from adapters.storage.s3_storage import S3StorageAdapter
+from .settings import Settings
+
+class ServiceContainer:
+    """Dependency injection container"""
+    
+    def __init__(self, settings: Settings):
+        self.settings = settings
+        self._translation_service = None
+        self._dictionary_service = None
+        self._audio_service = None
+        self._storage_service = None
+    
+    @property
+    def translation_service(self) -> TranslationService:
+        if self._translation_service is None:
+            if self.settings.translation_provider == "deepl":
+                self._translation_service = DeepLTranslationAdapter(
+                    api_key=self.settings.deepl_api_key
+                )
+            else:
+                self._translation_service = OpenAITranslationAdapter(
+                    api_key=self.settings.openai_api_key
+                )
+        return self._translation_service
+    
+    @property
+    def dictionary_service(self) -> DictionaryService:
+        if self._dictionary_service is None:
+            self._dictionary_service = OpenAIDictionaryAdapter(
+                api_key=self.settings.openai_api_key
+            )
+        return self._dictionary_service
+    
+    @property
+    def audio_service(self) -> AudioService:
+        if self._audio_service is None:
+            self._audio_service = GoogleTTSAdapter(
+                voice_name=self.settings.google_tts_voice
+            )
+        return self._audio_service
+    
+    @property
+    def storage_service(self) -> StorageService:
+        if self._storage_service is None:
+            if self.settings.storage_type == "s3":
+                self._storage_service = S3StorageAdapter(
+                    bucket_name=self.settings.s3_bucket,
+                    region=self.settings.s3_region
+                )
+            else:
+                self._storage_service = LocalFileStorage(
+                    base_path=self.settings.storage_path
+                )
+        return self._storage_service
+    
+    def create_card_generator(self) -> GenerateCardUseCase:
+        """Factory for card generation use case"""
+        return GenerateCardUseCase(
+            translation_service=self.translation_service,
+            dictionary_service=self.dictionary_service,
+            audio_service=self.audio_service
+        )
+    
+    def create_deck_generator(self) -> GenerateDeckUseCase:
+        """Factory for deck generation use case"""
+        from adapters.anki.genanki_exporter import GenankiExporter
+        
+        return GenerateDeckUseCase(
+            card_generator=self.create_card_generator(),
+            exporter=GenankiExporter(),
+            storage=self.storage_service
+        )
+
+@lru_cache()
+def get_container() -> ServiceContainer:
+    """Get singleton container"""
+    settings = Settings()
+    return ServiceContainer(settings)
+
+
+----- FILE: ./infrastructure/config/settings.py -----
+# infrastructure/config/settings.py
+from pydantic_settings import BaseSettings
+from typing import Optional
+
+class Settings(BaseSettings):
+    # API Keys
+    openai_api_key: str
+    
+    # Optional settings
+    storage_path: str = "./storage"
+    translation_provider: str = "openai"
+    
+    class Config:
+        env_file = ".env"
+        env_file_encoding = "utf-8"
+
+
+----- FILE: ./infrastructure/database/models.py -----
+# infrastructure/database/models.py
+from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, JSON, Boolean
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
+from datetime import datetime
+
+Base = declarative_base()
+
+class User(Base):
+    __tablename__ = 'users'
+    
+    id = Column(String, primary_key=True)
+    email = Column(String, unique=True, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    
+    # Limits for free tier
+    cards_generated_this_month = Column(Integer, default=0)
+    is_premium = Column(Boolean, default=False)
+    
+    decks = relationship("DeckRecord", back_populates="user")
+
+class DeckRecord(Base):
+    __tablename__ = 'decks'
+    
+    id = Column(String, primary_key=True)
+    user_id = Column(String, ForeignKey('users.id'))
+    name = Column(String, nullable=False)
+    card_count = Column(Integer, default=0)
+    status = Column(String, default='pending')  # pending, processing, completed, failed
+    file_path = Column(String)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    completed_at = Column(DateTime)
+    
+    user = relationship("User", back_populates="decks")
+    cards = relationship("CardRecord", back_populates="deck")
+
+class CardRecord(Base):
+    __tablename__ = 'cards'
+    
+    id = Column(String, primary_key=True)
+    deck_id = Column(String, ForeignKey('decks.id'))
+    french_text = Column(String, nullable=False)
+    english_text = Column(String, nullable=False)
+    word_breakdown = Column(JSON)
+    audio_url = Column(String)
+    grammar_notes = Column(JSON)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    
+    deck = relationship("DeckRecord", back_populates="cards")
+
+class APIUsage(Base):
+    __tablename__ = 'api_usage'
+    
+    id = Column(Integer, primary_key=True)
+    user_id = Column(String, ForeignKey('users.id'))
+    endpoint = Column(String)
+    cards_generated = Column(Integer)
+    cost = Column(Integer)  # in cents
+    timestamp = Column(DateTime, default=datetime.utcnow)
+
+
+
+----- FILE: ./infrastructure/database/repository.py -----
+# infrastructure/database/repository.py
+from sqlalchemy.orm import Session
+from typing import Optional, List
+from .models import User, DeckRecord, CardRecord
+
+class UserRepository:
+    def __init__(self, db: Session):
+        self.db = db
+    
+    def get_by_email(self, email: str) -> Optional[User]:
+        return self.db.query(User).filter(User.email == email).first()
+    
+    def create(self, email: str) -> User:
+        user = User(id=str(uuid.uuid4()), email=email)
+        self.db.add(user)
+        self.db.commit()
+        return user
+    
+    def check_limits(self, user_id: str) -> bool:
+        """Check if user is within free tier limits"""
+        user = self.db.query(User).filter(User.id == user_id).first()
+        if not user:
+            return False
+        
+        if user.is_premium:
+            return True
+        
+        # Free tier: 50 cards per month
+        return user.cards_generated_this_month < 50
+
+class DeckRepository:
+    def __init__(self, db: Session):
+        self.db = db
+    
+    def create(self, user_id: str, name: str, card_count: int) -> DeckRecord:
+        deck = DeckRecord(
+            id=str(uuid.uuid4()),
+            user_id=user_id,
+            name=name,
+            card_count=card_count
+        )
+        self.db.add(deck)
+        self.db.commit()
+        return deck
+    
+    def update_status(self, deck_id: str, status: str, file_path: Optional[str] = None):
+        deck = self.db.query(DeckRecord).filter(DeckRecord.id == deck_id).first()
+        if deck:
+            deck.status = status
+            if file_path:
+                deck.file_path = file_path
+            if status == 'completed':
+                deck.completed_at = datetime.utcnow()
+            self.db.commit()
+    
+    def get_by_user(self, user_id: str) -> List[DeckRecord]:
+        return self.db.query(DeckRecord).filter(DeckRecord.user_id == user_id).all()
+    
+
+
+----- FILE: ./infrastructure/jobs/celery_app.py -----
+# infrastructure/jobs/celery_app.py
+from celery import Celery
+from infrastructure.config.dependency_injection import get_container
+
+celery_app = Celery(
+    'flashcard_generator',
+    broker='redis://localhost:6379/0',
+    backend='redis://localhost:6379/1'
+)
+
+celery_app.conf.update(
+    task_serializer='json',
+    accept_content=['json'],
+    result_serializer='json',
+    timezone='UTC',
+    enable_utc=True,
+)
+
+@celery_app.task(name='generate_deck')
+def generate_deck_task(
+    sentences: list[str],
+    deck_name: str,
+    user_id: str
+):
+    """Celery task for deck generation"""
+    import asyncio
+    
+    container = get_container()
+    use_case = container.create_deck_generator()
+    
+    # Run async code in sync context
+    loop = asyncio.get_event_loop()
+    output_path = loop.run_until_complete(
+        use_case.execute(
+            sentences=sentences,
+            deck_name=deck_name,
+            output_path=f"./output/{user_id}/{deck_name}.apkg"
+        )
+    )
+    
+    return {
+        'status': 'completed',
+        'output_path': output_path,
+        'user_id': user_id
+    }
+
+@celery_app.task(name='generate_card')
+def generate_card_task(sentence: str):
+    """Celery task for single card"""
+    import asyncio
+    
+    container = get_container()
+    use_case = container.create_card_generator()
+    
+    loop = asyncio.get_event_loop()
+    card = loop.run_until_complete(
+        use_case.execute(sentence_text=sentence)
+    )
+    
+    return card.to_anki_fields()
+
+
+
+----- FILE: ./pyproject.toml -----
+# pyproject.toml
+[tool.poetry]
+name = "anki-card-generator"
+version = "0.1.0"
+description = "Automate French flashcard creation for Anki"
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.11"
+click = "^8.1.7"
+genanki = "^0.13.1"
+httpx = "^0.27.0"
+pydantic = "^2.6.0"
+pydantic-settings = "^2.1.0"
+python-dotenv = "^1.0.0"
+openai = "^1.12.0"
+google-cloud-texttospeech = "^2.16.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+pytest-asyncio = "^0.23.5"
+black = "^24.0.0"
+ruff = "^0.2.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+----- FILE: ./tests/mocks.py -----
+# tests/mocks.py
+from core.domain.interfaces import TranslationService, DictionaryService, AudioService
+from core.domain.models import Translation, Word, WordBreakdown, AudioFile, AudioFormat
+
+class MockTranslationService(TranslationService):
+    async def translate(self, text, source_lang, target_lang):
+        # Simple mock translation
+        translations = {
+            "Je mange une pomme.": "I eat an apple.",
+            "Bonjour": "Hello",
+        }
+        return Translation(
+            text=translations.get(text, f"Translation of {text}"),
+            target_language=target_lang,
+            provider="mock"
+        )
+
+class MockDictionaryService(DictionaryService):
+    async def lookup_word(self, word, source_lang, target_lang):
+        return Word(
+            text=word,
+            lemma=word,
+            pos="noun",
+            definition=f"Definition of {word}"
+        )
+    
+    async def analyze_sentence(self, sentence, source_lang, target_lang):
+        words = sentence.replace(".", "").split()
+        word_objects = [
+            Word(text=w, lemma=w, pos="noun", definition=f"def:{w}")
+            for w in words
+        ]
+        return WordBreakdown(words=word_objects)
+
+class MockAudioService(AudioService):
+    async def generate_audio(self, text, language, format=AudioFormat.MP3):
+        return AudioFile(
+            filename=f"{text[:10]}.mp3",
+            format=format,
+            provider="mock"
+        )
+        
+
+
+----- FILE: ./tests/unit/test_generate_card_use_case.py -----
+# tests/unit/test_generate_card_use_case.py
+import pytest
+from core.use_cases.generate_card import GenerateCardUseCase
+from core.domain.models import Translation, Word, WordBreakdown, AudioFile
+from tests.mocks import (
+    MockTranslationService,
+    MockDictionaryService,
+    MockAudioService
+)
+
+@pytest.mark.asyncio
+async def test_generate_card_basic():
+    """Test card generation with mock services"""
+    
+    # Arrange
+    translator = MockTranslationService()
+    dictionary = MockDictionaryService()
+    audio = MockAudioService()
+    
+    use_case = GenerateCardUseCase(
+        translation_service=translator,
+        dictionary_service=dictionary,
+        audio_service=audio
+    )
+    
+    # Act
+    card = await use_case.execute("Je mange une pomme.")
+    
+    # Assert
+    assert card.sentence.text == "Je mange une pomme."
+    assert card.translation.text == "I eat an apple."
+    assert len(card.word_breakdown.words) == 4
+    assert card.audio is not None
+
+@pytest.mark.asyncio
+async def test_generate_card_without_audio():
+    """Test card generation without audio"""
+    
+    translator = MockTranslationService()
+    dictionary = MockDictionaryService()
+    audio = MockAudioService()
+    
+    use_case = GenerateCardUseCase(
+        translation_service=translator,
+        dictionary_service=dictionary,
+        audio_service=audio
+    )
+    
+    card = await use_case.execute(
+        "Je mange une pomme.",
+        include_audio=False
+    )
+    
+    assert card.audio is None
+
+

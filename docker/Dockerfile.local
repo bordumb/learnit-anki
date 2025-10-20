@@ -1,0 +1,19 @@
+# docker/Dockerfile.local
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements
+COPY pyproject.toml poetry.lock ./
+RUN pip install poetry && poetry install --no-root
+
+# Copy application
+COPY . .
+
+# Run CLI
+ENTRYPOINT ["poetry", "run", "python", "infrastructure/cli/main.py"]
