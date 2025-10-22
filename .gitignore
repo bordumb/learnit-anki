@@ -24,6 +24,7 @@ dist/
 output/
 storage/
 logs/
+all_code.txt
 
 # IDE and OS-specific files
 # Ignore common files created by editors and operating systems
