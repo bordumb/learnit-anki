@@ -32,6 +32,7 @@ find . \
   ! -name "*.sh" \
   ! -name "poetry.lock" \
   ! -name ".env" \
+  ! -name "google_config.json" \
   | sort \
   | while read -r file; do
       # Only include readable text/code files

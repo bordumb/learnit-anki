@@ -1,6 +1,8 @@
 # infrastructure/config/settings.py
-from pydantic_settings import BaseSettings
-from typing import Optional
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from typing import Optional, Dict
+import json
+import os
 
 class Settings(BaseSettings):
     # API Keys
@@ -16,7 +18,19 @@ class Settings(BaseSettings):
 
     # Audio
     audio_provider: str = "google"
-    google_tts_voice: str = "fr-FR-Neural2-A"
+    # --- New: Dictionary for Language-Specific Voices ---
+    # This dictionary maps language codes (e.g., 'fr', 'de') to Google TTS voice names.
+    # It can be overridden via an environment variable GOOGLE_TTS_VOICES
+    # Example .env entry:
+    # GOOGLE_TTS_VOICES='{"fr": "fr-FR-Neural2-A", "de": "de-DE-Neural2-B", "es": "es-ES-Neural2-A"}'
+    google_tts_voices: Dict[str, str] = {
+        "fr": "fr-FR-Neural2-A",
+        "de": "de-DE-Neural2-B",
+        "es": "es-ES-Neural2-A",
+        "ca": "ca-ES-Standard-A",
+        # Add more languages and voices here as needed
+    }
+    # --- End New Voice Dictionary ---
 
     # Translation
     translation_provider: str = "openai"
@@ -24,10 +38,27 @@ class Settings(BaseSettings):
     # Dictionary
     dictionary_provider: str = "openai"
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-        
-        # This allows pydantic to find an env var like `OPENAI_API_KEY`
-        # and map it to the field `openai_api_key`
-        case_sensitive = False
+    # Language Settings
+    default_source_language: str = "fr"
+    default_target_language: str = "en"
+
+    # Pydantic V2 configuration using model_config
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        case_sensitive=False,
+        # Allow extra fields (useful if env file has more vars than defined here)
+        extra='ignore'
+    )
+
+    # Custom validator/parser for the dictionary from env var if needed
+    # (Pydantic might handle simple JSON strings automatically, but complex cases might need this)
+    # @validator('google_tts_voices', pre=True)
+    # def parse_google_tts_voices(cls, v):
+    #     if isinstance(v, str):
+    #         try:
+    #             return json.loads(v)
+    #         except json.JSONDecodeError:
+    #             raise ValueError("GOOGLE_TTS_VOICES env var is not valid JSON")
+    #     return v
+
