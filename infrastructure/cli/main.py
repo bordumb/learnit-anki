@@ -60,7 +60,7 @@ try:
     SUPPORTED_LANG_CODES = list(LANGUAGE_NAMES.keys())
 except ImportError:
     logger.warning("Could not import LANGUAGE_NAMES for validation help. Using basic codes.")
-    SUPPORTED_LANG_CODES = ['fr', 'en', 'de', 'es'] # Fallback
+    SUPPORTED_LANG_CODES = ['fr', 'en', 'de', 'es', 'ca'] # Fallback
 
 def validate_lang_code(ctx, param, value):
     """Click callback to validate language codes."""

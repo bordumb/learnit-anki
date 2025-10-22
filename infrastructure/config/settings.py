@@ -27,6 +27,7 @@ class Settings(BaseSettings):
         "fr": "fr-FR-Neural2-A",
         "de": "de-DE-Neural2-B",
         "es": "es-ES-Neural2-A",
+        "ca": "ca-ES-Standard-A",
         # Add more languages and voices here as needed
     }
     # --- End New Voice Dictionary ---

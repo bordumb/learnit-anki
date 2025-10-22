@@ -21,6 +21,7 @@ LANGUAGE_NAMES: Dict[LanguageCode, str] = {
     "en": "English",
     "it": "Italian",
     "pt": "Portuguese",
+    'ca': 'Catalan',
     # Add more as needed
 }
 
@@ -138,11 +139,12 @@ class GenankiExporter(DeckExporter):
 
     def _get_front_template(self, source_lang_name: str, target_lang_name: str) -> str:
         """HTML template for the front of the card."""
-        # Uses standard Anki template syntax {{FieldName}}
+        # --- CORRECTED ---
+        # Use {{ {{FieldName}} }} within f-string to output literal {{FieldName}}
         return f'''
         <div class="card-container">
             <div class="source-text">
-                {{{source_lang_name}}}
+                {{{{{source_lang_name}}}}}
             </div>
 
             <div class="audio-container">
@@ -157,6 +159,8 @@ class GenankiExporter(DeckExporter):
 
     def _get_back_template(self, source_lang_name: str, target_lang_name: str) -> str:
         """HTML template for the back of the card."""
+        # --- CORRECTED ---
+        # Use {{ {{FieldName}} }} within f-string to output literal {{FieldName}}
         return f'''
         {{{{FrontSide}}}}
 
@@ -164,7 +168,7 @@ class GenankiExporter(DeckExporter):
 
         <div class="card-container">
             <div class="target-text">
-                {{{target_lang_name}}}
+                {{{{{target_lang_name}}}}}
             </div>
 
             {{{{#WordBreakdown}}}}
@@ -190,6 +194,7 @@ class GenankiExporter(DeckExporter):
     def _get_card_styles(self) -> str:
         """CSS styling for the cards."""
         # Using more generic class names like .source-text, .target-text
+        # [CSS content remains the same - not shown here for brevity]
         return '''
         /* Base card styling */
         .card {
@@ -542,8 +547,7 @@ class GenankiExporter(DeckExporter):
 
         # Generate a stable GUID for the note
         # Uses the Sentence ID and the Model ID to ensure uniqueness across note types
-        # Corrected attribute access here:
-        note_guid = genanki.guid_for(card.sentence.id, model.model_id) # CORRECTED LINE
+        note_guid = genanki.guid_for(card.sentence.id, model.model_id)
 
         # Create the genanki Note
         note = genanki.Note(
