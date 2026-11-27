@@ -3,7 +3,7 @@
 import argparse
 import asyncio
 import json
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from hashlib import sha256
 from pathlib import Path
 from statistics import median
@@ -26,6 +26,7 @@ class Case:
     language: str
     group: str
     suite: str = "smoke"
+    writing_direction: str | None = None
 
 
 def load_cases(manifests: list[Path]) -> list[Case]:
@@ -60,6 +61,7 @@ def load_cases(manifests: list[Path]) -> list[Case]:
                     id=row["id"], kind=kind, category=row.get("category", kind),
                     media=media, reference=row["reference"],
                     language=row["language"], group=row["group"], suite=suite,
+                    writing_direction=row.get("writing_direction"),
                 ))
                 ids.add(row["id"])
             except (TypeError, ValueError, KeyError) as error:

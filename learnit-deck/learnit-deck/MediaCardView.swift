@@ -26,6 +26,11 @@ struct MediaCardView: View {
     @State private var image: NSImage?
     @State private var selection: CGRect?
     @State private var audioURL: URL?
+    @State private var audioDuration: TimeInterval?
+    @State private var trimAudio = false
+    @State private var clipStart: TimeInterval = 0
+    @State private var clipEnd: TimeInterval = 0
+    @State private var draftClip: AudioClip?
     @State private var recordingURL: URL?
     @State private var recorder: AVAudioRecorder?
     @State private var player: AVAudioPlayer?
@@ -59,13 +64,7 @@ struct MediaCardView: View {
                     Button("Read Image") { readMedia() }
                         .disabled(busy || recorder != nil)
                 } else if let audioURL {
-                    HStack {
-                        Text(audioURL == recordingURL ? "Recording" : audioURL.lastPathComponent)
-                            .lineLimit(1)
-                        Button("Play or Stop") { play(audioURL) }
-                        Button("Transcribe Audio") { readMedia() }
-                    }
-                    .disabled(busy || recorder != nil)
+                    audioControls(audioURL)
                 }
                 Text("Japanese text")
                     .font(.headline)
@@ -110,7 +109,9 @@ struct MediaCardView: View {
                 } else {
                     image = nil
                     audioURL = url
+                    Task { await loadAudioDuration(url) }
                 }
+                resetAudioRange()
                 draft = ""
                 status = ""
                 source = url.lastPathComponent
@@ -118,6 +119,68 @@ struct MediaCardView: View {
                 status = error.localizedDescription
             }
         }
+    }
+
+    private var selectedClip: AudioClip? {
+        guard trimAudio, let audioDuration else { return nil }
+        return AudioClip(start: clipStart, end: clipEnd, duration: audioDuration)
+    }
+
+    private func audioControls(_ url: URL) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text(url == recordingURL ? "Recording" : url.lastPathComponent)
+                    .lineLimit(1)
+                if let audioDuration {
+                    Text(AudioClip.timestamp(audioDuration)).monospacedDigit().foregroundStyle(.secondary)
+                }
+                Button("Play or Stop") { preview(url) }
+                    .disabled(trimAudio && selectedClip == nil)
+                Button(trimAudio ? "Transcribe Selection" : "Transcribe Audio") { readMedia() }
+                    .disabled(trimAudio && selectedClip == nil)
+            }
+            if let audioDuration {
+                Toggle("Select a time range", isOn: $trimAudio)
+                    .onChange(of: trimAudio) { player?.stop() }
+                if trimAudio {
+                    clipBoundary("Start", value: $clipStart, duration: audioDuration)
+                    clipBoundary("End", value: $clipEnd, duration: audioDuration)
+                    if selectedClip == nil {
+                        Text("Choose a start and end within the recording, with the end after the start.")
+                            .font(.caption).foregroundStyle(.secondary)
+                    }
+                }
+            }
+        }
+        .disabled(busy || recorder != nil)
+    }
+
+    private func clipBoundary(_ label: String, value: Binding<TimeInterval>, duration: TimeInterval) -> some View {
+        HStack {
+            Slider(value: value, in: 0...duration) { Text(label) }
+                .accessibilityValue(AudioClip.timestamp(value.wrappedValue))
+            TextField("\(label) in seconds", value: value, format: .number.precision(.fractionLength(2)))
+                .multilineTextAlignment(.trailing)
+                .textFieldStyle(.roundedBorder)
+                .frame(width: 82)
+            Text("s").foregroundStyle(.secondary)
+        }
+        .onChange(of: value.wrappedValue) { player?.stop() }
+    }
+
+    private func resetAudioRange() {
+        audioDuration = nil
+        trimAudio = false
+        clipStart = 0
+        clipEnd = 0
+        draftClip = nil
+    }
+
+    private func loadAudioDuration(_ url: URL) async {
+        guard let duration = await AudioClip.duration(of: url),
+              duration.isFinite, duration > 0, audioURL == url, recorder == nil else { return }
+        audioDuration = duration
+        clipEnd = duration
     }
 
     private func choose(image: Bool) {
@@ -131,6 +194,7 @@ struct MediaCardView: View {
             recorder.stop()
             self.recorder = nil
             status = "Recording ready to transcribe."
+            if let recordingURL { await loadAudioDuration(recordingURL) }
             return
         }
         guard await AVCaptureDevice.requestAccess(for: .audio) else {
@@ -153,6 +217,7 @@ struct MediaCardView: View {
             recordingURL = url
             audioURL = url
             recorder = newRecorder
+            resetAudioRange()
             image = nil
             draft = ""
             source = "Microphone recording"
@@ -162,58 +227,65 @@ struct MediaCardView: View {
         }
     }
 
-    private func play(_ url: URL) {
+    private func preview(_ url: URL) {
         if let player, player.isPlaying {
             player.stop()
             return
         }
-        do {
-            let data = try withAccess(url) { try Data(contentsOf: url) }
-            let newPlayer = try AVAudioPlayer(data: data)
-            player = newPlayer
-            newPlayer.play()
-        } catch {
-            status = error.localizedDescription
+        let clip = selectedClip
+        busy = true
+        Task {
+            defer { busy = false }
+            do {
+                let temporary = try await clip?.export(from: url)
+                defer { if let temporary { try? FileManager.default.removeItem(at: temporary) } }
+                let input = temporary ?? url
+                let data = try withAccess(input) { try Data(contentsOf: input) }
+                let newPlayer = try AVAudioPlayer(data: data)
+                if newPlayer.play() { player = newPlayer }
+                else { status = "Could not play this audio." }
+            } catch {
+                status = error.localizedDescription
+            }
         }
     }
 
     private func readMedia() {
-        do {
-            let command: String
-            let input: URL
-            let temporary: Bool
-            if let image {
-                command = "ocr"
-                input = try writeCrop(image)
-                temporary = true
-            } else if let audioURL {
-                command = "transcribe"
-                input = audioURL
-                temporary = false
-            } else {
-                return
+        let clip = selectedClip
+        let projectPath = settings.projectPath
+        let sourceLabel = sourceWithRange(clip)
+        player?.stop()
+        busy = true
+        status = "Transcribing…"
+        Task {
+            var temporary: URL?
+            defer {
+                busy = false
+                if let temporary { try? FileManager.default.removeItem(at: temporary) }
             }
-            let projectPath = settings.projectPath
-            let sourceLabel = source
-            busy = true
-            status = "Transcribing…"
-            Task {
-                defer {
-                    busy = false
-                    if temporary { try? FileManager.default.removeItem(at: input) }
+            do {
+                let command: String
+                let input: URL
+                if let image {
+                    command = "ocr"
+                    input = try writeCrop(image)
+                    temporary = input
+                } else if let audioURL {
+                    command = "transcribe"
+                    temporary = try await clip?.export(from: audioURL)
+                    input = temporary ?? audioURL
+                } else {
+                    return
                 }
-                do {
-                    let result = try await Task.detached {
-                        try runTranscription(projectPath, command, input, sourceLabel)
-                    }.value
-                    draft = result.text
-                    status = draft.isEmpty ? "No text was detected. Select another region or type the phrase." : "Review the Japanese text before creating a card."
-                } catch {
-                    status = error.localizedDescription
-                }
+                let result = try await Task.detached {
+                    try runTranscription(projectPath, command, input, sourceLabel)
+                }.value
+                draft = result.text
+                draftClip = clip
+                status = draft.isEmpty ? "No text was detected. Select another region or type the phrase." : "Review the Japanese text before creating a card."
+            } catch {
+                status = error.localizedDescription
             }
-        } catch {
-            status = error.localizedDescription
         }
     }
 
@@ -249,10 +321,17 @@ struct MediaCardView: View {
     private func createCard() {
         var args = ["--deck-name", deckName, "-s", "ja", "-t", "en"]
         if includeAudio { args.append("--audio") }
-        if !source.isEmpty { args += ["--source", source] }
+        let label = sourceWithRange(draftClip)
+        if !label.isEmpty { args += ["--source", label] }
         args += ["--", draft]
         runGeneration(projectPath: settings.projectPath, command: "add", args: args,
                       isGenerating: $busy, progressMessage: $status) { status = "" }
+    }
+
+    private func sourceWithRange(_ clip: AudioClip?) -> String {
+        guard let clip else { return source }
+        let label = source.isEmpty ? audioURL?.lastPathComponent ?? "Audio" : source
+        return "\(label) [\(clip.timestampLabel)]"
     }
 }
 

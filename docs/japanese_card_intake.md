@@ -1,6 +1,8 @@
 # Japanese cards from text, images, and audio
 
-Open the macOS app's **Japanese Card** tab. Type Japanese directly, open an image and drag a rectangle around a phrase, or import or record a short audio clip. Click **Read Image** or **Transcribe Audio**, adjust the draft, then choose **Create Card**. You can replay the audio or inspect the original image as you edit. The app uses your selected project directory and its `.venv/bin/python`.
+Open the macOS app's **Japanese Card** tab. Type Japanese directly, open an image and drag a rectangle around a phrase, or import or record audio. Click **Read Image** or **Transcribe Audio**, adjust the draft, then choose **Create Card**. You can replay the audio or inspect the original image as you edit. The app uses your selected project directory and its `.venv/bin/python`.
+
+For a podcast or longer recording, turn on **Select a time range**, enter the start and end in seconds, and preview the excerpt. **Transcribe Selection** sends only that excerpt. The card's source notes include the file or source label and the time range of the last successful transcription. The app can trim PCM audio natively and uses FFmpeg for compressed audio when installed. FFmpeg and `ffprobe` are also detected in the standard Homebrew bin directories.
 
 ## Command line
 
