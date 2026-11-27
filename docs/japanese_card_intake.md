@@ -17,3 +17,4 @@ Install the Poetry dependencies with `poetry install`. Enable Google Cloud Visio
 The two providers implement the same transcription interface. The CLI and Swift app use the same draft commands, and all three inputs call the existing card-generation use case after approval.
 
 See [evaluation](../evals/README.md) for the Japanese golden datasets and scoring.
+See the [design specification](specs/japanese-card-intake.md) for architecture, repository layout, and acceptance criteria.
