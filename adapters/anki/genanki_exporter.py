@@ -568,18 +568,19 @@ class GenankiExporter(DeckExporter):
             return ""
 
         source_lang_code, target_lang_code = lang_pair
-        lines = []
+        lines = ["<ul class='word-list'>"] # Start an unordered list
         for word in card.word_breakdown.words:
+            lines.append("<li>") # Start list item
             # Word (POS): Target Definition
             line = f"<b>{word.text}</b> <span class='pos'>({word.pos})</span>: <span class='definition-target'>{word.definition}</span>"
             lines.append(line)
-
             # Add native definition if available
             if word.definition_native:
                 native_line = f"<span class='definition-native'>({source_lang_code}: {word.definition_native})</span>"
                 lines.append(native_line)
-
-        return "<br>".join(lines)
+            lines.append("</li>") # End list item
+        lines.append("</ul>") # End unordered list
+        return "".join(lines) # Join without <br>
 
     def _format_card_notes(self, card: FlashCard) -> str:
         notes = self._format_grammar_notes(card)

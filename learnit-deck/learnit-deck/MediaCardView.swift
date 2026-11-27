@@ -52,6 +52,7 @@ struct MediaCardView: View {
                 if let image {
                     ImagePhrasePicker(image: image, selection: $selection)
                         .frame(height: 185)
+                        .allowsHitTesting(!busy)
                     Text("Drag to select the phrase, or use the whole image.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -73,6 +74,7 @@ struct MediaCardView: View {
                     .frame(minHeight: 82)
                     .border(Color.secondary.opacity(0.35))
                     .accessibilityLabel("Japanese text")
+                    .disabled(busy)
                 TextField("Source URL or label", text: $source)
                 TextField("Anki deck", text: $deckName)
                 Toggle("Generate pronunciation audio", isOn: $includeAudio)
@@ -84,6 +86,11 @@ struct MediaCardView: View {
                 }
             }
             .padding()
+        }
+        .onDisappear {
+            recorder?.stop()
+            recorder = nil
+            player?.stop()
         }
         .fileImporter(
             isPresented: $importing,
@@ -245,7 +252,7 @@ struct MediaCardView: View {
         if !source.isEmpty { args += ["--source", source] }
         args += ["--", draft]
         runGeneration(projectPath: settings.projectPath, command: "add", args: args,
-                      isGenerating: $busy, progressMessage: $status)
+                      isGenerating: $busy, progressMessage: $status) { status = "" }
     }
 }
 
