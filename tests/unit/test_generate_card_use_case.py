@@ -1,7 +1,9 @@
 # tests/unit/test_generate_card_use_case.py
+from typing import Optional
+
 import pytest
 from core.use_cases.generate_card import GenerateCardUseCase
-from core.domain.models import AudioFile, GrammarNote
+from core.domain.models import AudioFile, GrammarNote, Translation, WordBreakdown
 from tests.mocks import (
     MockTranslationService,
     MockDictionaryService,

@@ -3,6 +3,7 @@ import genanki
 import hashlib
 import logging
 import uuid
+from html import escape
 from pathlib import Path
 from typing import List, Optional, Tuple, Dict, Set
 
@@ -22,6 +23,7 @@ LANGUAGE_NAMES: Dict[LanguageCode, str] = {
     "it": "Italian",
     "pt": "Portuguese",
     'ca': 'Catalan',
+    "ja": "Japanese",
     # Add more as needed
 }
 
@@ -182,7 +184,7 @@ class GenankiExporter(DeckExporter):
 
             {{{{#GrammarNotes}}}}
             <div class="grammar-section">
-                <div class="section-title">✏️ Grammar Notes</div>
+                <div class="section-title">✏️ Notes</div>
                 <div class="grammar-content">
                     {{{{GrammarNotes}}}}
                 </div>
@@ -534,11 +536,11 @@ class GenankiExporter(DeckExporter):
 
         # Prepare field data in the exact order defined in the model
         fields_data = [
-            card.sentence.text,                             # Field 0: Source Language Text
+            escape(card.sentence.text),                             # Field 0: Source Language Text
             card.translation.text,                          # Field 1: Target Language Text
             self._format_word_breakdown(card, lang_pair),   # Field 2: WordBreakdown
             self._format_audio_field(card),                 # Field 3: Audio
-            self._format_grammar_notes(card),               # Field 4: GrammarNotes
+            self._format_card_notes(card),               # Field 4: GrammarNotes
             " ".join(card.tags) if card.tags else "",      # Field 5: Tags
             card.sentence.id or str(uuid.uuid4()),          # Field 6: SentenceId (fallback to new UUID)
             source_lang_code,                               # Field 7: SourceLangCode (hidden)
@@ -578,6 +580,12 @@ class GenankiExporter(DeckExporter):
                 lines.append(native_line)
 
         return "<br>".join(lines)
+
+    def _format_card_notes(self, card: FlashCard) -> str:
+        notes = self._format_grammar_notes(card)
+        if card.sentence.source:
+            notes += f'<div><strong>Source</strong> {escape(card.sentence.source)}</div>'
+        return notes
 
     def _format_grammar_notes(self, card: FlashCard) -> str:
         """Formats grammar notes into HTML for Anki."""

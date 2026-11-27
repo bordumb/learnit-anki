@@ -1,6 +1,6 @@
 # core/use_cases/generate_card.py
-from typing import Optional, Tuple
-from ..domain.models import Sentence, FlashCard, AudioFile, Translation, WordBreakdown, GrammarNote
+from typing import Optional
+from ..domain.models import Sentence, FlashCard, AudioFile, GrammarNote
 from ..domain.interfaces import (
     TranslationService, DictionaryService, AudioService, GrammarService, StorageService
 )
@@ -48,7 +48,8 @@ class GenerateCardUseCase:
         source_lang: Optional[str] = None,
         target_lang: Optional[str] = None,
         include_audio: bool = True,
-        include_grammar: bool = True
+        include_grammar: bool = True,
+        source: Optional[str] = None,
     ) -> FlashCard:
         """
         Generates a complete flashcard for a given sentence.
@@ -61,12 +62,13 @@ class GenerateCardUseCase:
             target_lang: The target language code (e.g., 'en', 'es'). Defaults if None.
             include_audio: Whether to generate and save audio.
             include_grammar: Whether to generate grammar notes.
+            source: Optional URL or label for the original material.
 
         Returns:
             A populated FlashCard object.
 
         Raises:
-            ValueError: If audio generation fails and include_audio is True.
+            ValueError: If translation or dictionary analysis fails.
             Exception: Propagates exceptions from underlying services.
         """
         # Determine languages to use
@@ -74,7 +76,7 @@ class GenerateCardUseCase:
         tgt_lang = target_lang or self.default_target_lang
 
         # Create sentence object with the correct language
-        sentence = Sentence(text=sentence_text, language=src_lang)
+        sentence = Sentence(text=sentence_text, language=src_lang, source=source)
 
         # 1. Get Translation
         translation = await self.translator.translate(
@@ -84,6 +86,8 @@ class GenerateCardUseCase:
         )
         # Ensure the translation object has the target language set
         # (Some adapters might not set it, though they should)
+        if translation is None:
+            raise ValueError("Translation failed.")
         if not translation.target_language:
             translation.target_language = tgt_lang
 
@@ -95,6 +99,9 @@ class GenerateCardUseCase:
             target_lang=tgt_lang # Pass target lang for definitions
         )
 
+        if word_breakdown is None:
+            raise ValueError("Word breakdown analysis failed.")
+
         # 3. Generate and Save Audio (if requested)
         audio_model: Optional[AudioFile] = None
         if include_audio:
@@ -105,28 +112,19 @@ class GenerateCardUseCase:
                 # Format is handled by the adapter or uses its default
             )
 
-            # Check if audio generation was successful
             if generated_audio_model and audio_data:
-                # Save the audio data using the storage service
-                # The storage service might return a URL or path
                 storage_location = await self.storage.save_audio(generated_audio_model, audio_data)
+                if storage_location:
+                    if storage_location.startswith(("http://", "https://")):
+                        generated_audio_model.url = storage_location
+                    generated_audio_model.language = src_lang
+                    audio_model = generated_audio_model
 
-                # Optionally update the model with the URL if applicable
-                if isinstance(storage_location, str) and storage_location.startswith(('http://', 'https://')):
-                     generated_audio_model.url = storage_location
-                generated_audio_model.language = src_lang # Store language with audio model
-
-                audio_model = generated_audio_model # Assign to the variable used for the card
-            else:
-                # Handle potential failure from the audio service
-                print(f"⚠️ Audio generation skipped or failed for sentence: '{sentence_text}'")
-                # Decide if this should be a critical error or just a warning
-                # raise ValueError("Audio generation failed.") # Option 1: Fail hard
-                # Option 2: Continue without audio (current implementation)
-
+            if audio_model is None:
+                print("⚠️ Audio generation or storage did not complete. The card will be saved without audio.")
 
         # 4. Get Grammar Notes (if requested and service available)
-        grammar_notes: List[GrammarNote] = []
+        grammar_notes: list[GrammarNote] = []
         if include_grammar and self.grammar:
             grammar_notes = await self.grammar.explain_grammar(
                 sentence=sentence_text,

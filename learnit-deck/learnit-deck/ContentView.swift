@@ -62,6 +62,10 @@ struct ContentView: View {
                     .tabItem { Label("From CSV File", systemImage: "tablecells") }
                     .tag(2)
                     
+                MediaCardView()
+                    .tabItem { Label("Japanese Card", systemImage: "photo.on.rectangle") }
+                    .tag(4)
+
                 SettingsView()
                     .tabItem { Label("Settings", systemImage: "gear") }
                     .tag(3)

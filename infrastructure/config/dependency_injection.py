@@ -7,14 +7,13 @@ from core.domain.interfaces import (
 )
 from core.use_cases.generate_card import GenerateCardUseCase
 from core.use_cases.generate_deck import GenerateDeckUseCase
+from core.use_cases.transcribe_media import TranscribeMediaUseCase
 from adapters.translation.deepl_adapter import DeepLTranslationAdapter
 from adapters.translation.openai_adapter import OpenAITranslationAdapter
 from adapters.dictionary.openai_dictionary_adapter import OpenAIDictionaryAdapter
 from adapters.grammar.openai_grammar_adapter import OpenAIGrammarAdapter
-from adapters.audio.google_tts_adapter import GoogleTTSAdapter
 from adapters.storage.local_file_storage import LocalFileStorage
 from adapters.storage.s3_storage import S3StorageAdapter
-from adapters.anki.genanki_exporter import GenankiExporter
 from .settings import Settings
 from typing import Optional
 
@@ -82,6 +81,8 @@ class ServiceContainer:
                 if os.path.exists(cred_path):
                     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = cred_path
                     # Pass the voice dictionary to the adapter
+                    from adapters.audio.google_tts_adapter import GoogleTTSAdapter
+
                     self._audio_service = GoogleTTSAdapter(
                         voice_map=self.settings.google_tts_voices
                     )
@@ -114,8 +115,28 @@ class ServiceContainer:
         """Provides the deck exporter instance."""
         if self._deck_exporter is None:
             # Currently only GenankiExporter is implemented
+            from adapters.anki.genanki_exporter import GenankiExporter
+
             self._deck_exporter = GenankiExporter()
         return self._deck_exporter
+
+    def create_image_transcriber(self) -> TranscribeMediaUseCase:
+        from adapters.transcription.google_vision import GoogleVisionTranscriber
+
+        return TranscribeMediaUseCase(
+            GoogleVisionTranscriber(self.settings.google_application_credentials)
+        )
+
+    def create_audio_transcriber(self) -> TranscribeMediaUseCase:
+        if not self.settings.openai_api_key:
+            raise ValueError("Set OPENAI_API_KEY to transcribe audio.")
+        from adapters.transcription.openai_speech import OpenAISpeechTranscriber
+
+        return TranscribeMediaUseCase(
+            OpenAISpeechTranscriber(
+                self.settings.openai_api_key, self.settings.openai_transcription_model
+            )
+        )
 
     def create_card_generator(self) -> GenerateCardUseCase:
         """Factory for card generation use case"""

@@ -6,7 +6,8 @@ import os
 
 class Settings(BaseSettings):
     # API Keys
-    openai_api_key: str
+    openai_api_key: Optional[str] = None
+    openai_transcription_model: str = "gpt-transcribe"
     deepl_api_key: Optional[str] = None
     google_application_credentials: Optional[str] = None
 
@@ -28,6 +29,7 @@ class Settings(BaseSettings):
         "de": "de-DE-Neural2-B",
         "es": "es-ES-Neural2-A",
         "ca": "ca-ES-Standard-A",
+        "ja": "ja-JP-Standard-A",
         # Add more languages and voices here as needed
     }
     # --- End New Voice Dictionary ---

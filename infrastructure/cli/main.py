@@ -1,5 +1,7 @@
 # infrastructure/cli/main.py
 import click
+from dataclasses import asdict
+import json
 import asyncio
 from pathlib import Path
 import sys
@@ -60,7 +62,7 @@ try:
     SUPPORTED_LANG_CODES = list(LANGUAGE_NAMES.keys())
 except ImportError:
     logger.warning("Could not import LANGUAGE_NAMES for validation help. Using basic codes.")
-    SUPPORTED_LANG_CODES = ['fr', 'en', 'de', 'es', 'ca'] # Fallback
+    SUPPORTED_LANG_CODES = ['fr', 'en', 'de', 'es', 'ca', 'ja'] # Fallback
 
 def validate_lang_code(ctx, param, value):
     """Click callback to validate language codes."""
@@ -86,6 +88,32 @@ def cli():
         logger.warning(f"Could not create necessary directories: {e}")
     pass
 
+def echo_draft(transcriber_factory, media, language, source):
+    try:
+        draft = asyncio.run(transcriber_factory().execute(media, language, source))
+    except Exception as error:
+        raise click.ClickException(f"Transcription failed: {error}") from error
+    click.echo(json.dumps(asdict(draft), ensure_ascii=False))
+
+
+@cli.command("ocr")
+@click.argument("image", type=click.Path(exists=True, dir_okay=False, path_type=Path))
+@click.option("--language", "-l", default="ja", callback=validate_lang_code, show_default=True)
+@click.option("--source", help="Source URL or label to retain with the draft.")
+def ocr(image, language, source):
+    """Print an image transcription draft as JSON."""
+    echo_draft(container.create_image_transcriber, image, language, source)
+
+
+@cli.command("transcribe")
+@click.argument("audio_file", type=click.Path(exists=True, dir_okay=False, path_type=Path))
+@click.option("--language", "-l", default="ja", callback=validate_lang_code, show_default=True)
+@click.option("--source", help="Source URL or label to retain with the draft.")
+def transcribe(audio_file, language, source):
+    """Print an audio transcription draft as JSON."""
+    echo_draft(container.create_audio_transcriber, audio_file, language, source)
+
+
 @cli.command()
 @click.argument('sentence')
 @click.option('--deck-name', default='Language Practice', help='Name of the Anki deck.')
@@ -93,7 +121,8 @@ def cli():
 @click.option('--target-lang', '-t', default=None, callback=validate_lang_code, help=f'Target language code (e.g., {", ".join(SUPPORTED_LANG_CODES)}). Defaults to setting from .env.')
 @click.option('--no-grammar', is_flag=True, default=False, help='Disable grammar/phrase notes.')
 @click.option('--audio/--no-audio', default=False, help='Enable/disable audio generation (requires setup, default: disabled).') # Changed to flag pair
-def add(sentence, deck_name, source_lang, target_lang, no_grammar, audio):
+@click.option("--source", help="Source URL or label to include on the card.")
+def add(sentence, deck_name, source_lang, target_lang, no_grammar, audio, source):
     """
     Generate a single flashcard from a sentence.
 
@@ -103,6 +132,8 @@ def add(sentence, deck_name, source_lang, target_lang, no_grammar, audio):
     Example (German to English, default deck name):
         anki-cli add "Ich esse einen Apfel." -s de -t en
     """
+    if not sentence.strip():
+        raise click.BadParameter("Enter or approve some text before creating a card.", param_hint="sentence")
     # Use defaults from settings if not provided via CLI
     final_source_lang = source_lang or container.settings.default_source_language
     final_target_lang = target_lang or container.settings.default_target_language
@@ -122,7 +153,8 @@ def add(sentence, deck_name, source_lang, target_lang, no_grammar, audio):
             source_lang=final_source_lang, # Pass determined languages
             target_lang=final_target_lang,
             include_audio=audio,
-            include_grammar=not no_grammar
+            include_grammar=not no_grammar,
+            source=source,
         )
 
         if card is None:
