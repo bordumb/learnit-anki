@@ -1,6 +1,7 @@
 # infrastructure/config/dependency_injection.py
 from functools import lru_cache
 import os
+from pathlib import Path
 from core.domain.interfaces import (
     TranslationService, DictionaryService, AudioService,
     StorageService, CacheService, GrammarService, DeckExporter
@@ -117,7 +118,7 @@ class ServiceContainer:
             # Currently only GenankiExporter is implemented
             from adapters.anki.genanki_exporter import GenankiExporter
 
-            self._deck_exporter = GenankiExporter()
+            self._deck_exporter = GenankiExporter(Path(self.settings.storage_path) / "audio")
         return self._deck_exporter
 
     def create_image_transcriber(self) -> TranscribeMediaUseCase:
