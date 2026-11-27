@@ -131,8 +131,8 @@ Return a JSON object containing a single key "words", which holds an array. Each
 - "text": The original word from the sentence.
 - "lemma": The base form (lemma) of the word.
 - "pos": The part of speech (e.g., verb, noun, adj).
-- "definition": A brief definition in {target_lang}.
-- "definition_native": A brief definition in {source_lang} (monolingual).
+- "definition": A clear, dictionary-style definition in {target_lang}, suitable for a language learner. Include nuance if relevant.
+- "definition_native": A clear, dictionary-style definition in {source_lang} (monolingual).
 
 Example format:
 {{
