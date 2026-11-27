@@ -4,6 +4,7 @@ import argparse
 import asyncio
 import json
 from dataclasses import asdict, dataclass
+from hashlib import sha256
 from pathlib import Path
 from statistics import median
 from time import perf_counter
@@ -43,6 +44,10 @@ def load_cases(manifests: list[Path]) -> list[Case]:
                 media = (folder / row["media"]).resolve()
                 if kind not in {"image", "audio"} or not media.is_relative_to(folder) or not media.is_file():
                     raise ValueError("expected an image or audio file inside the manifest directory")
+                if media.stat().st_size == 0:
+                    raise ValueError(f"media file is empty: {media.name}")
+                if "sha256" in row and sha256(media.read_bytes()).hexdigest() != row["sha256"]:
+                    raise ValueError(f"media checksum does not match: {media.name}")
                 if row["id"] in ids:
                     raise ValueError(f'duplicate ID {row["id"]}')
                 for field in ("id", "reference", "language", "group", "source_url", "license"):
