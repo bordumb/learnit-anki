@@ -1,15 +1,15 @@
 # Japanese speech evaluation
 
-The `passages` suite has five continuous recordings with reference text. The [manifest](cases.jsonl) lists the local clip, source, transcription, timestamps, and license for each one.
+The `passages` suite has six continuous recordings with reference text. The [manifest](cases.jsonl) lists the local clip, source, transcription, timestamps, and license for each one.
 
 | Source | Clips | Duration | Evaluation target |
 | --- | ---: | --- | --- |
-| IngCrowd Japanese Themed Casual Conversation Corpus | 3 | 29.62–41.82 s | Two-speaker, unscripted dialogue with fillers, backchannels, and overlapping speech |
+| IngCrowd Japanese Themed Casual Conversation Corpus | 4 | 29.62–85.93 s | Two-speaker, unscripted dialogue with fillers, backchannels, and overlapping speech |
 | Japanese Spoken Wikipedia, 「タチバナ」 | 2 | 20.70–22.50 s | Single-speaker narration with terminology and kanji compounds |
 
 ## Unscripted conversation
 
-Credit **IngCrowd Inc.** for the [Japanese Themed Casual Conversation Corpus](https://huggingface.co/datasets/IngCrowd/japanese-themed-dialogue) under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). Excerpts from the unmodified mixed audio cover hobbies, internet and communications, and education and science. Their references use the original human ELAN segments, listed by annotation ID, in chronological order. The text preserves fillers, repetitions, and source punctuation. Nonverbal laughter tags are omitted. Overlapping passages are reported in their own category because a single linear prediction can place concurrent speech in a different order. The clips share one evaluation group because stable speaker identifiers across conversations are unavailable.
+Credit **IngCrowd Inc.** for the [Japanese Themed Casual Conversation Corpus](https://huggingface.co/datasets/IngCrowd/japanese-themed-dialogue) under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). Excerpts from the unmodified mixed audio cover hobbies, internet and communications, and education and science. The 86-second clip is a second, non-overlapping excerpt from the hobbies conversation. References use the original human ELAN segments, listed by annotation ID, in chronological order. The text preserves fillers, repetitions, and source punctuation. Nonverbal laughter tags are omitted. Overlapping passages are reported in their own category because a single linear prediction can place concurrent speech in a different order. The clips share one evaluation group because stable speaker identifiers across conversations are unavailable.
 
 ## Narration
 

@@ -11,7 +11,6 @@ from core.use_cases.generate_deck import GenerateDeckUseCase
 from core.use_cases.transcribe_media import TranscribeMediaUseCase
 from adapters.translation.deepl_adapter import DeepLTranslationAdapter
 from adapters.translation.openai_adapter import OpenAITranslationAdapter
-from adapters.dictionary.openai_dictionary_adapter import OpenAIDictionaryAdapter
 from adapters.grammar.openai_grammar_adapter import OpenAIGrammarAdapter
 from adapters.storage.local_file_storage import LocalFileStorage
 from adapters.storage.s3_storage import S3StorageAdapter
@@ -57,6 +56,8 @@ class ServiceContainer:
         if self._dictionary_service is None:
             if not self.settings.openai_api_key:
                  raise ValueError("OpenAI API key is required for the dictionary service.")
+            from adapters.dictionary.openai_dictionary_adapter import OpenAIDictionaryAdapter
+
             self._dictionary_service = OpenAIDictionaryAdapter(
                 api_key=self.settings.openai_api_key
             )

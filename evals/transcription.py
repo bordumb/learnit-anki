@@ -120,11 +120,13 @@ async def run_live(cases: list[Case], env_file: Path | None = None) -> list[dict
     settings = Settings(_env_file=env_file) if env_file is not None else Settings()
     container = ServiceContainer(settings)
     factories = {"image": container.create_image_transcriber, "audio": container.create_audio_transcriber}
-    transcribers = {kind: factories[kind]() for kind in dict.fromkeys(case.kind for case in cases)}
+    transcribers = {}
     rows = []
     for case in cases:
         start = perf_counter()
         try:
+            if case.kind not in transcribers:
+                transcribers[case.kind] = factories[case.kind]()
             draft = await transcribers[case.kind].execute(case.media, case.language)
             rows.append(score(case, draft.text, perf_counter() - start))
         except Exception as error:
