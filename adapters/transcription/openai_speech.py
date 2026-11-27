@@ -11,11 +11,13 @@ class OpenAISpeechTranscriber:
         self.model = model
 
     async def transcribe(self, media: Path, language: str) -> str:
+        # GPT-Transcribe takes a list, while the older models take one language.
+        language_hint = {"languages": [language]} if self.model == "gpt-transcribe" else {"language": language}
         async with AsyncOpenAI(api_key=self.api_key, timeout=90) as client:
             with media.open("rb") as audio:
                 result = await client.audio.transcriptions.create(
                     model=self.model,
                     file=audio,
-                    extra_body={"languages": [language]},
+                    extra_body=language_hint,
                 )
         return result.text

@@ -12,6 +12,7 @@ import unicodedata
 
 GOLDEN = Path(__file__).resolve().parents[1] / "data" / "golden" / "ja"
 OUTPUT = Path(__file__).resolve().parents[1] / "output" / "transcription-evals"
+SUITES = ("smoke", "passages")
 
 
 @dataclass(frozen=True)
@@ -23,6 +24,7 @@ class Case:
     reference: str
     language: str
     group: str
+    suite: str = "smoke"
 
 
 def load_cases(manifests: list[Path]) -> list[Case]:
@@ -46,10 +48,13 @@ def load_cases(manifests: list[Path]) -> list[Case]:
                 for field in ("id", "reference", "language", "group", "source_url", "license"):
                     if not isinstance(row[field], str) or not row[field].strip():
                         raise ValueError(f"{field} must be a non-empty string")
+                suite = row.get("suite", "smoke")
+                if suite not in SUITES:
+                    raise ValueError(f"suite must be one of {', '.join(SUITES)}")
                 cases.append(Case(
                     id=row["id"], kind=kind, category=row.get("category", kind),
                     media=media, reference=row["reference"],
-                    language=row["language"], group=row["group"],
+                    language=row["language"], group=row["group"], suite=suite,
                 ))
                 ids.add(row["id"])
             except (TypeError, ValueError, KeyError) as error:
@@ -81,6 +86,7 @@ def score(case: Case, prediction: str, seconds: float | None) -> dict:
     candidate = normalize(prediction)
     return {
         "id": case.id, "kind": case.kind, "category": case.category, "group": case.group,
+        "suite": case.suite,
         "reference": case.reference, "prediction": prediction,
         "character_edits": edit_distance(reference, candidate),
         "reference_characters": len(reference), "exact_match": reference == candidate,
@@ -118,7 +124,7 @@ async def run_live(cases: list[Case], env_file: Path | None = None) -> list[dict
             rows.append(score(case, draft.text, perf_counter() - start))
         except Exception as error:
             rows.append({"id": case.id, "kind": case.kind, "category": case.category,
-                         "group": case.group, "error": str(error)})
+                         "group": case.group, "suite": case.suite, "error": str(error)})
     return rows
 
 
@@ -140,6 +146,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--manifest", type=Path, action="append", help="JSONL manifest. Can be repeated.")
     parser.add_argument("--kind", choices=["image", "audio"], help="Evaluate a single modality.")
+    parser.add_argument("--suite", choices=SUITES, help="Evaluate one suite. The default includes both.")
     parser.add_argument("--validate-only", action="store_true", help="Check the golden manifest and files offline.")
     parser.add_argument("--predictions", type=Path, help="Score saved JSONL predictions without invoking providers.")
     parser.add_argument("--env-file", type=Path, help="Load provider settings from this env file for a live run.")
@@ -150,12 +157,17 @@ def main() -> int:
         cases = load_cases(manifests)
         if args.kind:
             cases = [case for case in cases if case.kind == args.kind]
+        if args.suite:
+            cases = [case for case in cases if case.suite == args.suite]
         if not cases:
-            raise ValueError("No golden cases match the requested modality.")
+            raise ValueError("No golden cases match the requested filters.")
         if args.validate_only:
             print(json.dumps({"validated": len(cases), "by_kind": {
                 kind: sum(case.kind == kind for case in cases)
                 for kind in sorted({case.kind for case in cases})
+            }, "by_suite": {
+                suite: sum(case.suite == suite for case in cases)
+                for suite in sorted({case.suite for case in cases})
             }}, ensure_ascii=False))
             return 0
         rows = (
@@ -176,6 +188,8 @@ def main() -> int:
         "summary": summarize(rows),
         "by_kind": {kind: summarize([row for row in rows if row["kind"] == kind])
                     for kind in sorted({row["kind"] for row in rows})},
+        "by_suite": {suite: summarize([row for row in rows if row["suite"] == suite])
+                     for suite in sorted({row["suite"] for row in rows})},
         "by_category": by_category,
         "cases": rows,
     }

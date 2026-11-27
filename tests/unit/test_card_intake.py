@@ -1,6 +1,7 @@
 import asyncio
 import json
 from pathlib import Path
+import tempfile
 import unittest
 
 from core.use_cases.generate_card import GenerateCardUseCase
@@ -59,7 +60,6 @@ class CardIntakeTests(unittest.TestCase):
         cases = load_cases(sorted(GOLDEN.glob("*/cases.jsonl")))
         self.assertEqual({case.kind for case in cases}, {"image", "audio"})
         self.assertGreaterEqual(len(cases), 12)
-        import tempfile
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "predictions.jsonl"
             predictions = [
@@ -75,6 +75,7 @@ class CardIntakeTests(unittest.TestCase):
         self.assertEqual(summary["exact_match_rate"], (len(cases) - 1) / len(cases))
         self.assertGreater(summary["character_error_rate"], 0)
         self.assertEqual(summary["median_latency_seconds"], 0.1)
+        self.assertEqual({row["suite"] for row in rows}, {case.suite for case in cases})
 
 
 if __name__ == "__main__":
