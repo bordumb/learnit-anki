@@ -116,14 +116,34 @@ struct AudioClip: Sendable {
         return Int64(buffer.frameLength)
     }
 
-    private static func audioTool(_ name: String) -> URL? {
+    static func writeJapanesePronunciation(_ passage: String, in directory: URL) throws -> URL {
+        let input = directory.appendingPathComponent("pronunciation.txt")
+        let output = directory.appendingPathComponent("pronunciation.wav")
+        try passage.write(to: input, atomically: true, encoding: .utf8)
+        do {
+            _ = try run(URL(fileURLWithPath: "/usr/bin/say"), [
+                "-v", "Kyoko", "-f", input.path, "-o", output.path,
+                "--file-format=WAVE", "--data-format=LEI16",
+            ])
+            if let audio = try? AVAudioFile(forReading: output), audio.length > 0 {
+                return output
+            }
+        } catch {
+            // The voice can be listed before macOS has downloaded its audio assets.
+        }
+        throw AudioClipError.exportFailed(
+            "Could not generate Japanese pronunciation. Check that the Kyoko voice is available in macOS settings, or turn off Pronunciation audio."
+        )
+    }
+
+    static func audioTool(_ name: String) -> URL? {
         let path = ProcessInfo.processInfo.environment["PATH"] ?? ""
         let directories = path.split(separator: ":").map(String.init) + ["/opt/homebrew/bin", "/usr/local/bin"]
         return directories.lazy.map { URL(fileURLWithPath: $0).appendingPathComponent(name) }
             .first { FileManager.default.isExecutableFile(atPath: $0.path) }
     }
 
-    private static func run(_ command: URL, _ arguments: [String]) throws -> String {
+    static func run(_ command: URL, _ arguments: [String]) throws -> String {
         let process = Process()
         process.executableURL = command
         process.arguments = arguments

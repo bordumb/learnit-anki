@@ -20,6 +20,10 @@ class TranscriptionService(Protocol):
         ...
 
 
+class TranslationError(ValueError):
+    """The translation needed to create a card could not be obtained."""
+
+
 class TranslationService(ABC):
     """Port for translation providers"""
 

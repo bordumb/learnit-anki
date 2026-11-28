@@ -1,8 +1,9 @@
 # core/use_cases/generate_card.py
+import logging
 from typing import Optional
-from ..domain.models import Sentence, FlashCard, AudioFile, GrammarNote
+from ..domain.models import Sentence, FlashCard, AudioFile, GrammarNote, Translation, WordBreakdown
 from ..domain.interfaces import (
-    TranslationService, DictionaryService, AudioService, GrammarService, StorageService
+    TranslationService, TranslationError, DictionaryService, AudioService, GrammarService, StorageService
 )
 
 class GenerateCardUseCase:
@@ -14,8 +15,8 @@ class GenerateCardUseCase:
 
     def __init__(
         self,
-        translation_service: TranslationService,
-        dictionary_service: DictionaryService,
+        translation_service: Optional[TranslationService],
+        dictionary_service: Optional[DictionaryService],
         audio_service: AudioService,
         storage_service: StorageService,
         grammar_service: Optional[GrammarService],
@@ -50,6 +51,7 @@ class GenerateCardUseCase:
         include_audio: bool = True,
         include_grammar: bool = True,
         source: Optional[str] = None,
+        manual_translation: Optional[str] = None,
     ) -> FlashCard:
         """
         Generates a complete flashcard for a given sentence.
@@ -63,6 +65,7 @@ class GenerateCardUseCase:
             include_audio: Whether to generate and save audio.
             include_grammar: Whether to generate grammar notes.
             source: Optional URL or label for the original material.
+            manual_translation: Approved translation to export without cloud text enrichment.
 
         Returns:
             A populated FlashCard object.
@@ -78,54 +81,50 @@ class GenerateCardUseCase:
         # Create sentence object with the correct language
         sentence = Sentence(text=sentence_text, language=src_lang, source=source)
 
-        # 1. Get Translation
-        translation = await self.translator.translate(
-            text=sentence_text,
-            source_lang=src_lang,
-            target_lang=tgt_lang
-        )
-        # Ensure the translation object has the target language set
-        # (Some adapters might not set it, though they should)
-        if translation is None:
-            raise ValueError("Translation failed.")
-        if not translation.target_language:
-            translation.target_language = tgt_lang
+        if manual_translation is not None:
+            approved = manual_translation.strip()
+            if not approved:
+                raise TranslationError("Enter a translation before creating the card.")
+            translation = Translation(text=approved, target_language=tgt_lang, provider="manual")
+            word_breakdown = WordBreakdown(words=[])
+        else:
+            if self.translator is None or self.dictionary is None:
+                raise TranslationError("Configure a translation provider or enter a translation manually.")
+            translation = await self.translator.translate(
+                text=sentence_text, source_lang=src_lang, target_lang=tgt_lang,
+            )
+            if translation is None or not translation.text.strip():
+                raise TranslationError("Translation failed. Check the configured translation provider.")
+            if not translation.target_language:
+                translation.target_language = tgt_lang
 
-
-        # 2. Get Word Breakdown
-        word_breakdown = await self.dictionary.analyze_sentence(
-            sentence=sentence_text,
-            source_lang=src_lang,
-            target_lang=tgt_lang # Pass target lang for definitions
-        )
-
-        if word_breakdown is None:
-            raise ValueError("Word breakdown analysis failed.")
+            word_breakdown = await self.dictionary.analyze_sentence(
+                sentence=sentence_text, source_lang=src_lang, target_lang=tgt_lang,
+            )
+            if word_breakdown is None:
+                raise ValueError("Word breakdown analysis failed.")
 
         # 3. Generate and Save Audio (if requested)
         audio_model: Optional[AudioFile] = None
         if include_audio:
-            # Generate audio model and raw data using the source language
-            generated_audio_model, audio_data = await self.audio.generate_audio(
-                text=sentence_text,
-                language=src_lang # Use source language for TTS
-                # Format is handled by the adapter or uses its default
-            )
-
-            if generated_audio_model and audio_data:
-                storage_location = await self.storage.save_audio(generated_audio_model, audio_data)
-                if storage_location:
-                    if storage_location.startswith(("http://", "https://")):
-                        generated_audio_model.url = storage_location
-                    generated_audio_model.language = src_lang
-                    audio_model = generated_audio_model
+            try:
+                generated_audio, data = await self.audio.generate_audio(sentence_text, src_lang)
+                if generated_audio and data:
+                    location = await self.storage.save_audio(generated_audio, data)
+                    if location:
+                        if location.startswith(("http://", "https://")):
+                            generated_audio.url = location
+                        generated_audio.language = src_lang
+                        audio_model = generated_audio
+            except Exception:
+                logging.getLogger(__name__).warning("Pronunciation audio failed.", exc_info=True)
 
             if audio_model is None:
-                print("⚠️ Audio generation or storage did not complete. The card will be saved without audio.")
+                logging.getLogger(__name__).warning("Saving the card without pronunciation audio.")
 
         # 4. Get Grammar Notes (if requested and service available)
         grammar_notes: list[GrammarNote] = []
-        if include_grammar and self.grammar:
+        if manual_translation is None and include_grammar and self.grammar:
             grammar_notes = await self.grammar.explain_grammar(
                 sentence=sentence_text,
                 language=src_lang # Explain grammar based on source language

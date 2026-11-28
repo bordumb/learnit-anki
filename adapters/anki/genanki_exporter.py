@@ -4,6 +4,7 @@ import hashlib
 import logging
 import uuid
 from html import escape
+from tempfile import TemporaryDirectory
 from pathlib import Path
 from typing import List, Optional, Tuple, Dict, Set
 
@@ -510,7 +511,11 @@ class GenankiExporter(DeckExporter):
         try:
             output_file = Path(output_path).resolve()
             output_file.parent.mkdir(parents=True, exist_ok=True)
-            package.write_to_file(str(output_file))
+            # Keep the last completed package available if genanki fails partway.
+            with TemporaryDirectory(dir=output_file.parent) as staging:
+                pending = Path(staging) / output_file.name
+                package.write_to_file(str(pending))
+                pending.replace(output_file)
             logger.info(f"✅ Anki package successfully created: {output_file}")
             return str(output_file)
         except Exception as e:
@@ -537,7 +542,7 @@ class GenankiExporter(DeckExporter):
         # Prepare field data in the exact order defined in the model
         fields_data = [
             escape(card.sentence.text),                             # Field 0: Source Language Text
-            card.translation.text,                          # Field 1: Target Language Text
+            escape(card.translation.text).replace("\n", "<br>"),  # Field 1: Target Language Text
             self._format_word_breakdown(card, lang_pair),   # Field 2: WordBreakdown
             self._format_audio_field(card),                 # Field 3: Audio
             self._format_card_notes(card),               # Field 4: GrammarNotes

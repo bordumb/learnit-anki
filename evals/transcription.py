@@ -27,6 +27,7 @@ class Case:
     group: str
     suite: str = "smoke"
     writing_direction: str | None = None
+    source_url: str = ""
 
 
 def load_cases(manifests: list[Path]) -> list[Case]:
@@ -61,7 +62,7 @@ def load_cases(manifests: list[Path]) -> list[Case]:
                     id=row["id"], kind=kind, category=row.get("category", kind),
                     media=media, reference=row["reference"],
                     language=row["language"], group=row["group"], suite=suite,
-                    writing_direction=row.get("writing_direction"),
+                    writing_direction=row.get("writing_direction"), source_url=row["source_url"],
                 ))
                 ids.add(row["id"])
             except (TypeError, ValueError, KeyError) as error:
@@ -93,7 +94,7 @@ def score(case: Case, prediction: str, seconds: float | None) -> dict:
     candidate = normalize(prediction)
     return {
         "id": case.id, "kind": case.kind, "category": case.category, "group": case.group,
-        "suite": case.suite,
+        "suite": case.suite, "source_url": case.source_url,
         "reference": case.reference, "prediction": prediction,
         "character_edits": edit_distance(reference, candidate),
         "reference_characters": len(reference), "exact_match": reference == candidate,
@@ -125,15 +126,17 @@ async def run_live(cases: list[Case], env_file: Path | None = None) -> list[dict
     transcribers = {}
     rows = []
     for case in cases:
+        model = settings.openai_transcription_model if case.kind == "audio" else "DOCUMENT_TEXT_DETECTION"
         start = perf_counter()
         try:
             if case.kind not in transcribers:
                 transcribers[case.kind] = factories[case.kind]()
             draft = await transcribers[case.kind].execute(case.media, case.language)
-            rows.append(score(case, draft.text, perf_counter() - start))
+            rows.append({**score(case, draft.text, perf_counter() - start), "model": model})
         except Exception as error:
             rows.append({"id": case.id, "kind": case.kind, "category": case.category,
-                         "group": case.group, "suite": case.suite, "error": str(error)})
+                         "group": case.group, "suite": case.suite, "model": model,
+                         "source_url": case.source_url, "error": str(error)})
     return rows
 
 
@@ -147,8 +150,14 @@ def score_predictions(cases: list[Case], path: Path) -> list[dict]:
             predictions[row["id"]] = row
     if set(predictions) != {case.id for case in cases}:
         raise ValueError("Prediction IDs must match the selected golden cases exactly.")
-    return [score(case, predictions[case.id]["prediction"], predictions[case.id].get("latency_seconds"))
-            for case in cases]
+    rows = []
+    for case in cases:
+        prediction = predictions[case.id]
+        row = score(case, prediction["prediction"], prediction.get("latency_seconds"))
+        if "model" in prediction:
+            row["model"] = prediction["model"]
+        rows.append(row)
+    return rows
 
 
 def main() -> int:
@@ -194,6 +203,10 @@ def main() -> int:
     report = {
         "mode": "saved-predictions" if args.predictions else "live",
         "manifests": [str(path) for path in manifests],
+        "manifest_sha256": {str(path): sha256(path.read_bytes()).hexdigest() for path in manifests},
+        "normalization": "NFC, remove Unicode whitespace, preserve punctuation",
+        "by_source": {source: summarize([row for row in rows if row["source_url"] == source])
+                      for source in sorted({row["source_url"] for row in rows})},
         "summary": summarize(rows),
         "by_kind": {kind: summarize([row for row in rows if row["kind"] == kind])
                     for kind in sorted({row["kind"] for row in rows})},

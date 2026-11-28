@@ -3,7 +3,7 @@ from functools import lru_cache
 import os
 from pathlib import Path
 from core.domain.interfaces import (
-    TranslationService, DictionaryService, AudioService,
+    TranslationService, TranslationError, DictionaryService, AudioService,
     StorageService, CacheService, GrammarService, DeckExporter
 )
 from core.use_cases.generate_card import GenerateCardUseCase
@@ -48,7 +48,7 @@ class ServiceContainer:
                     api_key=self.settings.openai_api_key
                 )
             else:
-                 raise ValueError("No valid translation provider configured (check API keys).")
+                 raise TranslationError("Configure a translation provider in the project’s .env file.")
         return self._translation_service
 
     @property
@@ -140,14 +140,14 @@ class ServiceContainer:
             )
         )
 
-    def create_card_generator(self) -> GenerateCardUseCase:
+    def create_card_generator(self, *, manual_translation: bool = False) -> GenerateCardUseCase:
         """Factory for card generation use case"""
         return GenerateCardUseCase(
-            translation_service=self.translation_service,
-            dictionary_service=self.dictionary_service,
+            translation_service=None if manual_translation else self.translation_service,
+            dictionary_service=None if manual_translation else self.dictionary_service,
             audio_service=self.audio_service,
             storage_service=self.storage_service,
-            grammar_service=self.grammar_service,
+            grammar_service=None if manual_translation else self.grammar_service,
             # Pass default languages from settings
             default_source_lang=self.settings.default_source_language,
             default_target_lang=self.settings.default_target_language

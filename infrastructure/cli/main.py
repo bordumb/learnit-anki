@@ -32,6 +32,7 @@ try:
     from infrastructure.config.dependency_injection import get_container
     from infrastructure.cli.importers import load_sentences
     from core.domain.models import Deck
+    from core.domain.interfaces import TranslationError
     # Removed direct import of GenankiExporter as it's handled by DI
 except ImportError as e:
      logger.error(f"Failed to import necessary modules. Check sys.path and project structure. Error: {e}")
@@ -114,6 +115,79 @@ def transcribe(audio_file, language, source):
     echo_draft(container.create_audio_transcriber, audio_file, language, source)
 
 
+@cli.command("passage-deck")
+@click.argument("template", type=click.Path(exists=True, dir_okay=False, path_type=Path))
+def passage_deck(template):
+    """Inspect the destination deck for a whole-passage card."""
+    from adapters.anki.passage_deck import PassageDeck
+
+    try:
+        profile = PassageDeck.load(template)
+    except (OSError, ValueError) as error:
+        raise click.ClickException(str(error)) from error
+    click.echo(json.dumps({"name": profile.deck["name"]}, ensure_ascii=False))
+
+
+@cli.command("export-passage")
+@click.option("--pronunciation", type=click.Path(exists=True, dir_okay=False, path_type=Path))
+@click.option("--recording", type=click.Path(exists=True, dir_okay=False, path_type=Path))
+@click.argument("template", type=click.Path(exists=True, dir_okay=False, path_type=Path))
+@click.argument("draft", type=click.Path(exists=True, dir_okay=False, path_type=Path))
+def export_passage(template, draft, pronunciation, recording):
+    """Export one approved passage using the reference package's note type."""
+    from adapters.anki.passage_deck import PassageDeck
+
+    try:
+        data = json.loads(draft.read_text(encoding="utf-8"))
+        if not isinstance(data, dict):
+            raise ValueError("The passage draft must be a JSON object.")
+        package = PassageDeck.load(template).export(
+            data, project_root / "output", pronunciation=pronunciation, recording=recording,
+        )
+    except (OSError, ValueError) as error:
+        raise click.ClickException(str(error)) from error
+    click.echo(json.dumps({"package": str(package)}, ensure_ascii=False))
+
+
+@cli.command("furigana")
+@click.argument("passage", type=click.File("r", encoding="utf-8"))
+def furigana(passage):
+    """Analyze a whole passage locally and return editable reading spans as JSON."""
+    from adapters.readings.mecab import generate_reading
+
+    try:
+        spans = generate_reading(passage.read())
+    except (OSError, RuntimeError, ValueError) as error:
+        raise click.ClickException(str(error)) from error
+    click.echo(json.dumps([asdict(span) for span in spans], ensure_ascii=False))
+
+
+@cli.command("dictionary-headwords")
+@click.argument("passage", type=click.File("r", encoding="utf-8"))
+def dictionary_headwords(passage):
+    """Return the dictionary forms of content words in the passage as JSON."""
+    from adapters.dictionary.japanese_headwords import passage_headwords
+
+    try:
+        words = passage_headwords(passage.read())
+    except (OSError, RuntimeError, ValueError) as error:
+        raise click.ClickException(str(error)) from error
+    click.echo(json.dumps(words, ensure_ascii=False))
+
+
+@cli.command("translate-passage")
+@click.argument("text")
+def translate_passage(text):
+    """Return a Japanese passage's English translation without creating a card."""
+    try:
+        translated = asyncio.run(container.translation_service.translate(text, "ja", "en"))
+        if not translated or not translated.text.strip():
+            raise TranslationError("Translation failed. You can enter the translation manually.")
+    except TranslationError as error:
+        raise click.ClickException(str(error)) from None
+    click.echo(json.dumps({"text": translated.text}, ensure_ascii=False))
+
+
 @cli.command()
 @click.argument('sentence')
 @click.option('--deck-name', default='Language Practice', help='Name of the Anki deck.')
@@ -122,7 +196,9 @@ def transcribe(audio_file, language, source):
 @click.option('--no-grammar', is_flag=True, default=False, help='Disable grammar/phrase notes.')
 @click.option('--audio/--no-audio', default=False, help='Enable/disable audio generation (requires setup, default: disabled).') # Changed to flag pair
 @click.option("--source", help="Source URL or label to include on the card.")
-def add(sentence, deck_name, source_lang, target_lang, no_grammar, audio, source):
+@click.option("--json-result", is_flag=True, help="Print the exported package path as JSON.")
+@click.option("--translation", help="Use an approved translation without automatic vocabulary or grammar.")
+def add(sentence, deck_name, source_lang, target_lang, no_grammar, audio, source, json_result, translation):
     """
     Generate a single flashcard from a sentence.
 
@@ -145,7 +221,8 @@ def add(sentence, deck_name, source_lang, target_lang, no_grammar, audio, source
     async def generate_single_card_async():
         # 1. Get the use case from the container
         # The DI container now passes default languages to the use case constructor
-        card_generator = container.create_card_generator()
+        card_generator = (container.create_card_generator(manual_translation=True)
+                          if translation is not None else container.create_card_generator())
 
         # 2. Execute the use case, passing specific languages
         card = await card_generator.execute(
@@ -155,6 +232,7 @@ def add(sentence, deck_name, source_lang, target_lang, no_grammar, audio, source
             include_audio=audio,
             include_grammar=not no_grammar,
             source=source,
+            manual_translation=translation,
         )
 
         if card is None:
@@ -182,13 +260,21 @@ def add(sentence, deck_name, source_lang, target_lang, no_grammar, audio, source
             output_path=str(output_path)
         )
 
+        if not output_file:
+            raise RuntimeError(f"Could not write Anki package to {output_path}.")
         return output_file
 
     try:
         # Run the async function
         output = asyncio.run(generate_single_card_async())
         click.echo(f"✅ Card created in deck '{deck_name}': {output}")
-        click.echo(f"📥 Import this file into Anki!")
+        click.echo("📥 Import this file into Anki!")
+        if json_result:
+            click.echo(json.dumps({"package": output}, ensure_ascii=False))
+    except TranslationError as error:
+        if json_result:
+            click.echo(json.dumps({"error": "translation", "message": str(error)}, ensure_ascii=False))
+        raise click.ClickException(str(error)) from None
     except Exception as e:
         logger.error(f"❌ Error during single card generation: {e}", exc_info=True) # Log full traceback
         click.echo(f"❌ Error: {e}")
@@ -210,7 +296,8 @@ def add(sentence, deck_name, source_lang, target_lang, no_grammar, audio, source
 @click.option('--target-lang', '-t', default=None, callback=validate_lang_code, help=f'Target language code (e.g., {", ".join(SUPPORTED_LANG_CODES)}). Defaults to setting from .env.')
 @click.option('--no-grammar', is_flag=True, default=False, help='Disable grammar/phrase notes.')
 @click.option('--audio/--no-audio', default=False, help='Enable/disable audio generation (slow for batches, requires setup, default: disabled).')
-def batch(file_path, deck_name, column, source_lang, target_lang, no_grammar, audio):
+@click.option("--json-result", is_flag=True, help="Print the exported package path as JSON.")
+def batch(file_path, deck_name, column, source_lang, target_lang, no_grammar, audio, json_result):
     """
     Generate multiple cards from a .txt or .csv file.
 
@@ -233,6 +320,8 @@ def batch(file_path, deck_name, column, source_lang, target_lang, no_grammar, au
         click.echo(f"🔄 Loading sentences from: {file_path}")
         sentences = load_sentences(file_path, column)
         if not sentences:
+            if json_result:
+                raise ValueError("No sentences found in the file.")
             click.echo("⚠️ No sentences found in the file. Exiting.")
             sys.exit(0)
         click.echo(f"✅ Found {len(sentences)} sentences.")
@@ -267,7 +356,7 @@ def batch(file_path, deck_name, column, source_lang, target_lang, no_grammar, au
             source_lang=final_source_lang, # Pass determined languages
             target_lang=final_target_lang,
             include_audio=audio,
-            include_grammar=not no_grammar
+            include_grammar=not no_grammar,
         )
         return output_file
 
@@ -278,7 +367,9 @@ def batch(file_path, deck_name, column, source_lang, target_lang, no_grammar, au
         # (This requires deck_generator to return Deck object or count, currently it returns path)
         # For now, stick with input count for the message.
         click.echo(f"✅ Deck created for '{deck_name}': {output}")
-        click.echo(f"📥 Import this file into Anki!")
+        click.echo("📥 Import this file into Anki!")
+        if json_result:
+            click.echo(json.dumps({"package": output}, ensure_ascii=False))
     except Exception as e:
         logger.error(f"❌ Error during batch deck generation: {e}", exc_info=True) # Log full traceback
         click.echo(f"❌ Error: {e}")
@@ -411,6 +502,11 @@ def test():
         click.echo(f'   anki-cli add "Bonjour!" -s {container.settings.default_source_language} -t {container.settings.default_target_language}')
     else:
         click.echo("❌ Some configuration tests failed. Please review the errors above and check your .env file.")
+
+from infrastructure.cli.study import study
+
+cli.add_command(study)
+
 
 if __name__ == '__main__':
     # Add simple check to ensure running from project root or venv

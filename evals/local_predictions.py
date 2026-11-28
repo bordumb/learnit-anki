@@ -2,6 +2,7 @@
 
 import argparse
 import json
+from hashlib import file_digest
 from pathlib import Path
 import subprocess
 from tempfile import TemporaryDirectory
@@ -58,6 +59,23 @@ def main() -> int:
     if not cases:
         parser.error("No golden cases match the selected engine and suite.")
 
+    if use_whisper:
+        with args.whisper_model.open("rb") as model_file:
+            checksum = file_digest(model_file, "sha256").hexdigest()
+        model = {"engine": "whisper.cpp", "file": args.whisper_model.name,
+                 "sha256": checksum, "threads": 4, "gpu": False}
+    else:
+        languages = {"jpn_vert" if case.writing_direction == "vertical_right_to_left" else "jpn"
+                     for case in cases}
+        checksums = {}
+        for language in sorted(languages):
+            data_file = args.tessdata / f"{language}.traineddata"
+            if not data_file.is_file():
+                parser.error(f"Missing Tesseract language data: {data_file}")
+            with data_file.open("rb") as data:
+                checksums[language] = file_digest(data, "sha256").hexdigest()
+        model = {"engine": "tesseract", "traineddata_sha256": checksums}
+
     predictions = []
     with TemporaryDirectory() as directory:
         for case in cases:
@@ -70,7 +88,7 @@ def main() -> int:
             except OSError as error:
                 parser.exit(1, f"{case.id}: {error}\n")
             predictions.append({
-                "id": case.id, "prediction": prediction.strip(), "latency_seconds": perf_counter() - start,
+                "id": case.id, "model": model, "prediction": prediction.strip(), "latency_seconds": perf_counter() - start,
             })
 
     args.output.parent.mkdir(parents=True, exist_ok=True)

@@ -23,4 +23,15 @@ Generate predictions with a local [whisper.cpp](https://github.com/ggml-org/whis
 
 The runner reports exact match, character error rate, and provider latency by suite, modality, and source category. It ignores Unicode canonical equivalence and whitespace differences, while preserving kana, kanji, punctuation, and other differences. Character error rate is total edit distance divided by total reference characters. API errors are counted separately, reported per case, and make the live run exit nonzero.
 
-For a workflow comparison, time several cards from capture through approval and export, then compare with manual typing of the same phrase. Model latency is recorded by the runner. Human review time is measured separately.
+Reports include the source URL breakdown, manifest SHA-256 digests, and normalization rule. Live rows identify the requested model or Vision feature. Locally generated predictions carry the model or language-data hashes through scoring.
+
+## Compare capture with typing
+
+Pick one expression from a passage and use the same final Japanese text, deck settings, and pronunciation option for both trials. Start the clock when you begin locating the expression. Stop after Anki confirms the import. Use a separate test deck for each method and import each package immediately. Alternate which method goes first across phrases.
+
+| Phrase ID | Method | Draft before review | Approved Japanese | Seconds through import | Character edits |
+| --- | --- | --- | --- | ---: | ---: |
+| | Image or audio | Raw recognition | | | |
+| | Typing | Empty | | | |
+
+Count edits with `evals.transcription.edit_distance(normalize(draft), normalize(approved))`, using the `normalize` function from that module. For typing, this measures characters entered from an empty field. Record elapsed time separately from edits. Compare the paired difference in seconds for each expression and report the median across expressions. A recognition benchmark measures machine latency only.

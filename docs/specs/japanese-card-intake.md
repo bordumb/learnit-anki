@@ -33,20 +33,21 @@ flowchart TD
 
 | 段階 | 受け取るもの | 返すもの・保存するもの |
 | --- | --- | --- |
-| 画像の準備 | macOS で開いた画像と任意の矩形 | OCR に渡す PNG。矩形があれば選択領域を切り出す |
+| 画像の準備 | macOS で開いた画像と任意の矩形 | 矩形があれば選択領域を切り出す。Google には PNG または JPEG を送る。Mac 上の認識には画像を直接渡す |
 | 音声の準備 | 音声ファイルまたは録音と任意の時間範囲 | 範囲指定時は試聴と文字起こしに同じ区間の WAV を使う |
 | メディア認識 | ファイル、言語、任意の出典ラベル | `CardDraft(text, language, source)`。CLI は JSON を標準出力に返す |
 | カード生成 | 確定した文章、原文と訳の言語、音声の要否、出典 | 翻訳、語彙分析、任意の文法メモと発音音声を持つ `FlashCard` |
 | 書き出し | デッキ名とカード | `output/<deck-name>.apkg`。出典は既存カードのノート欄に入る |
 
-macOS の **Japanese Card** タブは日本語から英語へのカードを作る。CLI の既存言語設定やテキスト一括取り込みも利用できる。発音音声をオンにすると、確定した文章を読み上げる。音声選択に使った元の録音は、試聴と文字起こしの入力として扱う。
+macOS は **Create a card** 画面を開く。手入力・画像・音声は同じ編集欄とカード設定を使う。初期設定は日本語から英語へのカードで、言語は変更できる。テキストや CSV の一括取り込みにも同じデッキ設定を使う。発音音声をオンにすると、確定した文章を読み上げる。音声選択に使った元の録音は、試聴と文字起こしの入力として扱う。
 
 ### ポートとアダプター
 
 ```mermaid
 flowchart TD
-    Mac["macOS Japanese Card"] --> CLI["Python CLI"]
+    Mac["macOS Create a card"] --> CLI["Python CLI"]
     Shell["ターミナル"] --> CLI
+    Mac --> Local["Apple Vision による端末内 OCR"]
     CLI --> Draft["TranscribeMediaUseCase"]
     CLI --> Generate["GenerateCardUseCase"]
     Draft --> Port["TranscriptionService"]
@@ -58,7 +59,7 @@ flowchart TD
     Export --> File[".apkg"]
 ```
 
-- 入力側は macOS と CLI。macOS は画像の切り出しや音声範囲の編集を担当し、CLI は認識・カード作成のコマンドを提供する。
+- 入力側は macOS と CLI。macOS は画像の切り出しや音声範囲の編集を担当し、CLI は認識・カード作成のコマンドを提供する。画像は Apple Vision を選んで Mac 上で認識することもでき、同じ下書き編集画面に表示する。
 - `TranscriptionService` は画像 OCR と音声認識が実装する共通ポート。依存性注入で用途に合うアダプターを選ぶ。認識は下書きを返し、作成時は確定済みの文章を `GenerateCardUseCase` に渡す。
 - 翻訳・辞書・発音・保存・エクスポートの既存ポートを活用する。翻訳や語彙分析の失敗はエラーとして表示し、発音音声を取得・保存できなかった場合は音声なしのカードを作成できる。
 - ローカルで生成した認識用の一時画像と切り出し音声は処理後に削除する。範囲指定時にプロバイダーへ送るのは、選択区間の WAV。全体を選んだ場合は音声ファイル全体を入力に使う。
@@ -103,8 +104,8 @@ flowchart TD
 
 | パス | 役割 |
 | --- | --- |
-| [`learnit-deck/learnit-deck/ContentView.swift`](../../learnit-deck/learnit-deck/ContentView.swift) | macOS のタブと既存のカード生成画面 |
-| [`learnit-deck/learnit-deck/MediaCardView.swift`](../../learnit-deck/learnit-deck/MediaCardView.swift) | 手入力・画像・録音・音声ファイルの操作と下書きの確認 |
+| [`learnit-deck/learnit-deck/ContentView.swift`](../../learnit-deck/learnit-deck/ContentView.swift) | 初回セットアップとプロジェクト設定 |
+| [`learnit-deck/learnit-deck/MediaCardView.swift`](../../learnit-deck/learnit-deck/MediaCardView.swift) | 手入力・画像・録音・ファイルの取り込み、共通のカード編集と書き出し |
 | [`learnit-deck/learnit-deck/AudioClip.swift`](../../learnit-deck/learnit-deck/AudioClip.swift) | 時間範囲の検証、WAV の生成、出典用の時刻表示 |
 | [`infrastructure/cli/main.py`](../../infrastructure/cli/main.py) | `ocr`、`transcribe`、`add`、`batch` の入口 |
 | [`infrastructure/config/`](../../infrastructure/config/) | 環境設定と認識・カード生成アダプターの組み立て |

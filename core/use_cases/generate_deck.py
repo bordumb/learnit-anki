@@ -100,9 +100,7 @@ class GenerateDeckUseCase:
         print(f"📊 Generated {successful_cards} cards successfully out of {len(sentences)} sentences.")
 
         if not cards:
-             print("❌ No cards were generated successfully. Aborting deck export.")
-             # Consider raising an error or returning a specific indicator
-             return f"Failed: No cards generated for deck '{deck_name}'."
+            raise ValueError(f"No cards could be generated for deck '{deck_name}'.")
 
         # Create the deck domain model with the correct language pair
         deck = Deck(
@@ -118,6 +116,8 @@ class GenerateDeckUseCase:
                 deck=deck,
                 output_path=output_path
             )
+            if not file_path:
+                raise RuntimeError(f"Could not write Anki package to {output_path}.")
             print(f"✅ Deck export complete: {file_path}")
             return file_path
         except Exception as e:

@@ -80,3 +80,175 @@ class CardIntakeTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def test_cli_approval_exports_only_corrected_text_and_source(monkeypatch, tmp_path):
+    import sqlite3
+    import zipfile
+
+    from click.testing import CliRunner
+    from adapters.anki.genanki_exporter import GenankiExporter
+    from adapters.storage.local_file_storage import LocalFileStorage
+    from infrastructure.cli import main
+
+    runner = CliRunner()
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(main, "project_root", tmp_path)
+    storage = LocalFileStorage(str(tmp_path / "storage"))
+    audio_provider = MockAudioService()
+    generator = GenerateCardUseCase(MockTranslationService(), MockDictionaryService(),
+                                    audio_provider, storage, None, "fr", "en")
+    monkeypatch.setattr(main.container, "create_card_generator", lambda: generator)
+    monkeypatch.setattr(main.container, "_deck_exporter", GenankiExporter(str(storage.audio_path)))
+    source = "episode.mp3 [0:12.5–0:19.3]"
+    for command, factory in (("ocr", "create_image_transcriber"), ("transcribe", "create_audio_transcriber")):
+        monkeypatch.setattr(main.container, factory,
+                            lambda: TranscribeMediaUseCase(FixtureTranscriber("週未に会おう")))
+        media = tmp_path / "selected"
+        media.write_bytes(b"fixture")
+        result = runner.invoke(main.cli, [command, "--source", source, str(media)])
+        assert result.exit_code == 0, result.output
+        assert json.loads(result.output) == {"text": "週未に会おう", "language": "ja", "source": source}
+        assert not list((tmp_path / "output").glob("*.apkg"))
+
+    result = runner.invoke(main.cli, ["add", "-s", "ja", "-t", "en", "--deck-name", "Japanese",
+                                      "--json-result", "--audio", "--source", source, "--", "週末に会おう"])
+    assert result.exit_code == 0, result.output
+    path = tmp_path / "output/Japanese.apkg"
+    assert json.loads(result.output.splitlines()[-1]) == {"package": str(path)}
+    expected_audio, _ = asyncio.run(audio_provider.generate_audio("週末に会おう", "ja"))
+    with zipfile.ZipFile(path) as package:
+        database = package.extract("collection.anki2", tmp_path)
+        assert expected_audio.filename in json.loads(package.read("media")).values()
+    with sqlite3.connect(database) as db:
+        fields, = db.execute("select flds from notes").fetchone()
+        assert db.execute("select count(*) from cards").fetchone() == (1,)
+    japanese, english, vocabulary, audio, notes, *_ = fields.split("\x1f")
+    assert japanese == "週末に会おう"
+    assert english and vocabulary
+    assert audio == f"[sound:{expected_audio.filename}]"
+    assert source in notes
+
+
+def test_optional_audio_exceptions_preserve_card():
+    from unittest.mock import AsyncMock
+
+    for stage in ("synthesis", "storage"):
+        audio = MockAudioService()
+        storage = MockStorageService()
+        if stage == "synthesis":
+            audio.generate_audio = AsyncMock(side_effect=RuntimeError("offline"))
+        else:
+            storage.save_audio = AsyncMock(side_effect=OSError("disk full"))
+        generator = GenerateCardUseCase(MockTranslationService(), MockDictionaryService(),
+                                        audio, storage, None, "ja", "en")
+        card = asyncio.run(generator.execute("週末に会おう"))
+        assert card.audio is None
+        assert card.translation.text
+
+
+def test_export_failure_preserves_package_and_reports_cli_error(monkeypatch, tmp_path):
+    from click.testing import CliRunner
+    from genanki import Package
+    from adapters.anki.genanki_exporter import GenankiExporter
+    from infrastructure.cli import main
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(main, "project_root", tmp_path)
+    generator = GenerateCardUseCase(MockTranslationService(), MockDictionaryService(),
+                                    MockAudioService(), MockStorageService(), None, "ja", "en")
+    monkeypatch.setattr(main.container, "create_card_generator", lambda: generator)
+    monkeypatch.setattr(main.container, "_deck_exporter", GenankiExporter(str(tmp_path)))
+    target = tmp_path / "output/Japanese.apkg"
+    target.parent.mkdir()
+    target.write_bytes(b"previous package")
+
+    def interrupted_write(self, path):
+        Path(path).write_bytes(b"incomplete")
+        raise OSError("disk full")
+
+    monkeypatch.setattr(Package, "write_to_file", interrupted_write)
+    result = CliRunner().invoke(main.cli, ["add", "--deck-name", "Japanese", "週末に会おう"])
+    assert result.exit_code != 0
+    assert "Could not write Anki package" in result.output
+    assert target.read_bytes() == b"previous package"
+
+
+def test_existing_voice_overrides_keep_japanese_pronunciation():
+    from infrastructure.config.settings import Settings
+
+    settings = Settings(_env_file=None, google_tts_voices={"fr": "fr-FR-Standard-B"})
+    assert settings.google_tts_voices["ja"] == "ja-JP-Standard-A"
+    assert settings.google_tts_voices["fr"] == "fr-FR-Standard-B"
+
+
+def test_batch_json_result_reports_created_package_and_empty_input(monkeypatch, tmp_path):
+    from click.testing import CliRunner
+    from adapters.anki.genanki_exporter import GenankiExporter
+    from core.use_cases.generate_deck import GenerateDeckUseCase
+    from infrastructure.cli import main
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(main, "project_root", tmp_path)
+    storage = MockStorageService()
+    card_generator = GenerateCardUseCase(MockTranslationService(), MockDictionaryService(),
+                                         MockAudioService(), storage, None, "ja", "en")
+    deck_generator = GenerateDeckUseCase(card_generator, GenankiExporter(str(tmp_path)), storage, "ja", "en")
+    monkeypatch.setattr(main.container, "create_deck_generator", lambda: deck_generator)
+
+    input_file = tmp_path / "sentences.csv"
+    input_file.write_text("japanese\n週末に会おう\nじゃあまた\n", encoding="utf-8")
+    args = ["batch", "-s", "ja", "-t", "en", "--deck-name", "Japanese",
+            "--column", "japanese", "--json-result", "--", str(input_file)]
+    runner = CliRunner()
+    result = runner.invoke(main.cli, args)
+    assert result.exit_code == 0, result.output
+    path = tmp_path / "output/Japanese.apkg"
+    assert json.loads(result.output.splitlines()[-1]) == {"package": str(path)}
+    original = path.read_bytes()
+
+    input_file.write_text("japanese\n", encoding="utf-8")
+    result = runner.invoke(main.cli, args)
+    assert result.exit_code != 0
+    assert "No sentences found" in result.output
+    assert path.read_bytes() == original
+
+
+def test_add_offers_manual_translation_after_provider_failure(monkeypatch, tmp_path):
+    import sqlite3
+    import zipfile
+
+    from click.testing import CliRunner
+    from infrastructure.cli import main
+    from infrastructure.config.dependency_injection import ServiceContainer
+    from infrastructure.config.settings import Settings
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(main, "project_root", tmp_path)
+    container = ServiceContainer(Settings(_env_file=None, openai_api_key=None, deepl_api_key=None,
+                                          google_application_credentials=None, storage_path=str(tmp_path / "storage")))
+    monkeypatch.setattr(main, "container", container)
+    runner = CliRunner()
+    args = ["add", "-s", "ja", "-t", "en", "--no-audio", "--deck-name", "Japanese",
+            "--json-result", "--source", "notebook.jpg"]
+    text = "次の駅で乗り換えます。"
+    failed = runner.invoke(main.cli, [*args, "--", text])
+    assert failed.exit_code != 0
+    assert any(line.startswith('{"error": "translation"') for line in failed.output.splitlines())
+    assert not (tmp_path / "output/Japanese.apkg").exists()
+
+    approved = "I'll change trains at the next station."
+    created = runner.invoke(main.cli, [*args, "--translation", approved, "--", text])
+    assert created.exit_code == 0, created.output
+    path = Path(json.loads(created.output.splitlines()[-1])["package"])
+    with zipfile.ZipFile(path) as package:
+        database = package.extract("collection.anki2", tmp_path)
+    with sqlite3.connect(database) as db:
+        fields, = db.execute("select flds from notes").fetchone()
+    japanese, english, vocabulary, audio, notes, *_ = fields.split("\x1f")
+    assert japanese == text
+    from html import unescape
+    assert unescape(english) == approved
+    assert not vocabulary
+    assert not audio
+    assert "notebook.jpg" in notes
