@@ -3,6 +3,8 @@ import genanki
 import hashlib
 import logging
 import uuid
+from html import escape
+from tempfile import TemporaryDirectory
 from pathlib import Path
 from typing import List, Optional, Tuple, Dict, Set
 
@@ -22,6 +24,7 @@ LANGUAGE_NAMES: Dict[LanguageCode, str] = {
     "it": "Italian",
     "pt": "Portuguese",
     'ca': 'Catalan',
+    "ja": "Japanese",
     # Add more as needed
 }
 
@@ -182,7 +185,7 @@ class GenankiExporter(DeckExporter):
 
             {{{{#GrammarNotes}}}}
             <div class="grammar-section">
-                <div class="section-title">✏️ Grammar Notes</div>
+                <div class="section-title">✏️ Notes</div>
                 <div class="grammar-content">
                     {{{{GrammarNotes}}}}
                 </div>
@@ -508,7 +511,11 @@ class GenankiExporter(DeckExporter):
         try:
             output_file = Path(output_path).resolve()
             output_file.parent.mkdir(parents=True, exist_ok=True)
-            package.write_to_file(str(output_file))
+            # Keep the last completed package available if genanki fails partway.
+            with TemporaryDirectory(dir=output_file.parent) as staging:
+                pending = Path(staging) / output_file.name
+                package.write_to_file(str(pending))
+                pending.replace(output_file)
             logger.info(f"✅ Anki package successfully created: {output_file}")
             return str(output_file)
         except Exception as e:
@@ -534,11 +541,11 @@ class GenankiExporter(DeckExporter):
 
         # Prepare field data in the exact order defined in the model
         fields_data = [
-            card.sentence.text,                             # Field 0: Source Language Text
-            card.translation.text,                          # Field 1: Target Language Text
+            escape(card.sentence.text),                             # Field 0: Source Language Text
+            escape(card.translation.text).replace("\n", "<br>"),  # Field 1: Target Language Text
             self._format_word_breakdown(card, lang_pair),   # Field 2: WordBreakdown
             self._format_audio_field(card),                 # Field 3: Audio
-            self._format_grammar_notes(card),               # Field 4: GrammarNotes
+            self._format_card_notes(card),               # Field 4: GrammarNotes
             " ".join(card.tags) if card.tags else "",      # Field 5: Tags
             card.sentence.id or str(uuid.uuid4()),          # Field 6: SentenceId (fallback to new UUID)
             source_lang_code,                               # Field 7: SourceLangCode (hidden)
@@ -566,18 +573,25 @@ class GenankiExporter(DeckExporter):
             return ""
 
         source_lang_code, target_lang_code = lang_pair
-        lines = []
+        lines = ["<ul class='word-list'>"] # Start an unordered list
         for word in card.word_breakdown.words:
+            lines.append("<li>") # Start list item
             # Word (POS): Target Definition
             line = f"<b>{word.text}</b> <span class='pos'>({word.pos})</span>: <span class='definition-target'>{word.definition}</span>"
             lines.append(line)
-
             # Add native definition if available
             if word.definition_native:
                 native_line = f"<span class='definition-native'>({source_lang_code}: {word.definition_native})</span>"
                 lines.append(native_line)
+            lines.append("</li>") # End list item
+        lines.append("</ul>") # End unordered list
+        return "".join(lines) # Join without <br>
 
-        return "<br>".join(lines)
+    def _format_card_notes(self, card: FlashCard) -> str:
+        notes = self._format_grammar_notes(card)
+        if card.sentence.source:
+            notes += f'<div><strong>Source</strong> {escape(card.sentence.source)}</div>'
+        return notes
 
     def _format_grammar_notes(self, card: FlashCard) -> str:
         """Formats grammar notes into HTML for Anki."""

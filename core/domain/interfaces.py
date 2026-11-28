@@ -1,5 +1,7 @@
 # core/domain/interfaces.py
 from abc import ABC, abstractmethod
+from pathlib import Path
+from typing import Protocol
 from typing import List, Optional, Tuple, Any # Added Any for CacheService
 from .models import (
     Sentence, Translation, WordBreakdown, AudioFile,
@@ -9,6 +11,17 @@ from .models import (
 
 # Type alias for clarity
 LanguagePair = Tuple[LanguageCode, LanguageCode]
+
+
+class TranscriptionService(Protocol):
+    """Port for reading source-language text from a selected media file."""
+
+    async def transcribe(self, media: Path, language: LanguageCode) -> str:
+        ...
+
+
+class TranslationError(ValueError):
+    """The translation needed to create a card could not be obtained."""
 
 
 class TranslationService(ABC):

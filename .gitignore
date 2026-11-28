@@ -22,7 +22,7 @@ dist/
 # Project-Specific Files
 # Ignore generated Anki decks, local audio storage, and logs
 output/
-storage/
+/storage/
 logs/
 all_code.txt
 

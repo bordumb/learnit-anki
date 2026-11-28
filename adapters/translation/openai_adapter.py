@@ -1,7 +1,7 @@
 # adapters/translation/openai_adapter.py
 import openai
 from typing import Optional
-from core.domain.interfaces import TranslationService
+from core.domain.interfaces import TranslationError, TranslationService
 from core.domain.models import Translation
 import logging
 
@@ -57,39 +57,41 @@ Original ({source_lang}): "{text}"
 
 Translation ({target_lang}):"""
 
-        logger.info(f"Requesting OpenAI translation ({self.model}): {source_lang} -> {target_lang} for text: '{text[:50]}...'")
-
         try:
             response = await self.client.chat.completions.create(
                 model=self.model,
                 messages=[{"role": "user", "content": prompt}],
-                temperature=0.2,  # Lower temperature for more deterministic translation
-                max_tokens=int(len(text) * 1.5) + 50 # Estimate max tokens needed
+                temperature=0.2,
+                max_tokens=int(len(text) * 1.5) + 50,
             )
+        except openai.APITimeoutError as error:
+            raise TranslationError("The OpenAI translation request timed out. Try again.") from error
+        except openai.APIConnectionError as error:
+            raise TranslationError(
+                "Could not reach OpenAI for translation. Check your network connection."
+            ) from error
+        except openai.APIStatusError as error:
+            if error.status_code == 401:
+                hint = "Check OPENAI_API_KEY in the project’s .env file."
+            elif error.status_code == 403:
+                hint = f"Check that your OpenAI project can use {self.model}."
+            elif error.status_code == 429 and error.code == "insufficient_quota":
+                hint = "Check billing and API credits for your OpenAI project."
+            elif error.status_code == 429:
+                hint = "The API rate limit was reached. Wait a moment and try again."
+            elif error.status_code == 404:
+                hint = f"Model {self.model} is unavailable for this OpenAI project."
+            else:
+                hint = "Try again or enter a translation manually."
+            raise TranslationError(f"OpenAI translation failed (HTTP {error.status_code}). {hint}") from error
 
-            # Extract the translated text, stripping any extra whitespace/quotes
-            translated_text = response.choices[0].message.content.strip().strip('"')
+        if not response.choices:
+            raise TranslationError("OpenAI returned no translation.")
+        choice = response.choices[0]
+        if choice.finish_reason == "length":
+            raise TranslationError("The OpenAI translation was cut off. Try a shorter passage.")
+        translated_text = (choice.message.content or "").strip().strip('"').strip()
+        if not translated_text:
+            raise TranslationError("OpenAI returned no translation.")
 
-            if not translated_text:
-                logger.warning(f"OpenAI returned an empty translation for: '{text}'")
-                return None
-
-            logger.info("OpenAI translation successful.")
-
-            return Translation(
-                text=translated_text,
-                target_language=target_lang, # Set correctly based on input
-                provider=f"openai-{self.model}",
-                confidence=None # LLMs don't typically provide a confidence score
-            )
-
-        except openai.APIError as e:
-            logger.error(f"OpenAI API request failed: {e.status_code} - {e.message}")
-            if e.status_code == 401:
-                 logger.error("Authentication failed. Check your OpenAI API key.")
-            elif e.status_code == 429:
-                 logger.error("OpenAI Rate limit exceeded or quota reached.")
-            return None
-        except Exception as e:
-            logger.error(f"An unexpected error occurred during OpenAI translation: {e}")
-            return None
+        return Translation(text=translated_text, target_language=target_lang, provider=f"openai-{self.model}")

@@ -1,28 +1,49 @@
-//
-//  learnit_deckApp.swift
-//  learnit-deck
-//
-//  Created by bordumb on 20/10/2025.
-//
-
 import SwiftUI
-import UniformTypeIdentifiers
 
-// MARK: - Main Application
 @main
 struct AnkiGeneratorApp: App {
     @StateObject private var settings = AppSettings()
+    @Environment(\.openWindow) private var openWindow
 
     var body: some Scene {
-        WindowGroup {
-            // Show a welcome/setup screen if the path isn't set.
-            // Otherwise, show the main app content.
+        Window("Learnit", id: "card") {
             if settings.projectPath.isEmpty {
                 WelcomeView(settings: settings)
             } else {
-                ContentView(settings: settings)
+                StudyWorkspace(project: settings.projectPath, database: testDatabase)
+                    .id(settings.projectPath)
+                    .environmentObject(settings)
             }
         }
-        .windowStyle(HiddenTitleBarWindowStyle())
+        .defaultSize(width: 1130, height: 730)
+        .commands {
+            CommandGroup(after: .newItem) {
+                Button("Anki Export Window") { openWindow(id: "anki-export") }
+                    .disabled(settings.projectPath.isEmpty)
+            }
+        }
+
+        Window("Anki Export", id: "anki-export") {
+            if settings.projectPath.isEmpty {
+                WelcomeView(settings: settings)
+            } else {
+                MediaCardView().environmentObject(settings)
+            }
+        }
+        .defaultSize(width: 960, height: 660)
+
+        Settings {
+            ProjectSettingsView()
+                .environmentObject(settings)
+        }
+    }
+
+    private var testDatabase: URL? {
+        #if DEBUG
+        if let path = UserDefaults.standard.string(forKey: "studyTestDatabase") {
+            return URL(fileURLWithPath: path)
+        }
+        #endif
+        return nil
     }
 }

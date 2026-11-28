@@ -1,20 +1,19 @@
 # infrastructure/config/dependency_injection.py
 from functools import lru_cache
 import os
+from pathlib import Path
 from core.domain.interfaces import (
-    TranslationService, DictionaryService, AudioService,
+    TranslationService, TranslationError, DictionaryService, AudioService,
     StorageService, CacheService, GrammarService, DeckExporter
 )
 from core.use_cases.generate_card import GenerateCardUseCase
 from core.use_cases.generate_deck import GenerateDeckUseCase
+from core.use_cases.transcribe_media import TranscribeMediaUseCase
 from adapters.translation.deepl_adapter import DeepLTranslationAdapter
 from adapters.translation.openai_adapter import OpenAITranslationAdapter
-from adapters.dictionary.openai_dictionary_adapter import OpenAIDictionaryAdapter
 from adapters.grammar.openai_grammar_adapter import OpenAIGrammarAdapter
-from adapters.audio.google_tts_adapter import GoogleTTSAdapter
 from adapters.storage.local_file_storage import LocalFileStorage
 from adapters.storage.s3_storage import S3StorageAdapter
-from adapters.anki.genanki_exporter import GenankiExporter
 from .settings import Settings
 from typing import Optional
 
@@ -49,7 +48,7 @@ class ServiceContainer:
                     api_key=self.settings.openai_api_key
                 )
             else:
-                 raise ValueError("No valid translation provider configured (check API keys).")
+                 raise TranslationError("Configure a translation provider in the project’s .env file.")
         return self._translation_service
 
     @property
@@ -57,6 +56,8 @@ class ServiceContainer:
         if self._dictionary_service is None:
             if not self.settings.openai_api_key:
                  raise ValueError("OpenAI API key is required for the dictionary service.")
+            from adapters.dictionary.openai_dictionary_adapter import OpenAIDictionaryAdapter
+
             self._dictionary_service = OpenAIDictionaryAdapter(
                 api_key=self.settings.openai_api_key
             )
@@ -82,6 +83,8 @@ class ServiceContainer:
                 if os.path.exists(cred_path):
                     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = cred_path
                     # Pass the voice dictionary to the adapter
+                    from adapters.audio.google_tts_adapter import GoogleTTSAdapter
+
                     self._audio_service = GoogleTTSAdapter(
                         voice_map=self.settings.google_tts_voices
                     )
@@ -114,17 +117,37 @@ class ServiceContainer:
         """Provides the deck exporter instance."""
         if self._deck_exporter is None:
             # Currently only GenankiExporter is implemented
-            self._deck_exporter = GenankiExporter()
+            from adapters.anki.genanki_exporter import GenankiExporter
+
+            self._deck_exporter = GenankiExporter(Path(self.settings.storage_path) / "audio")
         return self._deck_exporter
 
-    def create_card_generator(self) -> GenerateCardUseCase:
+    def create_image_transcriber(self) -> TranscribeMediaUseCase:
+        from adapters.transcription.google_vision import GoogleVisionTranscriber
+
+        return TranscribeMediaUseCase(
+            GoogleVisionTranscriber(self.settings.google_application_credentials)
+        )
+
+    def create_audio_transcriber(self) -> TranscribeMediaUseCase:
+        if not self.settings.openai_api_key:
+            raise ValueError("Set OPENAI_API_KEY to transcribe audio.")
+        from adapters.transcription.openai_speech import OpenAISpeechTranscriber
+
+        return TranscribeMediaUseCase(
+            OpenAISpeechTranscriber(
+                self.settings.openai_api_key, self.settings.openai_transcription_model
+            )
+        )
+
+    def create_card_generator(self, *, manual_translation: bool = False) -> GenerateCardUseCase:
         """Factory for card generation use case"""
         return GenerateCardUseCase(
-            translation_service=self.translation_service,
-            dictionary_service=self.dictionary_service,
+            translation_service=None if manual_translation else self.translation_service,
+            dictionary_service=None if manual_translation else self.dictionary_service,
             audio_service=self.audio_service,
             storage_service=self.storage_service,
-            grammar_service=self.grammar_service,
+            grammar_service=None if manual_translation else self.grammar_service,
             # Pass default languages from settings
             default_source_lang=self.settings.default_source_language,
             default_target_lang=self.settings.default_target_language

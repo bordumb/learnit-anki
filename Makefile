@@ -1,7 +1,7 @@
 # Makefile
 # Provides convenient shortcuts for common development tasks.
 
-.PHONY: install test add batch clean help
+.PHONY: install install-furigana test add batch clean help
 
 # Default variables (can be overridden from command line)
 FILE ?= sentences.txt
@@ -17,6 +17,9 @@ ARGS =
 install: ## Install dependencies using Poetry and create necessary directories
 	poetry install
 	mkdir -p output storage/audio cache logs
+
+install-furigana: ## Install the local MeCab and UniDic engine for the macOS app
+	.venv/bin/python -m pip install 'fugashi==1.5.2' 'unidic-lite==1.0.8'
 
 test: ## Run configuration tests
 	poetry run python infrastructure/cli/main.py test

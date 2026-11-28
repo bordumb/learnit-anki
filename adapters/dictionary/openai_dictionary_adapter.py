@@ -131,8 +131,8 @@ Return a JSON object containing a single key "words", which holds an array. Each
 - "text": The original word from the sentence.
 - "lemma": The base form (lemma) of the word.
 - "pos": The part of speech (e.g., verb, noun, adj).
-- "definition": A brief definition in {target_lang}.
-- "definition_native": A brief definition in {source_lang} (monolingual).
+- "definition": A clear, dictionary-style definition in {target_lang}, suitable for a language learner. Include nuance if relevant.
+- "definition_native": A clear, dictionary-style definition in {source_lang} (monolingual).
 
 Example format:
 {{
@@ -168,11 +168,9 @@ Skip punctuation marks like commas, periods, quotes, etc."""
             data = json.loads(raw_json)
 
             # Extract the list of words, expecting it under the "words" key
-            word_list_data = data.get('words', [])
-
+            word_list_data = data.get("words")
             if not isinstance(word_list_data, list):
-                 logger.warning(f"Expected a list under 'words' key, but got {type(word_list_data)}. Response: {data}")
-                 word_list_data = [] # Treat as empty list if format is wrong
+                raise ValueError("Dictionary response is missing the words list.")
 
             # Create Word objects from the list
             words = []
@@ -191,12 +189,10 @@ Skip punctuation marks like commas, periods, quotes, etc."""
                 else:
                     logger.warning(f"Skipping invalid word data item: {word_data}")
 
+            if word_list_data and not words:
+                raise ValueError("Dictionary response contains no usable words.")
             logger.info(f"Successfully parsed {len(words)} words for sentence: '{sentence}'")
             return WordBreakdown(words=words)
 
-        except json.JSONDecodeError as e:
-            logger.error(f"Failed to parse JSON response for sentence: '{sentence}'. Error: {e}\nRaw Response: {raw_json}")
-            return WordBreakdown(words=[]) # Return empty breakdown on JSON error
-        except Exception as e:
-            logger.error(f"API call or processing failed for sentence: '{sentence}'. Error: {e}")
-            return WordBreakdown(words=[]) # Return empty breakdown on other errors
+        except Exception as error:
+            raise RuntimeError(f"Word breakdown analysis failed: {error}") from error

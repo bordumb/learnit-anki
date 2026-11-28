@@ -16,7 +16,7 @@ class GoogleTTSAdapter(AudioService):
             voice_map: A dictionary mapping language codes (e.g., 'fr', 'de')
                        to specific Google TTS voice names (e.g., 'fr-FR-Neural2-A').
         """
-        self.client = tts.TextToSpeechClient()
+        self.client = None
         self.voice_map = voice_map
         # Define a fallback voice if a language is not found in the map
         self.fallback_voice = "en-US-Standard-C" # Example fallback
@@ -72,6 +72,8 @@ class GoogleTTSAdapter(AudioService):
                 audio_encoding=tts.AudioEncoding.MP3 if format == AudioFormat.MP3 else tts.AudioEncoding.LINEAR16
             )
 
+            if self.client is None:
+                self.client = tts.TextToSpeechClient()
             response = self.client.synthesize_speech(
                 request = tts.SynthesizeSpeechRequest(
                     input=synthesis_input,

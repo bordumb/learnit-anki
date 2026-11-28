@@ -1,12 +1,23 @@
 # infrastructure/config/settings.py
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import Optional, Dict
 import json
 import os
 
+DEFAULT_TTS_VOICES = {
+    "fr": "fr-FR-Neural2-A",
+    "de": "de-DE-Neural2-B",
+    "es": "es-ES-Neural2-A",
+    "ca": "ca-ES-Standard-A",
+    "ja": "ja-JP-Standard-A",
+}
+
+
 class Settings(BaseSettings):
     # API Keys
-    openai_api_key: str
+    openai_api_key: Optional[str] = None
+    openai_transcription_model: str = "gpt-transcribe"
     deepl_api_key: Optional[str] = None
     google_application_credentials: Optional[str] = None
 
@@ -23,13 +34,12 @@ class Settings(BaseSettings):
     # It can be overridden via an environment variable GOOGLE_TTS_VOICES
     # Example .env entry:
     # GOOGLE_TTS_VOICES='{"fr": "fr-FR-Neural2-A", "de": "de-DE-Neural2-B", "es": "es-ES-Neural2-A"}'
-    google_tts_voices: Dict[str, str] = {
-        "fr": "fr-FR-Neural2-A",
-        "de": "de-DE-Neural2-B",
-        "es": "es-ES-Neural2-A",
-        "ca": "ca-ES-Standard-A",
-        # Add more languages and voices here as needed
-    }
+    google_tts_voices: Dict[str, str] = DEFAULT_TTS_VOICES
+
+    @field_validator("google_tts_voices")
+    @classmethod
+    def apply_voice_overrides(cls, overrides: Dict[str, str]) -> Dict[str, str]:
+        return {**DEFAULT_TTS_VOICES, **overrides}
     # --- End New Voice Dictionary ---
 
     # Translation
