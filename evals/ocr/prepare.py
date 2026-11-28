@@ -8,10 +8,11 @@ from io import BytesIO
 import json
 from pathlib import Path
 import random
-import unicodedata
 
 from PIL import Image, ImageOps
 import pyarrow.parquet as pq
+
+from evals.transcription import normalize as compact
 
 REVISION = "627ca7ea7c224ffe1accff8737991fc2240784fa"
 SEED = 20261128
@@ -23,10 +24,6 @@ MAX_EDGE = 2200
 
 def digest(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
-
-
-def compact(text: str) -> str:
-    return "".join(unicodedata.normalize("NFC", text).split())
 
 
 def write_jsonl(path: Path, rows: list[dict]) -> None:
@@ -53,7 +50,7 @@ def geometry(record: dict) -> tuple[list[dict], str, list[str]]:
         })
     vertical_count = sum(line["vertical"] for line in lines)
     vertical = vertical_count > len(lines) / 2
-    if lines and 0.25 <= vertical_count / len(lines) <= 0.75:
+    if 0 < vertical_count < len(lines):
         flags.append("mixed_geometry")
     direction = "vertical" if vertical else "horizontal"
     if any(line["source_direction"] in STRATA and
@@ -75,7 +72,7 @@ def pitch_hash(image: Image.Image) -> int:
     )
 
 
-def read_candidates(shards: Path, root: Path, reference_overrides: dict) -> tuple[list[dict], list[dict]]:
+def read_candidates(shards: Path, root: Path) -> tuple[list[dict], list[dict]]:
     candidates, exclusions = [], []
     seen_ids = set()
     seen_bytes = set()
@@ -96,19 +93,13 @@ def read_candidates(shards: Path, root: Path, reference_overrides: dict) -> tupl
         ):
             for record in batch.to_pylist():
                 source_id = record["image_id"]
-                case_id = f"jawildtext-{int(source_id):04d}"
-                if source_id in seen_ids:
-                    raise ValueError(f"duplicate source ID {source_id}")
-                seen_ids.add(source_id)
+                filename = record["filename"]
+                case_id = f"jawildtext-{Path(filename).stem}"
+                if case_id in seen_ids:
+                    raise ValueError(f"duplicate filename-derived case ID {case_id}")
+                seen_ids.add(case_id)
                 writer = record["writer_id"]
                 lines, direction, flags = geometry(record)
-                order = reference_overrides.get(case_id)
-                if order:
-                    by_id = {str(line["polygon_id"]): line for line in lines}
-                    if len(order) != len(lines) or set(order) != set(by_id):
-                        raise ValueError(f"invalid reference order for {case_id}")
-                    lines = [by_id[key] for key in order]
-                    flags.append("human_order")
                 reference = "\n".join(line["text"] for line in lines)
                 if writer is None or writer < 0 or not compact(reference):
                     exclusions.append({"id": case_id, "reason": "missing_writer_or_reference"})
@@ -137,10 +128,11 @@ def read_candidates(shards: Path, root: Path, reference_overrides: dict) -> tupl
                 candidates.append({
                     "id": case_id, "kind": "image", "language": "ja", "suite": "passages",
                     "category": "handwriting", "media": str(image_path.relative_to(root)),
-                    "source_image_id": source_id, "source_filename": record["filename"],
+                    "source_image_id": source_id, "source_filename": filename,
                     "source_url": SOURCE, "source_revision": REVISION, "license": "Apache-2.0",
                     "writer_id": writer, "reference": reference, "writing_direction": direction,
-                    "medium": record["tool"] or "unknown", "sha256": digest(data),
+                    "medium": {"whilte_bord": "whiteboard"}.get(record["tool"], record["tool"]) or "unknown",
+                    "sha256": digest(data),
                     "original_sha256": raw_hash, "original_size": original_size,
                     "prepared_size": image.size, "original_pixel_sha256": pixel_hash,
                     "perceptual_hash": f"{perceptual:016x}", "line_count": len(lines),
@@ -152,7 +144,7 @@ def read_candidates(shards: Path, root: Path, reference_overrides: dict) -> tupl
     return candidates, exclusions
 
 
-def split_cases(candidates: list[dict], exclusions: list[dict]) -> None:
+def split_cases(candidates: list[dict], exclusions: list[dict]) -> list[dict]:
     # Near-duplicate pixels alone can match two different, similarly framed sheets.
     # Link groups on exact substantial text or jointly close pixels and text.
     from rapidfuzz.distance import Levenshtein
@@ -166,12 +158,13 @@ def split_cases(candidates: list[dict], exclusions: list[dict]) -> None:
         return writer
 
     similar = []
+    texts = {case["id"]: compact(case["reference"]) for case in candidates}
     for index, left in enumerate(candidates):
-        left_text = compact(left["reference"])
+        left_text = texts[left["id"]]
         left_hash = int(left["perceptual_hash"], 16)
         for right in candidates[:index]:
             distance = (left_hash ^ int(right["perceptual_hash"], 16)).bit_count()
-            right_text = compact(right["reference"])
+            right_text = texts[right["id"]]
             repeated = len(left_text) >= 30 and left_text == right_text
             close = distance <= 5 and Levenshtein.normalized_similarity(left_text, right_text) >= 0.85
             if repeated or close:
@@ -234,20 +227,39 @@ def main() -> None:
     cache = root / "inventory.jsonl"
     reference_overrides = (json.loads(options.reference_order.read_text())
                            if options.reference_order else {})
-    if cache.exists() and not reference_overrides:
+    if cache.exists():
         all_rows = [json.loads(line) for line in cache.read_text().splitlines()]
     else:
-        all_rows, exclusions = read_candidates(root / "shards", root, reference_overrides)
+        all_rows, exclusions = read_candidates(root / "shards", root)
         links = split_cases(all_rows, exclusions)
         write_jsonl(root / "exclusions.jsonl", exclusions)
         write_jsonl(root / "related-pages.jsonl", links)
         write_jsonl(cache, all_rows)
+    reviewed = set()
+    for row in all_rows:
+        if row["id"] not in reference_overrides:
+            continue
+        review = reference_overrides[row["id"]]
+        order = review["order"]
+        by_id = {line["polygon_id"]: line for line in row["lines"]}
+        if len(order) != len(by_id) or set(order) != set(by_id) or not review["reason"].strip():
+            raise ValueError(f"invalid reference review for {row['id']}")
+        row["reference"] = "\n".join(by_id[key]["text"] for key in order)
+        row["reference_review"] = review
+        reviewed.add(row["id"])
+    if reviewed != reference_overrides.keys():
+        raise ValueError("reference review contains unknown IDs")
     for split in ("pilot", "development", "heldout", "unused"):
         cohort = [r for r in all_rows if r["split"] == split]
         write_jsonl(root / f"{split}.jsonl", [{k: v for k, v in r.items() if k != "lines"} for r in cohort])
         print(split, len(cohort), "pages,", len({r["writer_id"] for r in cohort}), "writers,",
               len({r["group"] for r in cohort}), "groups",
               dict(Counter(r["writing_direction"] for r in cohort)))
+    smoke = next(row for row in all_rows if row["source_filename"] == "0004_01_4_0_0_v.jpg")
+    if smoke["split"] != "unused":
+        raise ValueError("Provider preflight writer must be outside the scored cohorts")
+    write_jsonl(root / "prepared-smoke.jsonl", [{key: smoke[key] for key in
+                ("id", "media", "sha256", "cloud_eligible")}])
 
 
 if __name__ == "__main__":

@@ -1,0 +1,46 @@
+{
+  "date": "2026-11-28",
+  "source_case": "jawildtext-0004_01_4_0_0_v",
+  "cohort": "unused",
+  "objective": "provider connectivity and model initialization",
+  "input": {
+    "source": "https://datasets-server.huggingface.co/cached-assets/llm-jp/jawildtext/--/627ca7ea7c224ffe1accff8737991fc2240784fa/--/handwriting_ocr/train/0/image/image.jpg",
+    "sha256": "b796ea79b38332e44f9f7afe2671700fe993897a7a319182cc0dc75748ffd187",
+    "bytes": 439425,
+    "dimensions_px": [2714, 5000],
+    "reference_sha256": "4878ed3dbc2129837f5ef55ba978ec11c509e079fa516d1b3a4155afdb26417e",
+    "reference_characters": 117,
+    "reference_lines": 6
+  },
+  "host": {
+    "os": "macOS 27.0",
+    "os_build": "26A5353q",
+    "architecture": "arm64"
+  },
+  "normal_terminal": {
+    "apple": {
+      "status": "empty_with_model_initialization_diagnostics",
+      "revision": 3,
+      "seconds": 29.432497499976307,
+      "binary_sha256": "ca8c9c26d1d05ee75ce2f9c68df75f40543b7011bcce238c25a6eb0c36b8c740",
+      "scored": false
+    },
+    "google": {
+      "status": "ok",
+      "feature": "DOCUMENT_TEXT_DETECTION",
+      "language_hint": "ja",
+      "seconds": 1.5004878750187345,
+      "prediction_characters": 120,
+      "prediction_lines": 19,
+      "insertions": 21,
+      "deletions": 18,
+      "substitutions": 9,
+      "character_edits": 48,
+      "cer": 0.41025641025641024
+    }
+  },
+  "restricted_process": {
+    "apple": "model initialization and cache access errors",
+    "google": "authentication transport error"
+  }
+}

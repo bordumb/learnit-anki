@@ -1,0 +1,16 @@
+\begin{tikzpicture}[x=0.0145cm,y=0.57cm, every node/.style={font=\small}]
+  \foreach \y/\name/\h/\v/\total in {
+    3/{パイロット}/74/26/100,
+    2/{開発予備}/78/33/111,
+    1/{最終評価}/583/206/789,
+    0/{対象外}/37/28/65} {
+      \node[anchor=east] at (-13,\y) {\name};
+      \fill[mutedblue] (0,\y-.22) rectangle (\h,\y+.22);
+      \fill[warmochre] (\h,\y-.22) rectangle (\total,\y+.22);
+      \node[anchor=west] at (\total+9,\y) {\total};
+  }
+  \fill[mutedblue] (0,-.72) rectangle (14,-.45);
+  \node[anchor=west] at (19,-.58) {横書き優勢};
+  \fill[warmochre] (134,-.72) rectangle (148,-.45);
+  \node[anchor=west] at (153,-.58) {縦書き優勢};
+\end{tikzpicture}

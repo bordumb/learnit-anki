@@ -1,0 +1,31 @@
+\begin{tikzpicture}[
+  every node/.style={font=\small},
+  block/.style={draw=inkblue, fill=mutedblue!8, rounded corners=2pt,
+                minimum height=6.5mm, minimum width=16mm},
+  margin/.style={block,draw=warmochre,fill=warmochre!8},
+  >=Stealth]
+  \node[anchor=east] at (-.2,1.1) {座標順};
+  \node[anchor=east] at (-.2,0) {監査後};
+  \foreach \x in {0,1,2,3,4,5} {
+    \ifnum\x<5
+      \draw[->,inkblue] (\x*1.85+1.68,1.1) -- (\x*1.85+1.87,1.1);
+      \draw[->,inkblue] (\x*1.85+1.68,0) -- (\x*1.85+1.87,0);
+    \fi
+  }
+  \foreach \x/\top/\bottom in {0/1/1,1/2/2,2/5/3,3/3/4,4/4/5,5/10/10} {
+    \ifnum\x=2
+      \node[margin,anchor=west] at (\x*1.85,1.1) {罫線 \top};
+    \else
+      \ifnum\x=5
+        \node[margin,anchor=west] at (\x*1.85,1.1) {罫線 \top};
+      \else
+        \node[block,anchor=west] at (\x*1.85,1.1) {本文 \top};
+      \fi
+    \fi
+    \ifnum\x<4
+      \node[block,anchor=west] at (\x*1.85,0) {本文 \bottom};
+    \else
+      \node[margin,anchor=west] at (\x*1.85,0) {罫線 \bottom};
+    \fi
+  }
+\end{tikzpicture}

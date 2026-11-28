@@ -1,0 +1,3466 @@
+{
+  "jawildtext-0021_06_3_0_1_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1766542946890-ghq299wyz",
+      "bbox-3",
+      "bbox-4",
+      "bbox-1766542953457-a4kuxc2ka"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0028_03_3_0_1_h": {
+    "order": [
+      "bbox-1",
+      "bbox-1766545346551-y8copy7d1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-1766545360374-4msh33l13",
+      "bbox-1766545367295-jhma8ut6m",
+      "bbox-5",
+      "bbox-6"
+    ],
+    "reason": "同じ式の「とすれば」は右側の短い行で、抵抗の式の直後に続く。上流の順序と一致。"
+  },
+  "jawildtext-0050_08_4_0_0_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0061_08_4_0_0_v": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-1766561560947-g9ca0x1kr"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0065_05_4_0_3_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0067_07_4_0_0_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1766563126344-ox568htug",
+      "bbox-1766563138001-y4ww3mjff",
+      "bbox-1766563146910-171ekip06",
+      "bbox-1766563156353-qsruw2osq",
+      "bbox-1766563166775-0kpfembma"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0089_06_4_0_2_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-5"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0096_04_3_0_1_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0097_05_4_0_3_ｈ": {
+    "order": [
+      "bbox-1",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-8"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0100_06_4_0_0_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1769138160744-r7p2v0mx6",
+      "bbox-1769138168767-1se37yhdq",
+      "bbox-1769138174303-ty1jmjfx2",
+      "bbox-1769138185031-4ty7goh7x"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0103_02_3_0_3_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-1769144722835-f0ubb8t3t",
+      "bbox-6"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0106_05_4_0_1_ｈ": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-1769145395487-pbsqjiv0o",
+      "bbox-1769145416815-hvllhqmgk",
+      "bbox-1769145448493-cy3zn8ma3"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0117_06_3_0_3_v": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-1769147463760-p7bi7tic1",
+      "bbox-1769147483471-91ysiuue5"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0121_03_3_0_2_v": {
+    "order": [
+      "bbox-1",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0123_05_3_0_3_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1769150230599-z7vp05atc",
+      "bbox-1769150237324-3i23t9sd4",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0125_07_3_0_2_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1769150934578-iuliyjn6h",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0130_05_4_0_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1769152346350-pl35ht30z",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-1769152356117-lqgavytfl"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0136_04_3_0_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-4",
+      "bbox-5"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0137_04_4_0_1_v": {
+    "order": [
+      "bbox-1767675975965-fy86td3cm",
+      "bbox-1767676347612-6yudfvlvb",
+      "bbox-1767676455674-ocnxfj56i",
+      "bbox-1767676562173-uend4skz4",
+      "bbox-1767676716674-o2kyvqugu"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0138_02_4_0_0_v": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-1769153083005-8su6vx577",
+      "bbox-5",
+      "bbox-1769153093244-1puhq9acz",
+      "bbox-6",
+      "bbox-7",
+      "bbox-1769153105012-m4geqmfze"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0140_04_4_0_1_v": {
+    "order": [
+      "bbox-1769153390564-4z00vf0ns",
+      "bbox-1769153396899-ds3e4h144",
+      "bbox-1769153401451-1hte4d7c3",
+      "bbox-1769153407059-jszqkz2e0",
+      "bbox-1769153415331-flf98b3or",
+      "bbox-1769153420795-wc8blg7gp",
+      "bbox-1769153425355-aommruahx",
+      "bbox-1769153430027-rd0hb1mor",
+      "bbox-1769153435355-xb7p05bao",
+      "bbox-1769153441762-lehfdpliz"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0143_07_4_0_0_v": {
+    "order": [
+      "bbox-1769153879754-fap8yt20f",
+      "bbox-1769153885530-hs9e2wzwj",
+      "bbox-1769153891554-vc0x85yeh",
+      "bbox-1769153903394-kyn4xab0y",
+      "bbox-1769153909346-xbcwo0gq7",
+      "bbox-1769153916441-w6yt7u484",
+      "bbox-1769153921962-d18sz2pdt"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0146_50_1_2_3_v": {
+    "order": [
+      "bbox-1767993498851-1p2bnhc3x",
+      "bbox-1767993509597-o9qglorgy",
+      "bbox-1767993519789-fmpqwd7pd",
+      "bbox-1767993530836-yyte3do75",
+      "bbox-1767993539170-4qksa31ul",
+      "bbox-1767993546467-heykkmgvx",
+      "bbox-1767993554124-e8iymh4uj"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0149_13_1_1_1_v": {
+    "order": [
+      "bbox-1767994425281-5zgknfz74",
+      "bbox-1767994435775-1dogi1y4q",
+      "bbox-1767994442652-6645a17pe",
+      "bbox-1767994449327-eoong9bog",
+      "bbox-1767994456295-8b728k6vq"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0150_14_2_1_1_v": {
+    "order": [
+      "bbox-1767994864709-8ih9nhww8",
+      "bbox-1767994872854-53kjs1kjb",
+      "bbox-1767994880008-60ry3uz9z",
+      "bbox-1767994887479-jgbk6l6ld",
+      "bbox-1767994894619-lb97k96oe",
+      "bbox-1767994902176-x86126pt0"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0151_15_2_1_1_h": {
+    "order": [
+      "bbox-1769505070512-13kpdlwfn",
+      "bbox-1769505091309-54rk4bs4h",
+      "bbox-1767995339730-a7qvdd9an",
+      "bbox-1767995350017-c4oxurjxp",
+      "bbox-1767995358141-98fklmc5f",
+      "bbox-1767995366803-dbkyvk2gc"
+    ],
+    "reason": "同じヘッダー行の印字を左から右に読んでから本文へ進む。"
+  },
+  "jawildtext-0152_16_1_2_1_v": {
+    "order": [
+      "bbox-1767995586186-r91ixwy9r",
+      "bbox-1767995595219-dyyi3yjyv",
+      "bbox-1767995604481-m14wsr1j1",
+      "bbox-1767995611539-51nxilbhe",
+      "bbox-1767995619504-xy033h9sj",
+      "bbox-1767995626448-mg1o7da3o",
+      "bbox-1767995631741-g9balc2of"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0153_17_1_1_1_v": {
+    "order": [
+      "bbox-1768089638937-rz3nuri5e",
+      "bbox-1768089649309-ogktbz927",
+      "bbox-1768089656532-1pd56gr14",
+      "bbox-1768089662516-zdyd8v4yd",
+      "bbox-1768089669890-7667xknx2",
+      "bbox-1768089676356-6xs4panfg",
+      "bbox-1768089681288-cdo4byljj"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0155_19_2_2_1_v": {
+    "order": [
+      "bbox-1768090491456-kply110xw",
+      "bbox-1768090499780-8nukldw1n",
+      "bbox-1768090506650-tknf4kydf",
+      "bbox-1768090514697-6kuxz3ux3",
+      "bbox-1768090523991-so5ydzvc3",
+      "bbox-1768090531910-1gt1ry3o6"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0158_22_2_2_1_v": {
+    "order": [
+      "bbox-1768093519260-fieqxvaea",
+      "bbox-1768093527441-wnf6lkivp",
+      "bbox-1768093536201-rgmn5ss1t",
+      "bbox-1768093545352-iuwfi5fic",
+      "bbox-1768093555934-1bkwly2g4",
+      "bbox-1768093565025-0xcqv1kla"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0159_23_2_2_1_v": {
+    "order": [
+      "bbox-1769566256299-ksj0s5zz9",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7",
+      "bbox-8",
+      "bbox-9",
+      "bbox-10"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0160_24_2_1_1_v": {
+    "order": [
+      "bbox-1768099311273-l8kbpcn89",
+      "bbox-1768099331230-q752hqink",
+      "bbox-1768099337779-tt0yax3pw",
+      "bbox-1768099345502-mn6t53zeo"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0163_27_2_1_1_v": {
+    "order": [
+      "bbox-1768100321809-aw3h1f2ro",
+      "bbox-1768100330314-zokuts7wv",
+      "bbox-1768100338663-o2o7v15tq",
+      "bbox-1768100346606-7cyye53ye",
+      "bbox-1768100357825-ojss43i0g",
+      "bbox-1768100363878-hlhid6mh1",
+      "bbox-1768100370177-5sla3kokj",
+      "bbox-1768100378179-utcav95pq",
+      "bbox-1768100386070-yo6mici16",
+      "bbox-1768100394664-r9whgj575"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0164_28_1_2_1_v": {
+    "order": [
+      "bbox-1768100760157-h8nalz210",
+      "bbox-1768100768557-jcamld57t",
+      "bbox-1768100777250-0d6d8znk9",
+      "bbox-1768100784607-dkatjojnu"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0165_29_2_1_1_v": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-1767748198019-r14l8bl5n",
+      "bbox-1767748236771-nv87untso",
+      "bbox-1767748268678-bnx825b1a",
+      "bbox-1767748298273-yvova4r9f"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0167_31_2_1_1_v": {
+    "order": [
+      "bbox-1768101033233-8z16wdz9i",
+      "bbox-1768101043040-skgb2sl6r",
+      "bbox-1768101052603-yd88oy8u3",
+      "bbox-1768101071557-j9ohiiowd",
+      "bbox-1768101078163-lgjou06hs"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0168_32_2_3_2_v": {
+    "order": [
+      "bbox-1767749800342-x6o4j81uc",
+      "bbox-1767749958015-rq5f6jobh",
+      "bbox-1767750099570-jtjfjdyxt",
+      "bbox-1767750227732-dnapkpqrc",
+      "bbox-1767750380649-4lxn40j1o",
+      "bbox-1769478473853-flcmov5hk",
+      "bbox-1769478486853-uke9di8re",
+      "bbox-1769478499710-h7zasxxhq",
+      "bbox-1769478743447-kqa0ouu7z",
+      "bbox-1769478502744-ot8uu2g27"
+    ],
+    "reason": "縦書き本文を先に読み、右欄の罫線番号は上から下にまとめる。"
+  },
+  "jawildtext-0169_33_1_0_3_v": {
+    "order": [
+      "bbox-1768101370432-0xtrwvx7n",
+      "bbox-1768101378616-enq4gt85m",
+      "bbox-1768101388950-g5scu5tbn",
+      "bbox-1768101395176-wo8zjoxbi",
+      "bbox-1768101402526-6febs81sx",
+      "bbox-1768101408653-24dal89xr"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0170_34_1_2_1_v": {
+    "order": [
+      "bbox-1769567136849-79rf2acnh",
+      "bbox-1769567139733-v0t7si7uy",
+      "bbox-1768113826445-133dzbwi0",
+      "bbox-1768113836832-xshbgvoql",
+      "bbox-1768113843469-pk59nlurf",
+      "bbox-1768113851261-5rwwsrezv",
+      "bbox-1768113862849-8mpnpcbb3",
+      "bbox-1768113868424-f4zqj4eab"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0174_38_2_2_1_v": {
+    "order": [
+      "bbox-1768114822262-onbcgj38k",
+      "bbox-1768114833354-6s4nrqzas",
+      "bbox-1768114839616-2h84c2dyc",
+      "bbox-1768114847469-v9t587278"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0175_39_2_2_1_v": {
+    "order": [
+      "bbox-1768115259131-8zumrevr7",
+      "bbox-1768115267051-hm1jiikww",
+      "bbox-1768115272969-8grtzt6wc",
+      "bbox-1768115279442-loui5oqjx",
+      "bbox-1768115285720-xk9r0qngk",
+      "bbox-1768115292094-6nui8y9le",
+      "bbox-1768115296788-bd3fgpy6n"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0176_40_1_0_1_v": {
+    "order": [
+      "bbox-1768115637816-ds91l81nk",
+      "bbox-1768115644708-0um91wijm",
+      "bbox-1768115651413-nn7y7oas6",
+      "bbox-1768115656730-73tl9iws2"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0178_42_1_2_1_v": {
+    "order": [
+      "bbox-1768117488763-8u6b60qwa",
+      "bbox-1768117507354-lrqt5oerh",
+      "bbox-1768117516685-j0sumd4js"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0179_43_2_2_1_v": {
+    "order": [
+      "bbox-1768117774662-w35rwjkse",
+      "bbox-1768117784871-djewrmupv",
+      "bbox-1768117794764-clobx9w61",
+      "bbox-1768117803986-c90o4w8sz",
+      "bbox-1768117826721-l63h3hlfw",
+      "bbox-1768117884646-73fqdblrd",
+      "bbox-1768117896405-4mxrbjqj7",
+      "bbox-1768117908953-d5byy22kw",
+      "bbox-1768117917322-0mdbslkyp",
+      "bbox-1768117935795-vnlax0ze7",
+      "bbox-1768117946145-5n6k5oajm",
+      "bbox-1768117954387-2kko388s4",
+      "bbox-1768117961100-t2v2tjwl2",
+      "bbox-1768117966879-09q16ohw8"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0180_44_2_1_1_h": {
+    "order": [
+      "bbox-1769568579465-qxpd9xmn4",
+      "bbox-1769568582802-apemxunum",
+      "bbox-1768118797544-e430qyhzn",
+      "bbox-1768118817412-5uanzseea",
+      "bbox-1768118826434-n8roidr8r",
+      "bbox-1768118833613-tcxsmnjua",
+      "bbox-1768118856172-b9b78htsr",
+      "bbox-1768118871083-4ewq42vue",
+      "bbox-1768118880232-xe5ajen7l",
+      "bbox-1768118893576-8w3xh0xyj"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0186_48_2_2_1_v": {
+    "order": [
+      "bbox-1768172511057-7igb1a4np",
+      "bbox-1768172526124-g1bulye3y",
+      "bbox-1768172535614-iokp9wdhc",
+      "bbox-1768172542902-lgu6rl7ho",
+      "bbox-1768172551399-kwht8zvqf",
+      "bbox-1769568892035-3ymxuk16a"
+    ],
+    "reason": "用紙下部の印字は本文の後に置く。"
+  },
+  "jawildtext-0188_49_2_2_1_v": {
+    "order": [
+      "bbox-1768172766862-hbaptjzwi",
+      "bbox-1768172776343-0bthj9l31",
+      "bbox-1768172785477-1qtdpmaeg"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0190_05_4_0_0_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0195_02_4_0_1_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1766543475197-1v0fx3xq9",
+      "bbox-1766543481874-40unuz3j8",
+      "bbox-1766543490144-rz19kvta0"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0215_14_2_2_2_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0222_17_2_2_2_h": {
+    "order": [
+      "bbox-1769570541504-xfqmutaa1",
+      "bbox-2",
+      "bbox-1768174370951-jl6dmexap",
+      "bbox-1768174381886-t77qtrlyh",
+      "bbox-1768174393623-h40ghoiv0",
+      "bbox-1768174401325-ua92bt4rl",
+      "bbox-1768174549662-nuso4s4j4"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0243_30_1_3_1_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1767753098605-dqsh265ct",
+      "bbox-1767753140742-rk339k16p"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0246_33_2_1_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0248_35_2_2_1_h": {
+    "order": [
+      "bbox-1769575401790-5ej5kmkkw",
+      "bbox-1769575405249-ewwv6ylsx",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0255_42_1_3_2_v": {
+    "order": [
+      "bbox-1",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0262_48_2_1_1_h": {
+    "order": [
+      "bbox-1769576720893-06heeey8w",
+      "bbox-2",
+      "bbox-1768187687083-px7a3lsmh",
+      "bbox-1768187696832-4y6zm0hvx",
+      "bbox-1768187706986-9gqhmr7yh",
+      "bbox-1768187722406-4tf95ekpn"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0265_07_4_0_0_h": {
+    "order": [
+      "bbox-1",
+      "bbox-1766555373159-fp65gcyry",
+      "bbox-1766555376360-69p7543f4",
+      "bbox-1766555379637-iwizp805o",
+      "bbox-1766555383049-no5x19b6k"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0273_08_4_0_0_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0287_18_2_2_2_v": {
+    "order": [
+      "bbox-1768191120699-jq69b6l9h",
+      "bbox-1768191129264-zft3629cu",
+      "bbox-1768191138056-jh3wtqe51",
+      "bbox-1768191144134-1h3gpj200",
+      "bbox-1768191150841-hr71q94ke",
+      "bbox-1768191155880-xykhkg8qr"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0288_19_2_3_3_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-6",
+      "bbox-7"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0289_20_1_2_1_v": {
+    "order": [
+      "bbox-1768192055742-61fgjljd3",
+      "bbox-1768192068478-ocooyj56t",
+      "bbox-1768192075633-196zz23z2",
+      "bbox-1768192082931-w2ddtuwjo",
+      "bbox-1768192090774-x4bzh0mek",
+      "bbox-1768192097171-59cl7lwhe"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0290_21_1_2_3_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-1768192460714-v7vwze58d",
+      "bbox-1768192471708-m4hmi2p4t"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0304_32_2_2_1_v": {
+    "order": [
+      "bbox-1767758923673-kqqya3686",
+      "bbox-1767758935546-cm4likuyh",
+      "bbox-1767758945918-yk0c1x68l",
+      "bbox-1767758954018-qni9cp0kx",
+      "bbox-1767758963214-cz37dfqph",
+      "bbox-1767758983892-aqt8jsr33",
+      "bbox-1767758994608-izhqzz3dp",
+      "bbox-1767759034515-0879jpehp",
+      "bbox-1767759055793-5x87eza7e",
+      "bbox-1769480478892-lwuzyujpl",
+      "bbox-1769480480533-d2bswlfco",
+      "bbox-1769480482868-mddzj0gj8",
+      "bbox-1769480505907-qxtimof0j",
+      "bbox-1769480507828-ep6spdmvh",
+      "bbox-1769480502604-17karwbcr",
+      "bbox-1769480500291-mtng36m00",
+      "bbox-1769480498549-thok93qne",
+      "bbox-1769480469172-8qt14sz1p",
+      "bbox-1769480471509-3uqtv43qo",
+      "bbox-1769480473740-u5xfx913h",
+      "bbox-1769480495523-53d70h0wn",
+      "bbox-1769480497096-88en6112z"
+    ],
+    "reason": "連続した縦書き本文を読み、罫線番号を右欄、下欄、左欄の順にまとめる。"
+  },
+  "jawildtext-0305_33_2_2_0_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-1768193995114-e05yepd90",
+      "bbox-1768194007257-l7bw9g15i"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0310_38_2_2_0_h": {
+    "order": [
+      "bbox-1769581204754-er8kaj30a",
+      "bbox-2",
+      "bbox-1768210817457-192ip4lnz",
+      "bbox-1768210847994-gdz67gw3y",
+      "bbox-1768210863090-5ozfhvyfr"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0314_42_1_1_1_v": {
+    "order": [
+      "bbox-1768212184213-xbsgiuri5",
+      "bbox-1768212199153-qnpfbqyr4",
+      "bbox-1768212214062-iwzg6lo1k"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0315_43_1_1_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0325_47_2_1_1_h": {
+    "order": [
+      "bbox-1769581879274-979k3oc7i",
+      "bbox-1769581887919-e5t88ws45",
+      "bbox-1768213126632-wkimnrmpz",
+      "bbox-1768213138887-99nv7lwqq",
+      "bbox-1768213190869-9dhzf3hhj",
+      "bbox-1768213209343-ueus69if3",
+      "bbox-1768213219865-zq7z6og6g"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0342_05_3_0_1_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0355_15_2_1_1_h": {
+    "order": [
+      "bbox-1769582603775-n8229wjsk",
+      "bbox-1",
+      "bbox-1768215177606-vaazw75a1",
+      "bbox-1768215202027-af7fhdwrr",
+      "bbox-1768215265228-nf3ywkszf",
+      "bbox-1768215295425-v4nl49fqm",
+      "bbox-1768215310425-nlw1a35ba"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0361_16_2_1_1_h": {
+    "order": [
+      "bbox-1769585359998-18baath22",
+      "bbox-1769585367405-jqy9r3cmd",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-1768215573257-g6mh95mv1"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0364_19_2_1_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-1769585666803-rbmgq8ag9"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0371_23_2_2_2_h": {
+    "order": [
+      "bbox-1769585935159-jgo0x75tx",
+      "bbox-1769585937679-4zk3hlv9g",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0376_28_1_3_1_h": {
+    "order": [
+      "bbox-1",
+      "bbox-1768217969181-qepubbf5z",
+      "bbox-1768217982274-fnqxq62g2"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0384_34_1_2_2_h": {
+    "order": [
+      "bbox-1769586651899-117oosk0z",
+      "bbox-1769586663811-6a88tmvlu",
+      "bbox-3",
+      "bbox-1768218588891-dc79aylqf",
+      "bbox-1768218597913-i3k8s8h4c",
+      "bbox-1768218605773-0u3acukm1"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0392_39_1_1_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1768597895989-9kaop5p7d",
+      "bbox-1768597907623-d1xtrfhch",
+      "bbox-1768597919968-t0hvxs23g",
+      "bbox-1768597957250-tha4ahfql",
+      "bbox-1768597974951-6iiazymxv",
+      "bbox-1768597986095-9kv7g59cj"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0397_42_2_3_0_h": {
+    "order": [
+      "bbox-1769587506515-qceiae219",
+      "bbox-1769587513107-iacbs8m8s",
+      "bbox-3",
+      "bbox-4",
+      "bbox-1768257911074-j4pfecvsi"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0401_43_2_2_3_v": {
+    "order": [
+      "bbox-1768258110159-5qcaqee92",
+      "bbox-1768258129229-ejuzycl69",
+      "bbox-1768258147564-v5q0kg7f9",
+      "bbox-1768258160842-pkikr864y",
+      "bbox-1768258186758-qa5vebvjd",
+      "bbox-1768258194940-eicr7z2yv",
+      "bbox-1769587689749-d23mn8i8p",
+      "bbox-1769587697998-kfivh655f"
+    ],
+    "reason": "用紙下部の印字は本文の後にまとめる。"
+  },
+  "jawildtext-0402_44_2_3_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0405_47_2_2_3_h": {
+    "order": [
+      "bbox-1769588324966-mms4shmg6",
+      "bbox-1769588332580-irybkbz9q",
+      "bbox-3",
+      "bbox-4",
+      "bbox-1768259186963-ep6rq52co",
+      "bbox-1768259194634-yktmev33c"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0411_02_4_0_0_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0414_05_4_0_3_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-6",
+      "bbox-7"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0419_08_3_0_1_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0421_50_1_2_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1768259754975-ofgrn0hiw",
+      "bbox-1768259774367-b10y6jqo0",
+      "bbox-1768259785922-z0cuiqr00",
+      "bbox-1768259797067-7sp1lon27",
+      "bbox-1768259806994-fc4ozp8uc",
+      "bbox-1768259816713-lzo0r9brq"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0424_13_1_3_2_v": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-1768260112967-8nw1q4mrj",
+      "bbox-1768260123628-frcdfmnhi",
+      "bbox-1768260137059-k685hxmj2",
+      "bbox-1768260146062-117qe3v9q",
+      "bbox-1768260155211-2dcd2gmh6"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0426_15_2_0_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-1768264148829-wcnx60gc4",
+      "bbox-1768264155969-tki7pg6nf"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0427_16_1_1_1_v": {
+    "order": [
+      "bbox-1768264402531-rred6tlex",
+      "bbox-1768264414781-wtdbizm1a",
+      "bbox-1768264425214-mkev1bbe8",
+      "bbox-1768264437180-flfihnu4c",
+      "bbox-1768264448163-ehojhmaze"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0429_18_2_0_1_v": {
+    "order": [
+      "bbox-2",
+      "bbox-1768266547472-lpptcchwv",
+      "bbox-1768266560236-7bwi9c51r",
+      "bbox-1768266572253-yjbd27r9l",
+      "bbox-1768266584596-75w0jy8ix",
+      "bbox-1768266595921-p5ejy3hj8"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0430_19_2_1_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0431_20_1_1_1_v": {
+    "order": [
+      "bbox-1768598895644-txrc2uw1d",
+      "bbox-1768598909068-sjxx8dqoa",
+      "bbox-1768598920131-2w294bpwu",
+      "bbox-1768598936705-6yddyn8x4",
+      "bbox-1768598949260-3uuf03676",
+      "bbox-1768598960698-b0zorshpb"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0432_21_2_1_1_v": {
+    "order": [
+      "bbox-1768599280747-38t9k3xx9",
+      "bbox-1768599298266-tfb3rnitc",
+      "bbox-1768599311937-2trfigb2w",
+      "bbox-1768599323781-c22w7xxyv",
+      "bbox-1768599337363-rw6a4x1hf",
+      "bbox-1768599349446-6i6rv8hlc",
+      "bbox-1768599360477-4njdup6r6"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0433_22_2_1_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-1768267933822-xqrendypo"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0434_23_2_2_2_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0436_25_1_3_3_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7",
+      "bbox-8"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0437_26_1_1_1_v": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-1767777900558-bahjrxklj",
+      "bbox-1767777912707-8n05lwknq"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0443_32_2_1_1_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-1769482860651-axn5gozi0",
+      "bbox-1769482862642-i8df0xecl"
+    ],
+    "reason": "横書きの文の途中に挟まる左欄の罫線番号は末尾で上から下に読む。"
+  },
+  "jawildtext-0445_34_1_2_1_v": {
+    "order": [
+      "bbox-1768600055919-yp7whm6va",
+      "bbox-1768600078551-mo9ztfoen",
+      "bbox-1768600088782-fl5eoz987",
+      "bbox-1768600097045-quc1en5jd",
+      "bbox-1768600106842-ur9rqks7y"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0454_38_2_2_2_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1768600677929-i2oaavb6v",
+      "bbox-1768600684611-afy9nqi26",
+      "bbox-1768600691438-x9phr53sx",
+      "bbox-1768600699965-gl3wrx5nf",
+      "bbox-1768600706527-y7xmmwe8o",
+      "bbox-1768600712789-vf74koeu8"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0455_39_2_2_0_v": {
+    "order": [
+      "bbox-1768600928948-mmuv7ofex",
+      "bbox-1768600983024-n0b4lawu1",
+      "bbox-1768600995017-8ntpupyjy",
+      "bbox-1768601011262-8pkxwdlof",
+      "bbox-1768601025766-gporead4j",
+      "bbox-1768601036670-o3lus4cpo",
+      "bbox-1768601046398-gxuf5nwe3",
+      "bbox-1768601057912-fg1mxpovg"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0458_42_2_2_1_h": {
+    "order": [
+      "bbox-1769671214078-fq59a6flc",
+      "bbox-1769671220094-vkj8ibei0",
+      "bbox-3",
+      "bbox-4",
+      "bbox-1768601745385-lbnuaf43a",
+      "bbox-1768601763939-mq3d4ygfe"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0467_48_1_1_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-1768270598532-hdspf614e",
+      "bbox-1768270615512-kcfnayzma",
+      "bbox-1768270627877-7mzeiv5nt"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0469_10_2_2_1_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0471_02_4_0_0_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0474_05_4_0_2_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0475_06_3_0_2_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0498_21_1_2_2_v": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-1768602340094-y4h6e9xbl",
+      "bbox-1768602351422-awmwu095x",
+      "bbox-1768602368361-qmgdlp4fs"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0500_23_2_2_0_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0511_29_1_0_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0515_33_1_1_1_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1768279383754-5cgmkzz6h",
+      "bbox-1768279397813-bz1zbf0n2",
+      "bbox-1768279408893-b0lxzekld"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0526_41_2_3_1_v": {
+    "order": [
+      "bbox-3",
+      "bbox-6",
+      "bbox-1768602679566-j5k3y7esy",
+      "bbox-1768602692810-pvcc4jmj5",
+      "bbox-1768602701907-sskodokj8",
+      "bbox-1768602710003-pvmfqdko5"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0527_42_2_3_1_v": {
+    "order": [
+      "bbox-1768677852005-wdagl815a",
+      "bbox-1768677878210-qxku73ppr",
+      "bbox-1768677896194-oksobpwfs",
+      "bbox-1769741686874-s6oi9chnz",
+      "bbox-1769741691056-ktxkdw06u"
+    ],
+    "reason": "縦書き本文を連結し、本文左上の印字を上から下に続ける。"
+  },
+  "jawildtext-0531_46_1_2_1_v": {
+    "order": [
+      "bbox-1768678762424-8qgrysri8",
+      "bbox-1768678773103-qntq30h23",
+      "bbox-1768678789711-bpw31xeul",
+      "bbox-1768678803140-bzm0n8jdt",
+      "bbox-1768678815837-iyzvnmnm1",
+      "bbox-1768678825288-zjorskdy9",
+      "bbox-1768678837055-eh64mqxdo",
+      "bbox-1768678847224-nmk7j1hl3"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0533_48_1_2_3_v": {
+    "order": [
+      "bbox-1768679222548-2ve5a1x9v",
+      "bbox-1768679236476-od4zdhl95",
+      "bbox-1768679249694-xrfvi2bhv",
+      "bbox-1768679260433-4krwydzr7",
+      "bbox-1768679276672-09prd57s8",
+      "bbox-1768679292714-oc4orvbmj"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0534_49_2_1_1_v": {
+    "order": [
+      "bbox-1768679612410-eurna91m1",
+      "bbox-1768679625850-uwxlus5sr",
+      "bbox-1768679637909-3aqrp6xj4",
+      "bbox-1768679650695-eet439t4c"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0541_07_4_0_0_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1769394260781-m7ee13vvv",
+      "bbox-2",
+      "bbox-1769394264345-8sdg20m77",
+      "bbox-1769394266993-h7zrfk4pp",
+      "bbox-1769394269691-d8kety7yb",
+      "bbox-1769394272314-4cutq6c3e"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0548_08_3_0_3_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1769405256339-z5pqvoqas",
+      "bbox-1769405258523-sqrimww89",
+      "bbox-1769405261083-smto6lrnw",
+      "bbox-1769405263915-sgzumjgos",
+      "bbox-1769405266770-nap2oakt2",
+      "bbox-1769405269539-u5twj8qzy"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0549_08_3_0_2_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1769406222155-nlktvwpty",
+      "bbox-1769406225177-8klnnpwwr",
+      "bbox-1769406227637-awyh5y29i",
+      "bbox-3",
+      "bbox-1769406229985-t0nwd3zvd",
+      "bbox-1769406232651-490bs4dqk"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0550_50_1_1_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1768285126150-4wlsigatn",
+      "bbox-1768285137587-os99hey1j",
+      "bbox-1768285150788-816wgca1j",
+      "bbox-1768285162623-2tpp00vqh",
+      "bbox-1768285176151-czvxm1mqj",
+      "bbox-1768285187395-q015t9jn5"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0553_13_2_3_0_v": {
+    "order": [
+      "bbox-2",
+      "bbox-1768285428471-ajobjvfop",
+      "bbox-1768285442402-ix1x86bvw",
+      "bbox-1768285456069-g878oxrlk",
+      "bbox-1768285468307-eqbkb3mtx",
+      "bbox-1768285481534-tthzxe5aq",
+      "bbox-1768285492500-y4i9lsme8",
+      "bbox-1768285579451-py5q1l3yt",
+      "bbox-1768285591506-jioteud7b"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0555_15_1_2_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1768288056161-j7t4r9anf",
+      "bbox-1768288069342-ymi5n0wck"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0556_16_2_2_2_v": {
+    "order": [
+      "bbox-1768680351753-6at4wm4rh",
+      "bbox-1768680363347-vfd5t85ph",
+      "bbox-1768680376160-w6wo0xvtk",
+      "bbox-1768680387950-xg0m42vho"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0561_21_1_2_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-1768681141139-q0ez56tns",
+      "bbox-1768681154207-6rueymt0j",
+      "bbox-1768681169492-dtrxsofqf",
+      "bbox-1768681183640-poiu6ia1u"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0562_22_2_1_0_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1768289087541-829xt65e9",
+      "bbox-1768289102676-xmld9c08l",
+      "bbox-1768289114945-0hyxmuz6p",
+      "bbox-1768289124694-mpfaihxfm",
+      "bbox-1768289133557-0c32zoucx",
+      "bbox-1768289143623-hnwkozh30"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0565_25_2_1_1_v": {
+    "order": [
+      "bbox-1768681529144-dscdqnahs",
+      "bbox-1768681547090-4jkj8qlvo",
+      "bbox-1768681560761-vex9853xj",
+      "bbox-1768681572891-zpbp74x7j",
+      "bbox-1768681583236-aqcnfdwt8",
+      "bbox-1768681593044-inros9wvs"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0567_27_1_2_3_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1768298537905-3k1rkgrms",
+      "bbox-1768298552167-hjzuiqqnt",
+      "bbox-1768298580211-329jgr0dw",
+      "bbox-1768298591075-5ve01ksqs"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0568_28_1_2_2_v": {
+    "order": [
+      "bbox-4",
+      "bbox-1768299123932-c1mm3yrfm",
+      "bbox-1768299226218-zbddonoqr",
+      "bbox-1768299301693-4msiikqfc",
+      "bbox-1768299314576-8i32leltg"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0569_29_2_2_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1767818469256-oryjdlgie",
+      "bbox-1767818474807-hu3cd16x4",
+      "bbox-1767818491937-xh1moaayl",
+      "bbox-1767818501334-otazzub1d",
+      "bbox-1767818512240-ju8o34i42",
+      "bbox-1767818518226-qugxdk2rs"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0570_30_1_1_1_v": {
+    "order": [
+      "bbox-1767819260908-wsycgykjn",
+      "bbox-1767819270919-dojopuvgx",
+      "bbox-1767819300130-fgnbuivna",
+      "bbox-1767819321531-b7ro93scy",
+      "bbox-1767819340316-0l004jixe",
+      "bbox-1767819357223-6vnfw7qqw"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0574_34_1_2_2_v": {
+    "order": [
+      "bbox-3",
+      "bbox-1768331721438-hl3sxwo5g",
+      "bbox-1768331739424-utwbru3oc",
+      "bbox-1769755295567-ncitjdq26"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0575_35_2_1_1_h": {
+    "order": [
+      "bbox-1768682359426-uufnga1ny",
+      "bbox-1768682369206-zh81lm316",
+      "bbox-1768682382001-azrbkoa0d",
+      "bbox-1768682397031-34k9nxs2o",
+      "bbox-1768682408806-u1wecrift",
+      "bbox-1768682422615-vjdatvd4s",
+      "bbox-1768682433633-tbi8udcru",
+      "bbox-1768682446532-oge8meqyj"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0582_42_2_2_3_h": {
+    "order": [
+      "bbox-1769755882490-9kcdsuhgk",
+      "bbox-1769755895125-6q46em5c6",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-1768332823368-ag3cb5xpw",
+      "bbox-1768332835249-iuxwkwsfx",
+      "bbox-1769755864043-34zh2l8xd"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0583_43_2_2_1_h": {
+    "order": [
+      "bbox-1769755957013-ub44m75ws",
+      "bbox-1769755968842-65lw51cht",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7",
+      "bbox-1768333023140-snm6b64v9"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0592_02_4_0_0_v": {
+    "order": [
+      "bbox-2",
+      "bbox-4",
+      "bbox-3",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7",
+      "bbox-8",
+      "bbox-9",
+      "bbox-1769408588848-294yqn7ic"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0595_05_4_0_3_h": {
+    "order": [
+      "bbox-1",
+      "bbox-1769410356504-0on1897lm",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0596_06_4_0_0_h": {
+    "order": [
+      "bbox-1",
+      "bbox-1769410805052-o1jz07m9r",
+      "bbox-1769410807429-x9ig73x8s",
+      "bbox-1769410810605-qmo3b63gs",
+      "bbox-2"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0598_08_3_0_1_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1769411696747-errmtl6z2",
+      "bbox-1769411700130-z08go7mfg",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0600_50_2_2_3_h": {
+    "order": [
+      "bbox-1769756460930-1nkov4l2c",
+      "bbox-1769756471922-gfyhb6ofv",
+      "bbox-3",
+      "bbox-1768336003793-o52wn64ve",
+      "bbox-1768336041968-lbh59pnzt",
+      "bbox-1768336172776-xa4qi7myp"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0610_20_2_1_1_h": {
+    "order": [
+      "bbox-1769757049592-lp8lavkg9",
+      "bbox-3",
+      "bbox-1768337723934-yqyqp5f34",
+      "bbox-1768337737711-d8gb0ckhq",
+      "bbox-1768337749720-a0ccpjzia",
+      "bbox-1768337762560-l4g5hbkxp"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0614_24_1_3_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0616_26_2_1_1_h": {
+    "order": [
+      "bbox-1769488998381-lead9i35g",
+      "bbox-1769488977743-8se0fhw7o",
+      "bbox-1769488989480-5s9bes49v",
+      "bbox-1769488976005-vq669eh0q",
+      "bbox-21",
+      "bbox-1767835295659-m54oo1ess",
+      "bbox-1767835321117-wd3lv0uzt",
+      "bbox-1767835333469-os3kkd2ih",
+      "bbox-1767835343708-slqn4fsvx",
+      "bbox-1767835352166-63ehkhtif"
+    ],
+    "reason": "本文上部の方位記号を北から時計回りに読み、本文を続ける。"
+  },
+  "jawildtext-0617_27_1_1_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1768339552444-97cp7smun",
+      "bbox-1768339563268-jtt66yo4z",
+      "bbox-1768339574868-llssliv3n"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0618_28_2_2_0_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-1768339783399-p9p1fesj3"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0622_32_2_2_2_v": {
+    "order": [
+      "bbox-1767918310892-sce2syrpp",
+      "bbox-1767918321660-01wv5p0qp",
+      "bbox-1767918332212-1f85mrlrb",
+      "bbox-1767918341646-exre4vquj",
+      "bbox-1767918350676-uioqq68u9",
+      "bbox-1767918363742-rc2dq4w10"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0627_37_2_1_1_v": {
+    "order": [
+      "bbox-1767918954670-4vtsga8l6",
+      "bbox-1767918965291-k44jgwlkw",
+      "bbox-1767918974299-bpabelea3",
+      "bbox-1767918983186-i9oftk9t7",
+      "bbox-1767918993010-yw8xiz3rd"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0632_42_1_2_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1768340914426-st7ucjrrz",
+      "bbox-1768340933154-xhq2aigm3",
+      "bbox-1768340943803-1sockpjkr"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0638_48_2_1_1_h": {
+    "order": [
+      "bbox-1769758780891-klxka0jay",
+      "bbox-2",
+      "bbox-1768350337610-2cyhsjj41",
+      "bbox-1768350351417-0xk3pqokk",
+      "bbox-1768350365819-z2h4l03j9",
+      "bbox-1768350378223-2m1afuknw",
+      "bbox-1768350389192-ngfhdyk74"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0639_49_2_2_2_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0641_07_4_0_0_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1769413849542-cde3wls64",
+      "bbox-1769413852356-ys7b0mn15",
+      "bbox-1769413855137-lt9xi8o1v",
+      "bbox-3"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0642_02_4_0_0_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1769414482819-jmtzw5ght",
+      "bbox-1769414485698-v9jcc90ww",
+      "bbox-1769414488571-s5dgsu4g6",
+      "bbox-2",
+      "bbox-1769414491147-dj8u42cl8",
+      "bbox-1769414493299-rnimnsstr"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0644_04_4_0_0_h": {
+    "order": [
+      "bbox-1",
+      "bbox-1769415615703-hawy8fquv",
+      "bbox-1769415617753-ubdb7qnhe",
+      "bbox-1769415619810-0ka3djhdf",
+      "bbox-1769415622026-t6j9f2twx"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0648_08_3_0_2_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-1769417142060-psplfzkgl"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0649_08_3_0_3_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1769417676527-fa2ai0xe8",
+      "bbox-1769417678543-5fdzr3pmh",
+      "bbox-1769417681139-voc6zzc7l"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0650_50_2_2_1_h": {
+    "order": [
+      "bbox-1769758938506-0ck8kqwbq",
+      "bbox-1769758945266-ald9ew8t9",
+      "bbox-3",
+      "bbox-1768350744934-5bsd1t63e",
+      "bbox-1768350761307-5ccbfa7oo",
+      "bbox-1768350788998-xcb43z8h3"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0657_35_2_3_3_v": {
+    "order": [
+      "bbox-5",
+      "bbox-6",
+      "bbox-7",
+      "bbox-8",
+      "bbox-9",
+      "bbox-10",
+      "bbox-11",
+      "bbox-12",
+      "bbox-1768686584891-jbhdbk1dj"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0661_21_2_1_1_v": {
+    "order": [
+      "bbox-1768691379340-hhgkmnwao",
+      "bbox-1768691412686-joytofalo",
+      "bbox-1768691452438-5sum79wl0",
+      "bbox-1768691488001-8yx8qw5p5",
+      "bbox-1768691502978-wh7eg5rpo",
+      "bbox-1768691556416-50jaourgm",
+      "bbox-1768691569804-a40hla2od",
+      "bbox-1768691583371-qar22gbdk",
+      "bbox-1768691598813-tvd1pwgu7",
+      "bbox-1768691609112-bvf0ew3bu"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0665_25_1_3_0_v": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0670_30_2_1_1_h": {
+    "order": [
+      "bbox-1769490091163-59buck9vp",
+      "bbox-2",
+      "bbox-1767840057626-q9s03o1jg",
+      "bbox-1767840087303-z57de6tql",
+      "bbox-1767840113343-owahiunyh",
+      "bbox-1767840123183-qudmkpdgb"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0672_32_1_1_1_v": {
+    "order": [
+      "bbox-2",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7",
+      "bbox-1767840517881-xew15jdaa",
+      "bbox-1767840530293-7lcpsvoam"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0677_37_1_2_1_v": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0678_38_2_2_0_v": {
+    "order": [
+      "bbox-1768692589565-9jfg1vr9v",
+      "bbox-1768692599818-jvmou637r",
+      "bbox-1768692612493-1ers61rss",
+      "bbox-1768692620190-aja1kae9m",
+      "bbox-1768692630217-6rm66saol",
+      "bbox-1768692636547-txa8u0byi"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0681_41_1_2_3_v": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-6"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0683_43_1_2_1_v": {
+    "order": [
+      "bbox-1768692916060-a1oksoo29",
+      "bbox-1768692926141-uzuj87iit",
+      "bbox-1768692934515-shutdx5y5",
+      "bbox-1768692945819-ipsf7nq3j"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0684_44_1_2_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0685_45_1_3_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0688_48_2_2_3_v": {
+    "order": [
+      "bbox-1768693277806-m0pb7ckhg",
+      "bbox-1768693290512-4uwzdd5n4",
+      "bbox-1768693303388-ahy28unav",
+      "bbox-1768693313026-2uxskd55b",
+      "bbox-1768693322244-2phz6f278"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0713_23_1_1_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0714_24_1_3_0_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1768356979611-jyrvz5zep",
+      "bbox-1768356994595-72y72v3oo"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0721_31_2_2_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1768357627318-05v23v7w5",
+      "bbox-1768357638358-o4r9x4zlj",
+      "bbox-1768357647411-1e8w6b0vk",
+      "bbox-1768357656921-zj3sz92wb",
+      "bbox-1768357665059-bii9mj6d0",
+      "bbox-1768357671958-j0tlgfzre",
+      "bbox-1768357678249-r970uxd7a"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0722_32_2_3_1_v": {
+    "order": [
+      "bbox-1767919887419-bvvf22ycj",
+      "bbox-1767919899926-2yzzhu60f",
+      "bbox-1767919907208-8ha4jbjoo",
+      "bbox-1767919916779-fzomrhd51",
+      "bbox-1767919922833-9swc1pxnx",
+      "bbox-1767919938523-76oiiyt27",
+      "bbox-1767919949569-0ajf3ho8h",
+      "bbox-1767919957102-zzkaiuwty"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0723_33_1_2_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1768357933589-fpdab85w7",
+      "bbox-1768357947030-5plkm8p79",
+      "bbox-1768357959413-yhahrq0vz"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0724_34_1_1_1_h": {
+    "order": [
+      "bbox-3",
+      "bbox-4",
+      "bbox-1768358078819-42e8kp0z2"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0731_41_2_2_1_v": {
+    "order": [
+      "bbox-1768694322754-dh288oqhc",
+      "bbox-1768694338165-yap9mkhzv",
+      "bbox-1768694349982-xafr8o486",
+      "bbox-1768694363723-8h99fi3dj",
+      "bbox-1768694375850-i38csc7fy",
+      "bbox-1768694385645-b73c02oyk"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0732_42_2_2_0_v": {
+    "order": [
+      "bbox-1768694881284-23ba7tqs2",
+      "bbox-1768694898369-5wi48idey",
+      "bbox-1768694909589-swlg1uudz",
+      "bbox-1768694918229-f124e4tvr"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0733_43_2_3_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-1768372810896-yibzusko2"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0734_44_2_1_1_v": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7",
+      "bbox-8"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0736_46_1_2_3_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-1768373492754-5tsqpbcmn"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0737_47_2_2_1_v": {
+    "order": [
+      "bbox-2",
+      "bbox-1768695353883-m0stj0gml",
+      "bbox-1768695364084-9wg1kla7z",
+      "bbox-1768695375627-3yutz0j8f",
+      "bbox-1768695389300-zcniss8o3",
+      "bbox-1768695400828-f8l6snrq3",
+      "bbox-1768695412115-kc8o55knu",
+      "bbox-1768695420686-vu5k6ut25"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0762_22_2_2_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-1768376695632-13vv0aime"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0766_26_1_2_3_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-1767852608105-02zno6zd8"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0769_29_2_2_1_h": {
+    "order": [
+      "bbox-1769491457010-4n66axjau",
+      "bbox-1769491480342-g6ubw2m5n",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-1767853087979-q7p0e1ndf"
+    ],
+    "reason": "同じヘッダー行の印字を左から右に読み、本文を続ける。"
+  },
+  "jawildtext-0771_31_2_1_1_v": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-1768418954926-yojxb0l4w",
+      "bbox-1768418970248-bfnp673iy",
+      "bbox-1768418986427-hxkct6bxl",
+      "bbox-1768419020791-iymv6ce7a"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0772_32_1_2_2_h": {
+    "order": [
+      "bbox-1767905118150-tulh3xzeg",
+      "bbox-1767905132362-8du3sijqf",
+      "bbox-1767905144461-lzaqjx9h6",
+      "bbox-1767905154750-ael5qc7fr",
+      "bbox-1767905161980-mbujgt4y1",
+      "bbox-1769491746928-cr64hc632"
+    ],
+    "reason": "単語を分断する左欄の罫線番号は本文末尾に置く。"
+  },
+  "jawildtext-0774_34_1_1_1_v": {
+    "order": [
+      "bbox-1768696547294-2sdckaucb",
+      "bbox-1768696562542-09lmk5heq",
+      "bbox-1768696572959-dakjsthp3",
+      "bbox-1768696583788-dwfbj8o44",
+      "bbox-1768696597423-smwyifsx8"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0782_42_2_2_1_v": {
+    "order": [
+      "bbox-1768698647517-v2hvubbbv",
+      "bbox-1768698668058-c5c0ilwct",
+      "bbox-1768698678039-kliapb9zq",
+      "bbox-1768698692583-9y4bkqw6m",
+      "bbox-1768698701455-5aj3w54sl",
+      "bbox-1768698720498-qk7pufc6f",
+      "bbox-1768698732609-3jomrrgvz",
+      "bbox-1768698749417-zy0irnmf7"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0786_46_2_2_2_v": {
+    "order": [
+      "bbox-1768422275815-bmu3ltk8x",
+      "bbox-1768422289196-c76mz6ivx",
+      "bbox-1768422300476-mhqsjps64"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0787_47_1_1_1_v": {
+    "order": [
+      "bbox-1768422399485-79loojopk",
+      "bbox-1768422405643-9j7v17e0r",
+      "bbox-1768422413135-1o1th2l3m",
+      "bbox-1768422418363-qvppbt97t",
+      "bbox-1768422426142-vajqzooz2",
+      "bbox-1768422432733-y9vdargfe"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0789_49_2_2_0_v": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-1768423253984-zmyvj3xum",
+      "bbox-1768423268299-iplfmrkj2"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0790_10_1_2_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1768639325401-8871j80ml",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0798_08_4_0_2_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7",
+      "bbox-1766473467502-si0l1ozou"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0799_09_2_1_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-3",
+      "bbox-2",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0807_17_2_2_3_v": {
+    "order": [
+      "bbox-1768724833225-or8xixwbw",
+      "bbox-1768724841767-war4ia7ja",
+      "bbox-1768724849515-m9by3751n",
+      "bbox-1768724856736-6uqniy29o",
+      "bbox-1768724869285-8gjjo9a0f",
+      "bbox-1768724878014-37da23vte",
+      "bbox-1768724889625-q6s707xio"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0809_19_1_2_2_v": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-7",
+      "bbox-8"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0810_20_1_3_1_v": {
+    "order": [
+      "bbox-1768703956988-wbg9derb3",
+      "bbox-1768703969372-2aq715w41",
+      "bbox-1768703979144-hfspdk5ff",
+      "bbox-1768703991697-06sa7cb43",
+      "bbox-1768704001524-31nhkb368",
+      "bbox-1768704016626-vkwtnaq7m"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0813_23_2_2_3_v": {
+    "order": [
+      "bbox-4",
+      "bbox-1768902533884-53kn7ua5j",
+      "bbox-1768902546304-fhgpb3q91",
+      "bbox-1768902552331-k5eip2sb9"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0815_25_2_2_3_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-5",
+      "bbox-7",
+      "bbox-8",
+      "bbox-9",
+      "bbox-10",
+      "bbox-11"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0816_26_1_2_1_v": {
+    "order": [
+      "bbox-1767906831228-unhhyrhvg",
+      "bbox-1767906838256-r5d17q94h",
+      "bbox-1767906842651-sperj4gbl",
+      "bbox-1767906847031-guktjrdcv",
+      "bbox-1767906851560-9j2i2gk7m",
+      "bbox-1767906853825-4qabxhn71"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0817_27_2_2_0_v": {
+    "order": [
+      "bbox-1768705406315-jnjta2qgr",
+      "bbox-1768705419290-1dmlfoa6w",
+      "bbox-1768705428267-urq1gk6et",
+      "bbox-1768705436449-0fthaa0yd",
+      "bbox-1768705444931-gzkfgyzj2"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0818_28_1_0_1_h": {
+    "order": [
+      "bbox-1",
+      "bbox-1768425099860-18l9iq8zp",
+      "bbox-1768425112122-xju9kgfb8",
+      "bbox-1768425125044-349a2tem9",
+      "bbox-1768425135880-i2ka1gufz",
+      "bbox-1768425145414-vpzodgiq5"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0820_30_1_1_1_v": {
+    "order": [
+      "bbox-1767908170970-ja0a7qr5d",
+      "bbox-1767908182190-4vxr183d9",
+      "bbox-1767908193033-f3tiv8rw7",
+      "bbox-1767908198593-x1xuv237w",
+      "bbox-1767908208373-k7tj2f9qo",
+      "bbox-1767908214424-f22a5tr60"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0821_31_2_2_3_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7",
+      "bbox-8",
+      "bbox-9",
+      "bbox-10",
+      "bbox-11",
+      "bbox-13"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0822_32_2_1_3_h": {
+    "order": [
+      "bbox-1767908668131-m3ulzj68m",
+      "bbox-1767908697081-6rmy8f1fu",
+      "bbox-1767908706247-mir1iarj1",
+      "bbox-1767908714182-xz31oz6dx",
+      "bbox-1769492619257-lnjr6aku3",
+      "bbox-1769492653707-lpez9u93t"
+    ],
+    "reason": "左欄の罫線番号は本文末尾で上から下に読む。"
+  },
+  "jawildtext-0823_33_1_2_2_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0824_34_1_1_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1768425473066-l00799v7o"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0835_45_1_3_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-1768435137633-e0dgzoujc"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0837_47_1_3_2_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1768435402213-o1cn4enlh",
+      "bbox-1768435414364-l6zpm7qax",
+      "bbox-1768435434907-dsl2y39gt",
+      "bbox-1768435449081-mih8rl6dm",
+      "bbox-1768435462938-zhljjtjmo",
+      "bbox-1768435473069-lqqfaso7w"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0838_48_1_1_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1768435572039-qozcmhsw4",
+      "bbox-1768435587046-40aheljk0"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0843_03_4_0_2_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0845_05_3_0_1_h": {
+    "order": [
+      "bbox-1",
+      "bbox-1766551324621-rigxxtqhb",
+      "bbox-2"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0853_13_2_2_3_v": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0855_15_1_3_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0857_17_2_3_0_v": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-1768436685091-ztn0qea3k",
+      "bbox-1768436712275-y6jed8yp1",
+      "bbox-1768436726923-4dz8jbhte",
+      "bbox-1768436740057-j2h64km88"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0858_18_2_1_1_v": {
+    "order": [
+      "bbox-1768725630800-qdvy8ras5",
+      "bbox-1768725638809-vlqa999lk",
+      "bbox-1768725646639-forhz0az8",
+      "bbox-1768725657177-xu8bmf4o9",
+      "bbox-1768725666372-egss2943a",
+      "bbox-1768725677037-osdgmz435",
+      "bbox-1768725683150-kq8iulsm5"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0870_30_2_1_1_h": {
+    "order": [
+      "bbox-1769493350765-xgpawxal5",
+      "bbox-1767922179485-43w2nlehj",
+      "bbox-1767922188327-qimzxmjm2",
+      "bbox-1767922199232-xo8204j6p",
+      "bbox-1767922206700-ctpfp2mpf",
+      "bbox-1767922213654-reatso8fz"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0872_32_2_2_3_h": {
+    "order": [
+      "bbox-1767922533364-mljd1pavv",
+      "bbox-1767922543856-56vexihyi",
+      "bbox-1767922555037-wxaz2vr4e",
+      "bbox-1767922563767-qrehbj5ur",
+      "bbox-1769493438901-2ravhpgg4"
+    ],
+    "reason": "左欄の罫線番号は本文末尾に置く。"
+  },
+  "jawildtext-0877_37_2_0_1_v": {
+    "order": [
+      "bbox-1767922952992-sn2h5rwip",
+      "bbox-1767922961442-xwis1oehs",
+      "bbox-1767922968747-4yuafrdnt",
+      "bbox-1767922977725-cjhi24j6v",
+      "bbox-1767922984970-6k92eheyg"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0878_38_1_2_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1768442691783-mr399s4t4",
+      "bbox-1768442707953-nhddvebbj",
+      "bbox-1768442725279-gcr93cm6u",
+      "bbox-1768442744981-tch2a2giy"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0879_39_2_1_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1768707826889-a7uo0i2x2",
+      "bbox-1768707842234-nh958k7qy",
+      "bbox-1768707853117-tfxxkl5rx",
+      "bbox-1768707869887-bglmqnchr",
+      "bbox-1768707881699-5m9p6yvv4"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0880_40_1_2_3_v": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-4"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0881_41_2_1_1_v": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7",
+      "bbox-8"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0883_43_2_2_2_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1768443699608-e91lp6urz",
+      "bbox-1768443722270-6rjg2q356",
+      "bbox-1768443739110-gdnqcig3h"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0884_44_2_0_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0885_45_2_3_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0887_47_2_2_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-1768444944507-3rfbyd0gd",
+      "bbox-1768444972620-814d1kjjq"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0888_48_2_2_3_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1768445265583-15bs6nfi8",
+      "bbox-1768445297635-imf8fgqj1",
+      "bbox-1768445313490-mnxxpzsxa",
+      "bbox-1768445326735-a3fqbmsbb",
+      "bbox-1768445338395-llw1ypa2t",
+      "bbox-1768445349208-kt2u0d9ii",
+      "bbox-1768445360866-c5ocu3tgp"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0893_03_4_0_0_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-8",
+      "bbox-6",
+      "bbox-7"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0897_07_0_0_0_h": {
+    "order": [
+      "bbox-1",
+      "bbox-1766559145207-p1iq1yelq",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7",
+      "bbox-8",
+      "bbox-9"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0905_15_2_2_2_v": {
+    "order": [
+      "bbox-1768726497193-y825obioe",
+      "bbox-1768726505998-14ha6gbjk",
+      "bbox-1768726512837-crjg24o9j",
+      "bbox-1768726519820-4t00z9b7v",
+      "bbox-1768726527447-fi5fa5zri",
+      "bbox-1768726534639-n7dovqeug",
+      "bbox-1768726545777-my0swgrj7",
+      "bbox-1768726554733-hicdvyd61",
+      "bbox-1768726560394-2k6oplmxp",
+      "bbox-1768726566177-5j15l6tao"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0914_24_1_3_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1768728603400-rh5hpfn9n",
+      "bbox-1768728612247-dj03086a4",
+      "bbox-1768728620115-j48p1tw2z",
+      "bbox-1768728627286-av6rqs538",
+      "bbox-1768728636217-8z2f10hg7",
+      "bbox-1768728651405-w4rj6z9aa",
+      "bbox-1768728665002-fvcd2zdy1",
+      "bbox-1768728673013-9awt47nye",
+      "bbox-1768728679935-zrcmedpta",
+      "bbox-1768728690234-dmb169b8z",
+      "bbox-1768728704544-uqw2tsb3u",
+      "bbox-1768728713627-fyp67ori2"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0917_27_2_1_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1768449389678-gz3e5drjz",
+      "bbox-1768449401836-hiptwz4lh",
+      "bbox-1768449412087-ax3e95y2i"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0918_28_1_1_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1768449595927-jk000wjsi",
+      "bbox-1768449608482-3c0obcmyq",
+      "bbox-1768449618759-etqo6cf5c",
+      "bbox-1768449629124-4htvfdkjb"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0920_30_2_1_1_h": {
+    "order": [
+      "bbox-1769493851900-yyezgfcmw",
+      "bbox-1767926791393-e85a9czd3",
+      "bbox-1767926799134-mv3z8pt09",
+      "bbox-1767926806229-q2fkfkgwf",
+      "bbox-1767926812842-uvsti0vpb",
+      "bbox-1767926821154-filgbpo2e",
+      "bbox-1767926828309-nl7845axa"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0921_31_1_3_2_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1768449873796-qs9xtq2tb",
+      "bbox-1768449890968-m7fax1vev",
+      "bbox-1768449902667-7nmb3j9lx"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0924_34_1_1_1_v": {
+    "order": [
+      "bbox-1768728840204-5zp5aw0hv",
+      "bbox-1768728852654-651e98wu1",
+      "bbox-1768728859396-0ikor423f",
+      "bbox-1768728879991-yaz7dgudj",
+      "bbox-1768728892839-6wkc32ks0"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0927_37_2_3_1_v": {
+    "order": [
+      "bbox-1767927528684-1vhjp6yuz",
+      "bbox-1767927539506-c9o36hut5",
+      "bbox-1767927546908-hjz6t5d1w",
+      "bbox-1767927555083-g6t66h59s",
+      "bbox-1767927563792-qddbgmlj0",
+      "bbox-1767927572746-dnsal8rbd",
+      "bbox-1767927579046-7ex5r2tmw"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0928_38_1_2_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1768709118755-6l04pv969",
+      "bbox-1768709133453-sx839h826",
+      "bbox-1768709147329-felxsssw4",
+      "bbox-1768709166884-7fxxz4uvl",
+      "bbox-1768709178325-zbwnwr984"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0940_06_3_0_2_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1766562801269-06ms6mtih",
+      "bbox-1766562808941-fedhtjfz5"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0941_05_4_0_0_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1766571579567-ev0hl61r9",
+      "bbox-1766571593015-g3w21ukqi",
+      "bbox-3"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0946_06_3_0_0_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1766583012176-0773yjpc7",
+      "bbox-2",
+      "bbox-3",
+      "bbox-1766583162456-vi8f0sbvc"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0947_07_3_0_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1766586470041-63bhhitzq",
+      "bbox-3"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0948_08_4_0_3_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0950_50_2_1_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1768473664557-otsvaswhx",
+      "bbox-1768473677457-fql66r9tr",
+      "bbox-1768473686959-qksz9ltev"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0954_14_2_1_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0958_18_2_2_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1768475510410-j8bwv021e",
+      "bbox-1768475522845-e9s5v2m35",
+      "bbox-1768475537975-ltnqpol5q",
+      "bbox-1768475548849-wymtco7aa"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0962_22_2_2_0_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0966_26_1_2_2_v": {
+    "order": [
+      "bbox-1767928522476-clvx6zr1r",
+      "bbox-1767928531811-phoagurtk",
+      "bbox-1767928539276-dyp4x4yzl",
+      "bbox-1767928549090-3vo4iqj24",
+      "bbox-1767928555242-26xrvnof2",
+      "bbox-1767928567182-2ixxjd75g",
+      "bbox-1767928573129-49uwhyzq4",
+      "bbox-1767928585482-uxuiiacoy"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0967_27_1_2_0_h": {
+    "order": [
+      "bbox-1768477129393-jvlf2dytd",
+      "bbox-1768477141163-zufbkcmji",
+      "bbox-1768477155106-2zpvqi7on",
+      "bbox-1768477169289-tb41qfytj",
+      "bbox-1768477178332-lbkg8nx4r",
+      "bbox-1768477190511-z7r62791q"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0969_29_2_3_1_v": {
+    "order": [
+      "bbox-1767929087804-mmcoiktu5",
+      "bbox-1767929096857-w9jdkcocf",
+      "bbox-1767929103869-melhlhbmq",
+      "bbox-1767929111706-ylwe2r9kn",
+      "bbox-1767929122620-tpybiye5b",
+      "bbox-1767929129067-4pqk4408v",
+      "bbox-1767929139906-z44sttse6",
+      "bbox-1767929146469-iuqx7v8oy",
+      "bbox-1767929156840-81ilg6tmo"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0972_32_2_3_3_h": {
+    "order": [
+      "bbox-1767949200301-iliv1y0cd",
+      "bbox-1767949213060-w8ezatyj4",
+      "bbox-1767949223866-5u1nvxa09",
+      "bbox-1767949235858-nwraoadq2",
+      "bbox-1767949243846-3g45jm527",
+      "bbox-1769496350206-j9s6mnqwl",
+      "bbox-1769496359950-ylnvc6x6l"
+    ],
+    "reason": "右欄の罫線番号は本文末尾で上から下に読む。"
+  },
+  "jawildtext-0979_39_1_2_2_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1768478541853-r3mdkfxlz",
+      "bbox-1768478558802-7h2tb4pej",
+      "bbox-1768478571222-4jy10dnq3",
+      "bbox-1768478581707-iseitxalc",
+      "bbox-1768478592844-5cnai0uzn",
+      "bbox-1768478604665-xfmfmq8g9"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0982_42_1_2_1_v": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-1768479449910-75gwhejot",
+      "bbox-1768479463531-vsix1z6xm"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0983_43_2_0_1_v": {
+    "order": [
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7",
+      "bbox-8",
+      "bbox-1768710571217-u63hu6nng"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0989_49_1_1_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-4",
+      "bbox-6",
+      "bbox-7",
+      "bbox-8"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0994_04_3_0_2_v": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-1",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0995_05_3_0_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1769396988721-wgt4jl47a",
+      "bbox-1769396996213-wy2dqod45",
+      "bbox-3",
+      "bbox-1769397017831-p3zqc8vti",
+      "bbox-4"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0996_06_3_0_3_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1769397397655-tb9pc6og9",
+      "bbox-1769397403930-s28k40qd7"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0997_07_0_0_0_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-0999_08_3_0_1_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-1769398724887-y8zm8qxm7"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1000_50_2_2_3_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1768481224574-st3svbxdx",
+      "bbox-1768481247607-8zs14i4tj",
+      "bbox-1768481286337-in1l6ebkd"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1003_13_2_1_1_v": {
+    "order": [
+      "bbox-1768710737704-r9p71mt1p",
+      "bbox-1768710747221-6e5zcgth5",
+      "bbox-1768710755919-74nbx8pcf",
+      "bbox-1768710772233-wrza03wbr",
+      "bbox-1768710789423-7z4s4s5dh",
+      "bbox-1768710796308-g933caxb5"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1004_14_2_2_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-4",
+      "bbox-7",
+      "bbox-8",
+      "bbox-9"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1006_16_2_2_1_v": {
+    "order": [
+      "bbox-1768711139247-75teh2yk1",
+      "bbox-1768711151516-gl7bw9s3c",
+      "bbox-1768711171408-t46t2o0r7",
+      "bbox-1768711192954-mpxa7dlzx",
+      "bbox-1768711203366-lzmfizs3c",
+      "bbox-1768711210406-z2ui3d443"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1007_17_2_1_1_v": {
+    "order": [
+      "bbox-1768711401191-st9n71gnu",
+      "bbox-1768711412584-p0q6jhylp",
+      "bbox-1768711427246-5bxbt9ew1",
+      "bbox-1768711435153-2w5ura8vz",
+      "bbox-1768711457742-3mvyr5mit",
+      "bbox-1768711471625-vnu2pq0tx",
+      "bbox-1768711478735-40xg0wrxr",
+      "bbox-1768711490194-22wvoy69w",
+      "bbox-1768711495805-5i4sux1tt"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1009_19_2_1_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-4",
+      "bbox-5",
+      "bbox-11"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1010_20_1_2_1_v": {
+    "order": [
+      "bbox-1768729762809-qoe3uvbwe",
+      "bbox-1768729779999-1sipi437i",
+      "bbox-1768729793162-ijeqt7em7",
+      "bbox-1768729808289-i9cohcjdm",
+      "bbox-1768729818433-16557jmho",
+      "bbox-1768729827440-s7duo18eg"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1012_22_1_0_0_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-1768517514385-97xejdpct",
+      "bbox-1768517530248-5tncrgojq",
+      "bbox-1768517542453-dbol7ifp4"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1013_23_2_1_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1020_30_1_3_3_v": {
+    "order": [
+      "bbox-1767953238713-bqa7z3dwc",
+      "bbox-1767953246220-7pf1nnz0r",
+      "bbox-1767953256802-454la0q78",
+      "bbox-1767953266754-2drceiykd"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1021_31_2_2_2_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7",
+      "bbox-8"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1027_37_2_2_2_v": {
+    "order": [
+      "bbox-1767954184826-77fkgqtl4",
+      "bbox-1767954194282-3p3h2nm6h",
+      "bbox-1767954201229-a2vtxagyd",
+      "bbox-1767954208660-pz6gyhk0n"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1030_40_1_2_3_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7",
+      "bbox-8"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1031_41_1_1_0_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-8",
+      "bbox-9"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1034_44_2_2_2_v": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7",
+      "bbox-8"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1035_45_2_2_3_v": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-1768520608189-w84tszgcz",
+      "bbox-1768520623483-6af2ix9y0",
+      "bbox-1768520639501-f0nsmkrca"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1037_47_2_2_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-1768521018406-qfz5nh9xx"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1048_08_4_0_2_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1050_50_2_2_1_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1053_13_1_2_2_v": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1054_14_2_3_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1056_16_2_1_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-1768523229810-o6hwz8iej",
+      "bbox-1768523262248-hb6fjzifb",
+      "bbox-1768523275845-xvye9o2vk",
+      "bbox-1768523288497-0dk84pra7",
+      "bbox-1768523301781-nu82k8w1w"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1057_17_2_3_2_v": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7",
+      "bbox-8",
+      "bbox-1768523552986-iqx820nwh",
+      "bbox-1768523563331-st3ewe9al",
+      "bbox-1768523571522-m6x2rni52"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1059_19_2_2_1_v": {
+    "order": [
+      "bbox-1768712500339-depzdqgcd",
+      "bbox-1768712509991-zgw2xpf4g",
+      "bbox-1768712521339-gym6q69jq",
+      "bbox-1768712529897-1tlyersdd",
+      "bbox-1768712539164-kdenf4x1v"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1060_20_1_3_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7",
+      "bbox-8",
+      "bbox-9"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1061_21_1_2_1_h": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-1768713029465-1hct80jyx",
+      "bbox-1768713043855-0yviozd8u",
+      "bbox-1768713055937-yqd93eatg",
+      "bbox-1768713074052-ey3m9zhp1",
+      "bbox-1768713082023-q5fucx0wy",
+      "bbox-1768713090220-ovcj8emmh",
+      "bbox-1768713100014-ikd49znwy",
+      "bbox-1768713111098-k3vuv9ob9",
+      "bbox-1768713118833-8jpyui5pw",
+      "bbox-1768713130306-xvgak6nqx"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1064_24_1_2_2_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-7",
+      "bbox-1768525477144-k4z4u5w9s"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1068_28_2_0_0_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1768525951691-ns33qma34",
+      "bbox-1768525963147-4nqnk92ba"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1070_30_1_2_1_v": {
+    "order": [
+      "bbox-1767955190744-c6gu6uci3",
+      "bbox-1767955200014-bl1ah4550",
+      "bbox-1767955211429-op0s8q10k",
+      "bbox-1767955220129-b0zu1fhti",
+      "bbox-1767955227779-x1o96sd53"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1071_31_2_2_1_v": {
+    "order": [
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1072_32_2_1_1_h": {
+    "order": [
+      "bbox-1767956894030-x9rjkqh65",
+      "bbox-1767956900660-qzyuuytie",
+      "bbox-1767956907261-lgfdu6gfy",
+      "bbox-1767956930936-8fvt0lgxw",
+      "bbox-1767956941597-g0ozxqsxn",
+      "bbox-1767956954388-3zkqqe8cf",
+      "bbox-1769499397168-6jydivimu",
+      "bbox-1769499438404-fpjh9f4v7",
+      "bbox-1769499424401-q4cc1yyox"
+    ],
+    "reason": "左欄の罫線番号は本文末尾で上から下に読む。"
+  },
+  "jawildtext-1081_41_2_2_2_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1768527576406-xa17fkunp",
+      "bbox-1768527588225-3tvgwem2t",
+      "bbox-1768527599220-n9zvdy00g",
+      "bbox-1768527633127-obxpb8l5d",
+      "bbox-1768527644451-mw8h58gui",
+      "bbox-1768527660834-up7rox3si",
+      "bbox-1768527670236-vsbdee5eu"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1085_45_2_1_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1086_46_1_2_2_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1768528417226-bnm5nq2p3",
+      "bbox-1768528428331-12qxzuonu",
+      "bbox-1768528440140-20eob7mgz",
+      "bbox-1768528451801-490ihf54e",
+      "bbox-1768528460898-9b5gyr7wo"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1087_47_1_3_2_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1768528777061-b647tig6u",
+      "bbox-1768528790780-duocbwwks",
+      "bbox-1768528813114-d4d6yji1s",
+      "bbox-1768528831543-0uacx1mw3",
+      "bbox-1768528841659-48hlcojbv",
+      "bbox-1768528852414-3p37caatp",
+      "bbox-1768528862027-6rpvahlcu"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1090_07_3_0_1_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1111_21_2_2_0_v": {
+    "order": [
+      "bbox-1768713601673-9nxsnuj3e",
+      "bbox-1768713651634-nguw0qhrf",
+      "bbox-1768713699272-or4i1p2dl",
+      "bbox-1768713724794-sz288qj6f",
+      "bbox-1768713733097-ucrtgwmm3",
+      "bbox-1768713746889-jxy9kdsu2",
+      "bbox-1768713761870-f3cr2p0zb"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1135_45_1_3_1_h": {
+    "order": [
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6",
+      "bbox-1768536368899-w4qf3qarr"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1138_48_1_2_1_v": {
+    "order": [
+      "bbox-1768714352006-3bn4knnzd",
+      "bbox-1768714361591-6pi84ydit",
+      "bbox-1768714370269-5eye0lem0",
+      "bbox-1768714383581-slvij5lk7",
+      "bbox-1768714393113-ylgh54vc7"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1154_14_2_2_1_v": {
+    "order": [
+      "bbox-1768721227087-ykmrlknyz",
+      "bbox-1768721237730-vpp5alk79",
+      "bbox-1768721245937-x837cn0w1",
+      "bbox-1768721252933-l2st2tyx3",
+      "bbox-1768721261940-pezb0hk1l",
+      "bbox-1768721268940-og2qcaudp"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1155_15_1_3_3_v": {
+    "order": [
+      "bbox-2",
+      "bbox-1768543101479-09fhyh82e",
+      "bbox-1768543125896-zwhyxoil4",
+      "bbox-1768543139523-td7vlpenh",
+      "bbox-1768543157741-2c8ml201s",
+      "bbox-1768543170310-ywg6fjjci"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1158_18_2_0_1_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4",
+      "bbox-5",
+      "bbox-6"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1168_28_2_3_2_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-3",
+      "bbox-4"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1170_30_1_1_1_v": {
+    "order": [
+      "bbox-1767960588392-heayfqeey",
+      "bbox-1767960597703-jgvk4wb70",
+      "bbox-1767960606461-mdd743hvp",
+      "bbox-1767960625271-s93c33un3",
+      "bbox-1767960633303-n2lwwxrif",
+      "bbox-1767960639618-5xkg8f3dh"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1180_40_1_2_3_v": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1768545895315-9yos996uf"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1208_18_1_3_0_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1768548155131-35n6wthh6",
+      "bbox-1768548164707-8gygv39vr",
+      "bbox-1768548252587-v2begujcb",
+      "bbox-1768548271498-dl786fzt3",
+      "bbox-1768548285495-djmhjokky",
+      "bbox-1768548296372-n0c5bybt8",
+      "bbox-1768548309581-n97n220nz"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1212_22_2_0_0_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1768548699512-tjcmrkdbc",
+      "bbox-1768548719648-ghxn81qwn",
+      "bbox-1768548737712-n86nvl4ge",
+      "bbox-1768548753437-thiqnmegb",
+      "bbox-1768548764108-3rdfrjk3v",
+      "bbox-1768548774264-t4fxjhnju"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1215_25_2_2_1_v": {
+    "order": [
+      "bbox-2",
+      "bbox-4",
+      "bbox-6",
+      "bbox-7",
+      "bbox-8"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1216_26_1_2_2_v": {
+    "order": [
+      "bbox-1767961668849-rhmr5sm1h",
+      "bbox-1767961676400-5piu4yxup",
+      "bbox-1767961684726-t8jbcmicm",
+      "bbox-1767961693343-a395i5y2f",
+      "bbox-1767961701818-zwrjrjfzn",
+      "bbox-1767961708823-ew7by4aze",
+      "bbox-1767961714373-w1x27g6cn"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1219_29_1_1_2_v": {
+    "order": [
+      "bbox-1767962060926-n3xvuoasc",
+      "bbox-1767962067924-01defwn8q",
+      "bbox-1767962073782-9ket0e0ih",
+      "bbox-1767962079235-rbfutsj6e",
+      "bbox-1767962084639-hgd83iznl",
+      "bbox-1767962089966-a6rq3zfex",
+      "bbox-1767962096537-2sdbjm064",
+      "bbox-1767962103626-mzfl2r9n7",
+      "bbox-1767962109513-yaxhzhd8f",
+      "bbox-1767962116068-nfn2rl9iy",
+      "bbox-1767962126155-sdgem2mll"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1220_30_2_1_1_h": {
+    "order": [
+      "bbox-1769503700690-g00ccb2gr",
+      "bbox-1767962345319-gu621c7xw",
+      "bbox-1767962352176-4ckdbfdv1",
+      "bbox-1767962362353-9332544ga",
+      "bbox-1767962370769-hrrgdu4sk"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1225_35_2_1_1_h": {
+    "order": [
+      "bbox-1",
+      "bbox-2",
+      "bbox-1768552557654-z7x2vpcli",
+      "bbox-1768552573094-lv0soerlg",
+      "bbox-1768552587342-c2ud2baw0",
+      "bbox-1768552600460-vfxseeh70",
+      "bbox-1768552607504-wrbyjgah7"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1230_40_1_3_2_v": {
+    "order": [
+      "bbox-1768723640647-vruqcuh9c",
+      "bbox-1768723651035-e3baiv6dz",
+      "bbox-1768723665944-hko4dwwng",
+      "bbox-1768723679709-7d1bn9zte"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1236_46_2_2_1_v": {
+    "order": [
+      "bbox-1768724218301-jan8w9j4i",
+      "bbox-1768724229880-e031i36op",
+      "bbox-1768724241437-8w4rpov4u",
+      "bbox-1768724251412-dzwe0hxr9",
+      "bbox-1768724264260-782gu4rqj"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  },
+  "jawildtext-1237_47_1_2_3_v": {
+    "order": [
+      "bbox-1",
+      "bbox-1768554018163-pgq71qbam",
+      "bbox-1768554030852-rvyy0f1d4",
+      "bbox-1768554039778-qtcv1u6md",
+      "bbox-1768554049025-pb3xcp1wa",
+      "bbox-1768554056157-114nvq1d3"
+    ],
+    "reason": "画像と行ポリゴンを照合し、上流の読み順を確認。"
+  }
+}

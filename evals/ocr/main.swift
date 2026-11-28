@@ -14,6 +14,11 @@ if CommandLine.arguments.dropFirst().first == "--revision" {
     print(request.revision)
 } else {
     let encoder = JSONEncoder()
+    // Vision can emit system diagnostics on stdout. Give JSON its own stream.
+    let results = FileHandle(fileDescriptor: dup(STDOUT_FILENO), closeOnDealloc: true)
+    guard results.fileDescriptor >= 0, dup2(STDERR_FILENO, STDOUT_FILENO) >= 0 else {
+        throw CocoaError(.fileWriteUnknown)
+    }
     while let path = readLine() {
         let start = ProcessInfo.processInfo.systemUptime
         let row: Prediction
@@ -31,7 +36,6 @@ if CommandLine.arguments.dropFirst().first == "--revision" {
                              latency_seconds: ProcessInfo.processInfo.systemUptime - start,
                              error_class: String(describing: type(of: error)))
         }
-        print(String(decoding: try encoder.encode(row), as: UTF8.self))
-        fflush(stdout)
+        try results.write(contentsOf: encoder.encode(row) + Data([0x0a]))
     }
 }
