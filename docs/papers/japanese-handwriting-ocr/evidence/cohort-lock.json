@@ -1,0 +1,113 @@
+{
+  "dataset": "llm-jp/jawildtext/handwriting_ocr",
+  "revision": "627ca7ea7c224ffe1accff8737991fc2240784fa",
+  "upstream_code_revision": "677ebdd627d9fbb3ea87693f24cc4e6d97c4a799",
+  "seed": 20261128,
+  "preprocessing": {
+    "max_edge_px": 2200,
+    "jpeg_quality": 92,
+    "exif_transpose": true,
+    "pillow": "13.0.0",
+    "jpeg_codec": "6.2"
+  },
+  "parquet_sha256": {
+    "train-00000-of-00006.parquet": "eb9c63865daf373d704a5561bd79e6594077b217dfdd146bcc10d50bc815572d",
+    "train-00001-of-00006.parquet": "caa8d675503cfd815dcaacf1cc8e991c574b72f7bdee2fa69cc939ec72581266",
+    "train-00002-of-00006.parquet": "fe61268f737d466b9ca5d36bec2849656c8353f39f7c429b766c7a159f9ce27f",
+    "train-00003-of-00006.parquet": "8de95ccd374f19b5660d4db1e9d0f4f93ec6afb74eae318c352271562621a78c",
+    "train-00004-of-00006.parquet": "72263fac71b1097bf67b51ff42b74a3e3e4e79587cdee2da11fbed49315a2b05",
+    "train-00005-of-00006.parquet": "fae32949f717f2141ee5999005f9eba6e0d2344a73a2f58716bde4829719d578"
+  },
+  "source_rows": 1065,
+  "eligible_rows": 1065,
+  "related_pairs": 1,
+  "exclusions": {
+    "writer_group_outside_study_cap": 65
+  },
+  "splits": {
+    "pilot": {
+      "manifest_sha256": "581a0168dbe8c0dffe0979e800002294c86901e3cce1baca20958cc11d2448d0",
+      "pages": 100,
+      "writers": 7,
+      "groups": 7,
+      "by_direction": {
+        "horizontal": 74,
+        "vertical": 26
+      },
+      "by_medium": {
+        "other": 2,
+        "paper_other": 14,
+        "paper_plain": 9,
+        "tablet": 35,
+        "whiteboard": 40
+      },
+      "reference_characters": 10561,
+      "incomplete_glyph_pages": 0,
+      "review_required": 44,
+      "reviewed": 44,
+      "review_complete": true
+    },
+    "development": {
+      "manifest_sha256": "7d60f60175b109ae3d6a210c0de0d8a30fc1cd8e0756b4a7db21b21cd1ff1bcb",
+      "pages": 111,
+      "writers": 7,
+      "groups": 7,
+      "by_direction": {
+        "horizontal": 78,
+        "vertical": 33
+      },
+      "by_medium": {
+        "paper_other": 20,
+        "paper_plain": 17,
+        "tablet": 37,
+        "whiteboard": 37
+      },
+      "reference_characters": 11515,
+      "incomplete_glyph_pages": 0,
+      "review_required": 0,
+      "reviewed": 0,
+      "review_complete": false
+    },
+    "heldout": {
+      "manifest_sha256": "90193908da828eb430ce8b6725e961cf9e21aa535d47bdeeb2376d2aae7eb451",
+      "pages": 789,
+      "writers": 39,
+      "groups": 39,
+      "by_direction": {
+        "horizontal": 583,
+        "vertical": 206
+      },
+      "by_medium": {
+        "paper_other": 403,
+        "paper_plain": 287,
+        "tablet": 55,
+        "whiteboard": 44
+      },
+      "reference_characters": 82386,
+      "incomplete_glyph_pages": 0,
+      "review_required": 268,
+      "reviewed": 268,
+      "review_complete": true
+    },
+    "unused": {
+      "manifest_sha256": "61dcea244b32ab0ceba8a122c8d828ee71bd3b3950bb62858ce939f25e2f4855",
+      "pages": 65,
+      "writers": 5,
+      "groups": 5,
+      "by_direction": {
+        "horizontal": 37,
+        "vertical": 28
+      },
+      "by_medium": {
+        "paper_other": 31,
+        "paper_plain": 31,
+        "tablet": 3
+      },
+      "reference_characters": 6658,
+      "incomplete_glyph_pages": 0,
+      "review_required": 0,
+      "reviewed": 0,
+      "review_complete": false
+    }
+  }
+}
