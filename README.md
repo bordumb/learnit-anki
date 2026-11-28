@@ -2,7 +2,7 @@
 
 - [Japanese cards from text, images, and audio](docs/japanese_card_intake.md)
 - [Japanese transcription evaluation](evals/README.md)
-- [Original quick start](docs/quick_start_guide.md)
+- [Quick start](docs/quick_start_guide.md)
 
 
 ## Text OCR
@@ -26,3 +26,7 @@ Integrates with in-line dictionary definitions directly from your Mac's dictiona
 > Note: you will need to turn on the Japanese-Japanese or Japanese-English dictionary in your Dictionary app settings.
 
 ![alt text](docs/images/dictionary.png)
+
+## Architecture
+
+See [ARCHITECTURE.md](ARCHITECTURE.md) for more on how its built.
